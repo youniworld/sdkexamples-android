@@ -5,25 +5,27 @@ import android.content.Intent;
 import android.text.Spannable;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
+import com.easemob.applib.widget.MessageAdapter;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
-import com.easemob.ui.utils.SmileUtils;
-import com.easemob.uidemo.R;
-import com.easemob.widget.activity.ContextMenu;
+import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.activity.ContextMenu;
+import com.easemob.chatuidemo.utils.SmileUtils;
 
 public class EMChatRowTextWidget extends EMChatRowWidget {
 	
-	private EMMessage message;
-	
-	public EMChatRowTextWidget(Context context, EMMessage message, final int position, ViewGroup parent) {
-		super(context);
+	private BaseAdapter adapter;
+
+    public EMChatRowTextWidget(Context context, EMMessage message, final int position, ViewGroup parent, MessageAdapter adapter) {
+		super(context, adapter);
+		this.adapter = adapter;
 		setupView(message, position, parent);
-		this.message = message;
 	}
 
 	@Override
@@ -69,7 +71,7 @@ public class EMChatRowTextWidget extends EMChatRowWidget {
 		holder.tv.setOnLongClickListener(new OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-				chatWidget.getActivity().startActivityForResult(
+				activity.startActivityForResult(
 						(new Intent(context, ContextMenu.class)).putExtra("position", position).putExtra("type",
 								EMMessage.Type.TXT.ordinal()), REQUEST_CODE_CONTEXT_MENU);
 				return true;
@@ -99,7 +101,7 @@ public class EMChatRowTextWidget extends EMChatRowWidget {
 
 	@Override
 	public void updateSendedView(EMMessage message, ViewHolder holder) {
-		chatWidget.getAdapter().notifyDataSetChanged();
+		adapter.notifyDataSetChanged();
 	}
 
 	@Override

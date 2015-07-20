@@ -12,12 +12,14 @@ import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
+import com.easemob.applib.widget.MessageAdapter;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
@@ -25,18 +27,18 @@ import com.easemob.chat.FileMessageBody;
 import com.easemob.chat.ImageMessageBody;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.activity.ContextMenu;
+import com.easemob.chatuidemo.activity.ShowBigImage;
 import com.easemob.chatuidemo.task.LoadImageTask;
-import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.chatuidemo.utils.ImageCache;
+import com.easemob.chatuidemo.utils.ImageUtils;
 import com.easemob.util.EMLog;
 
 public class EMChatRowImageWidget extends EMChatRowWidget {
 	private static final String TAG = "EMChatRowImageWidget";
 	private Timer timer;
-	private Activity activity;
 
-	public EMChatRowImageWidget(Context context, EMMessage message, final int position, ViewGroup parent) {
-		super(context);
+	public EMChatRowImageWidget(Context context, EMMessage message, final int position, ViewGroup parent, MessageAdapter adapter) {
+		super(context, adapter);
 		setupView(message, position, parent);
 	}
 
@@ -99,9 +101,9 @@ public class EMChatRowImageWidget extends EMChatRowWidget {
 				if (imgBody.getLocalUrl() != null) {
 					// String filePath = imgBody.getLocalUrl();
 					String remotePath = imgBody.getRemoteUrl();
-					String filePath = CommonUtils.getImagePath(remotePath);
+					String filePath = ImageUtils.getImagePath(remotePath);
 					String thumbRemoteUrl = imgBody.getThumbnailUrl();
-					String thumbnailPath = CommonUtils.getThumbnailImagePath(thumbRemoteUrl);
+					String thumbnailPath = ImageUtils.getThumbnailImagePath(thumbRemoteUrl);
 					showImageView(thumbnailPath, holder.iv, filePath, imgBody.getRemoteUrl(), message);
 				}
 			}
@@ -114,9 +116,9 @@ public class EMChatRowImageWidget extends EMChatRowWidget {
 		ImageMessageBody imgBody = (ImageMessageBody) message.getBody();
 		String filePath = imgBody.getLocalUrl();
 		if (filePath != null && new File(filePath).exists()) {
-			showImageView(CommonUtils.getThumbnailImagePath(filePath), holder.iv, filePath, null, message);
+			showImageView(ImageUtils.getThumbnailImagePath(filePath), holder.iv, filePath, null, message);
 		} else {
-			showImageView(CommonUtils.getThumbnailImagePath(filePath), holder.iv, filePath, IMAGE_DIR, message);
+			showImageView(ImageUtils.getThumbnailImagePath(filePath), holder.iv, filePath, IMAGE_DIR, message);
 		}
 
 		switch (message.status) {
@@ -142,7 +144,7 @@ public class EMChatRowImageWidget extends EMChatRowWidget {
 
 				@Override
 				public void run() {
-					chatWidget.getActivity().runOnUiThread(new Runnable() {
+					activity.runOnUiThread(new Runnable() {
 						public void run() {
 							holder.pb.setVisibility(View.VISIBLE);
 							holder.tv.setVisibility(View.VISIBLE);
@@ -191,7 +193,7 @@ public class EMChatRowImageWidget extends EMChatRowWidget {
 
 			@Override
 			public void onSuccess() {
-				chatWidget.getActivity().runOnUiThread(new Runnable() {
+				activity.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
 						// message.setBackReceive(false);
@@ -199,7 +201,7 @@ public class EMChatRowImageWidget extends EMChatRowWidget {
 							holder.pb.setVisibility(View.GONE);
 							holder.tv.setVisibility(View.GONE);
 						}
-						chatWidget.getAdapter().notifyDataSetChanged();
+						adapter.notifyDataSetChanged();
 					}
 				});
 			}
@@ -212,7 +214,7 @@ public class EMChatRowImageWidget extends EMChatRowWidget {
 			@Override
 			public void onProgress(final int progress, String status) {
 				if (message.getType() == EMMessage.Type.IMAGE) {
-					chatWidget.getActivity().runOnUiThread(new Runnable() {
+					activity.runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
 							holder.tv.setText(progress + "%");
@@ -246,7 +248,7 @@ public class EMChatRowImageWidget extends EMChatRowWidget {
 				@Override
 				public void onSuccess() {
 					Log.d(TAG, "send image message successfully");
-					chatWidget.getActivity().runOnUiThread(new Runnable() {
+					activity.runOnUiThread(new Runnable() {
 						public void run() {
 							// send success
 							holder.pb.setVisibility(View.GONE);
@@ -258,7 +260,7 @@ public class EMChatRowImageWidget extends EMChatRowWidget {
 				@Override
 				public void onError(int code, String error) {
 					
-					chatWidget.getActivity().runOnUiThread(new Runnable() {
+					activity.runOnUiThread(new Runnable() {
 						public void run() {
 							holder.pb.setVisibility(View.GONE);
 							holder.tv.setVisibility(View.GONE);
@@ -272,7 +274,7 @@ public class EMChatRowImageWidget extends EMChatRowWidget {
 
 				@Override
 				public void onProgress(final int progress, String status) {
-					chatWidget.getActivity().runOnUiThread(new Runnable() {
+					activity.runOnUiThread(new Runnable() {
 						public void run() {
 							holder.tv.setText(progress + "%");
 						}
@@ -312,7 +314,7 @@ public class EMChatRowImageWidget extends EMChatRowWidget {
 				@Override
 				public void onClick(View v) {
 					EMLog.d(TAG, "image view on click");
-					Intent intent = new Intent(context, ShowImageActivity.class);
+					Intent intent = new Intent(context, ShowBigImage.class);
 					File file = new File(localFullSizePath);
 					if (file.exists()) {
 						Uri uri = Uri.fromFile(file);

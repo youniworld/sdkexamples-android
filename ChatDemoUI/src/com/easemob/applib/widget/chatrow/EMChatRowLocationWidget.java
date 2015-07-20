@@ -9,16 +9,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.easemob.applib.widget.MessageAdapter;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.LocationMessageBody;
-import com.easemob.uidemo.R;
+import com.easemob.chatuidemo.R;
 import com.easemob.util.LatLng;
 
 public class EMChatRowLocationWidget extends EMChatRowWidget {
 
 	public EMChatRowLocationWidget(Context context, EMMessage message, int position,
-			ViewGroup parent) {
-		super(context);
+			ViewGroup parent, MessageAdapter adapter) {
+		super(context, adapter);
 		setupView(message, position, parent);
 	}
 
@@ -59,7 +60,7 @@ public class EMChatRowLocationWidget extends EMChatRowWidget {
 		locationView.setOnLongClickListener(new OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-				chatWidget.getActivity().startActivityForResult(
+				activity.startActivityForResult(
 						(new Intent(context, ContextMenu.class)).putExtra("position", position).putExtra("type",
 								EMMessage.Type.LOCATION.ordinal()), REQUEST_CODE_CONTEXT_MENU);
 				return false;

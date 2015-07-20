@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easemob.applib.widget.MessageAdapter;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.NormalFileMessageBody;
@@ -27,8 +28,8 @@ public class EMChatRowFileWidget extends EMChatRowWidget {
 	private static final String TAG = "EMChatRowRecvFileWidget";
 	private Timer timer = new Timer();
 
-	public EMChatRowFileWidget(Context context, EMMessage message, int position, ViewGroup parent) {
-		super(context);
+	public EMChatRowFileWidget(Context context, EMMessage message, int position, ViewGroup parent, MessageAdapter adapter) {
+		super(context, adapter);
 		setupView(message, position, parent);
 	}
 

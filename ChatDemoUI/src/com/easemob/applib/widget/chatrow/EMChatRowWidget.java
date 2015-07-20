@@ -1,5 +1,7 @@
 package com.easemob.applib.widget.chatrow;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import com.easemob.EMCallBack;
 import com.easemob.applib.Constant;
 import com.easemob.applib.widget.EMChatMessageList;
+import com.easemob.applib.widget.MessageAdapter;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
@@ -68,7 +72,9 @@ public abstract class EMChatRowWidget extends LinearLayout {
 	public static final String IMAGE_DIR = "chat/image/";
 	public static final String VOICE_DIR = "chat/audio/";
 	public static final String VIDEO_DIR = "chat/video";
-
+	
+	protected Activity activity;
+	protected MessageAdapter adapter;
 	
 	public static class ViewHolder {
 		ImageView iv;
@@ -93,8 +99,9 @@ public abstract class EMChatRowWidget extends LinearLayout {
 		TextView tv_file_download_state;
 	}
 	
-	public EMChatRowWidget(Context context) {
+	public EMChatRowWidget(Context context, MessageAdapter adapter) {
 		super(context);
+		this.adapter = adapter;
 		init(context);
 	}
 
@@ -103,21 +110,17 @@ public abstract class EMChatRowWidget extends LinearLayout {
 		init(context);
 	}
 
-	public EMChatRowWidget(Context context, AttributeSet attrs, int defStyleAttr) {
+	@SuppressLint("NewApi")
+    public EMChatRowWidget(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		init(context);
 	}
 
-	public EMChatRowWidget(Context context, AttributeSet attrs,
-			int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
-		init(context);
-	}
 	
 	protected void init(Context context) {
 		this.context = context;
+		this.activity = (Activity) context;
 		inflater = LayoutInflater.from(context);
-		chatWidget = EMChatWidget.activityInstance;
 		holder = new ViewHolder();
 	}
 	
@@ -226,8 +229,7 @@ public abstract class EMChatRowWidget extends LinearLayout {
 								public void onClick(DialogInterface dialog, int which) {
 									dialog.dismiss();
 									message.status = EMMessage.Status.CREATE;
-									MessageAdapter adapter = chatWidget.getAdapter();
-									adapter.refreshSeekTo(position);
+									((MessageAdapter) adapter).refreshSeekTo(position);
 								}
 							})
 					.setNegativeButton(R.string.cancel,
@@ -264,7 +266,7 @@ public abstract class EMChatRowWidget extends LinearLayout {
 					intent.putExtra("msg", st);
 					intent.putExtra("cancel", true);
 					intent.putExtra("position", position);
-					chatWidget.getActivity().startActivityForResult(intent, REQUEST_CODE_ADD_TO_BLACKLIST);
+					activity.startActivityForResult(intent, REQUEST_CODE_ADD_TO_BLACKLIST);
 					return true;
 				}
 			});

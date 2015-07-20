@@ -8,14 +8,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.easemob.applib.Constant;
+import com.easemob.applib.widget.MessageAdapter;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chatuidemo.R;
 
 public class EMChatRowCallWidget extends EMChatRowWidget {
 
-	public EMChatRowCallWidget(Context context, EMMessage message, int position, ViewGroup parent) {
-		super(context);
+	public EMChatRowCallWidget(Context context, EMMessage message, int position, ViewGroup parent, MessageAdapter adapter) {
+		super(context, adapter);
 		setupView(message, position, parent);
 	}
 

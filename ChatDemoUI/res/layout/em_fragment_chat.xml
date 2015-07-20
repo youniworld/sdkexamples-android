@@ -60,29 +60,19 @@
     </RelativeLayout>
     
     <com.easemob.applib.widget.EMChatMessageList 
+        android:id="@+id/message_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bar_bottom"
         android:layout_below="@id/top_bar" 
         />
     
-
-    <LinearLayout
-        android:id="@+id/bar_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical"
-        android:paddingBottom="2dip"
-        android:paddingTop="2dip" >
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/gray_normal" />
-        
-        
-        
-    </LinearLayout>
+	<com.easemob.applib.widget.EMChatMenu 
+	    android:id="@+id/chat_menu"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    />
+    
 
 </RelativeLayout>

@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
+import com.easemob.applib.widget.MessageAdapter;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
@@ -35,8 +37,8 @@ public class EMChatRowVideoWidget extends EMChatRowWidget {
 	private static final String TAG = "EMChatRowVideoWidget";
 	final Timer timer = new Timer();
 
-	public EMChatRowVideoWidget(Context context, EMMessage message, int position, ViewGroup parent) {
-		super(context);
+	public EMChatRowVideoWidget(Context context, EMMessage message, int position, ViewGroup parent, MessageAdapter adapter) {
+		super(context, adapter);
 		setupView(message, position, parent);
 	}
 
@@ -98,7 +100,7 @@ public class EMChatRowVideoWidget extends EMChatRowWidget {
 
 			@Override
 			public boolean onLongClick(View v) {
-				chatWidget.getActivity().startActivityForResult(
+				activity.startActivityForResult(
 						new Intent(context, ContextMenu.class).putExtra("position", position).putExtra("type",
 								EMMessage.Type.VIDEO.ordinal()), REQUEST_CODE_CONTEXT_MENU);
 				return true;
@@ -167,7 +169,7 @@ public class EMChatRowVideoWidget extends EMChatRowWidget {
 
 				@Override
 				public void run() {
-					chatWidget.getActivity().runOnUiThread(new Runnable() {
+					activity.runOnUiThread(new Runnable() {
 
 						@Override
 						public void run() {
@@ -239,12 +241,12 @@ public class EMChatRowVideoWidget extends EMChatRowWidget {
 							e.printStackTrace();
 						}
 					}
-					chatWidget.getActivity().startActivity(intent);
+					activity.startActivity(intent);
 				}
 			});
 
 		} else {
-			new LoadVideoImageTask().execute(localThumb, thumbnailUrl, iv, chatWidget.getActivity(), message, chatWidget.getAdapter());
+			new LoadVideoImageTask().execute(localThumb, thumbnailUrl, iv, activity, message, adapter);
 		}
 	}
 
@@ -268,7 +270,7 @@ public class EMChatRowVideoWidget extends EMChatRowWidget {
 				@Override
 				public void onSuccess() {
 					Log.d(TAG, "send image message successfully");
-					chatWidget.getActivity().runOnUiThread(new Runnable() {
+					activity.runOnUiThread(new Runnable() {
 						public void run() {
 							// send success
 							holder.pb.setVisibility(View.GONE);
@@ -280,7 +282,7 @@ public class EMChatRowVideoWidget extends EMChatRowWidget {
 				@Override
 				public void onError(int code, String error) {
 					
-					chatWidget.getActivity().runOnUiThread(new Runnable() {
+					activity.runOnUiThread(new Runnable() {
 						public void run() {
 							holder.pb.setVisibility(View.GONE);
 							holder.tv.setVisibility(View.GONE);
@@ -294,7 +296,7 @@ public class EMChatRowVideoWidget extends EMChatRowWidget {
 
 				@Override
 				public void onProgress(final int progress, String status) {
-					chatWidget.getActivity().runOnUiThread(new Runnable() {
+					activity.runOnUiThread(new Runnable() {
 						public void run() {
 							holder.tv.setText(progress + "%");
 						}
@@ -326,7 +328,7 @@ public class EMChatRowVideoWidget extends EMChatRowWidget {
 
 			@Override
 			public void onSuccess() {
-				chatWidget.getActivity().runOnUiThread(new Runnable() {
+				activity.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
 						// message.setBackReceive(false);
@@ -334,7 +336,7 @@ public class EMChatRowVideoWidget extends EMChatRowWidget {
 							holder.pb.setVisibility(View.GONE);
 							holder.tv.setVisibility(View.GONE);
 						}
-						chatWidget.getAdapter().notifyDataSetChanged();
+						adapter.notifyDataSetChanged();
 					}
 				});
 			}
@@ -347,7 +349,7 @@ public class EMChatRowVideoWidget extends EMChatRowWidget {
 			@Override
 			public void onProgress(final int progress, String status) {
 				if (message.getType() == EMMessage.Type.IMAGE) {
-					chatWidget.getActivity().runOnUiThread(new Runnable() {
+					activity.runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
 							holder.tv.setText(progress + "%");

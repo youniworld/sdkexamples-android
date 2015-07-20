@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
+import com.easemob.applib.widget.MessageAdapter;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
@@ -31,8 +32,8 @@ public class EMChatRowVoiceWidget extends EMChatRowWidget {
 	
 	private static final String TAG = "EMChatRowVoiceWidget";
 
-	public EMChatRowVoiceWidget(Context context, EMMessage message, int position, ViewGroup parent) {
-		super(context);
+	public EMChatRowVoiceWidget(Context context, EMMessage message, int position, ViewGroup parent, MessageAdapter adapter) {
+		super(context,adapter);
 		setupView(message, position, parent);
 	}
 
@@ -84,11 +85,11 @@ public class EMChatRowVoiceWidget extends EMChatRowWidget {
 		VoiceMessageBody voiceBody = (VoiceMessageBody) message.getBody();
 		holder.tv.setText(voiceBody.getLength() + "\"");
 		holder.iv.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status,
-				chatWidget.getAdapter(), chatWidget.getActivity(), chatWidget.getToChatUsername()));
+				adapter, activity, adapter.getToChatUsername()));
 		holder.iv.setOnLongClickListener(new OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-				chatWidget.getActivity().startActivityForResult(
+				activity.startActivityForResult(
 						(new Intent(context, ContextMenu.class)).putExtra("position", position).putExtra("type",
 								EMMessage.Type.VOICE.ordinal()), REQUEST_CODE_CONTEXT_MENU);
 				return true;
@@ -129,12 +130,12 @@ public class EMChatRowVoiceWidget extends EMChatRowWidget {
 
 					@Override
 					public void onSuccess() {
-						chatWidget.getActivity().runOnUiThread(new Runnable() {
+						activity.runOnUiThread(new Runnable() {
 
 							@Override
 							public void run() {
 								holder.pb.setVisibility(View.INVISIBLE);
-								chatWidget.getAdapter().notifyDataSetChanged();
+								adapter.notifyDataSetChanged();
 							}
 						});
 
@@ -146,7 +147,7 @@ public class EMChatRowVoiceWidget extends EMChatRowWidget {
 
 					@Override
 					public void onError(int code, String message) {
-						chatWidget.getActivity().runOnUiThread(new Runnable() {
+						activity.runOnUiThread(new Runnable() {
 
 							@Override
 							public void run() {
