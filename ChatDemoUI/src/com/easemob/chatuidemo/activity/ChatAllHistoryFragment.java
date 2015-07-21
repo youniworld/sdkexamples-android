@@ -34,6 +34,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easemob.applib.ui.EMChatActivity;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
@@ -92,16 +93,16 @@ public class ChatAllHistoryFragment extends Fragment implements View.OnClickList
 					Toast.makeText(getActivity(), st2, 0).show();
 				else {
 				    // 进入聊天页面
-				    Intent intent = new Intent(getActivity(), ChatActivity.class);
+				    Intent intent = new Intent(getActivity(), EMChatActivity.class);
 				    if(conversation.isGroup()){
 				        if(conversation.getType() == EMConversationType.ChatRoom){
 				         // it is group chat
 	                        intent.putExtra("chatType", ChatActivity.CHATTYPE_CHATROOM);
-	                        intent.putExtra("groupId", username);
+	                        intent.putExtra("userId", username);
 				        }else{
 				         // it is group chat
 	                        intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-	                        intent.putExtra("groupId", username);
+	                        intent.putExtra("userId", username);
 				        }
 				        
 				    }else{

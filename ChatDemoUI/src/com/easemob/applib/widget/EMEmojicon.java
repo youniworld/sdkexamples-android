@@ -20,6 +20,9 @@ import com.easemob.chatuidemo.adapter.ExpressionAdapter;
 import com.easemob.chatuidemo.adapter.ExpressionPagerAdapter;
 import com.easemob.chatuidemo.widget.ExpandGridView;
 
+/**
+ * 表情图片控件
+ */
 public class EMEmojicon extends LinearLayout{
 	
 	private float emojiconSize;
@@ -46,7 +49,7 @@ public class EMEmojicon extends LinearLayout{
 	
 	private void init(Context context, AttributeSet attrs){
 		this.context = context;
-		LayoutInflater.from(context).inflate(R.layout.em_emojicon, this);
+		LayoutInflater.from(context).inflate(R.layout.em_widget_emojicon, this);
 		TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EMEmojicon);
 		ta.recycle();
 		// 表情list

@@ -16,4 +16,8 @@
        	<attr name="emojiconColumns" format="integer"/>
     </declare-styleable>
     
+    <declare-styleable name="EMChatExtendMenu">
+        <attr name="menuNumColumns" format="integer"/>
+    </declare-styleable>
+    
 </resources>

@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.adapter.MessageAdapter;
 
@@ -46,6 +49,9 @@ public class EMChatMessageList extends RelativeLayout{
 	
     protected ListView messageListView;
 	private Context context;
+    private EMConversation conversation;
+    private int chatType;
+    private String toChatUsername;
 
 	public EMChatMessageList(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -64,22 +70,47 @@ public class EMChatMessageList extends RelativeLayout{
 //        init(context, null);
     }
 
+    /**
+     * init widget
+     * @param toChatUsername
+     * @param chatType
+     */
     public void init(String toChatUsername, int chatType) {
         LayoutInflater.from(context).inflate(R.layout.em_chat_message_list, this);
+        
+        this.chatType = chatType;
+        this.toChatUsername = toChatUsername;
         messageListView = (ListView) findViewById(R.id.list);
+        
+        conversation = EMChatManager.getInstance().getConversation(toChatUsername);
         MessageAdapter adapter = new MessageAdapter(context, toChatUsername, chatType);
-        // 显示消息
+        // 设置adapter显示消息
         messageListView.setAdapter(adapter);
         
         adapter.refreshSelectLast();
         
     }
     
+    /**
+     * 发送消息
+     * @param message
+     */
+    public void sendMessage(EMMessage message){
+        
+    }
+    
+    
+    
+    
     protected void parseStyle(Context context, AttributeSet attrs, int defStyle) {
     	TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.EMChatMessageList, 0, defStyle);
 		ta.recycle();
 	}
 
+    /**
+     * 获取里面的listview
+     * @return
+     */
 	public ListView getListView() {
 		return messageListView;
 	} 

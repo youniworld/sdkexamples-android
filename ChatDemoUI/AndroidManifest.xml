@@ -80,6 +80,14 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustResize" >
         </activity>
+        <!-- 聊天页面 -->
+        <activity
+            android:name="com.easemob.applib.ui.EMChatActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
         <!-- 添加好友 -->
         <activity
             android:name=".activity.AddContactActivity"
