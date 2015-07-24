@@ -59,7 +59,6 @@ public class EMChatRowImageWidget extends EMChatRowWidget {
 		setAvatar(message, position, convertView, holder);
 		updateAckDelivered(message, position, convertView, holder);
 		setResendListener(message, position, convertView, holder);
-		setOnBlackList(message, position, convertView, holder);
 		
 		handleImageMessage(message, position, convertView, holder);
 	}

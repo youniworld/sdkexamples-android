@@ -48,7 +48,6 @@ public class EMChatRowCallWidget extends EMChatRowWidget {
 		setAvatar(message, position, convertView, holder);
 		updateAckDelivered(message, position, convertView, holder);
 		setResendListener(message, position, convertView, holder);
-		setOnBlackList(message, position, convertView, holder);
 
 		handleCallMessage(message, position, convertView, holder);
 	}

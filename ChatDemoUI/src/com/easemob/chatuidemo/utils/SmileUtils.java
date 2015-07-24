@@ -67,6 +67,8 @@ public class SmileUtils {
 	        .getInstance();
 	
 	private static final Map<Pattern, Integer> emoticons = new HashMap<Pattern, Integer>();
+	
+	public static int simleSize = 0;
 
 	static {
 		
@@ -105,6 +107,8 @@ public class SmileUtils {
 	    addPattern(emoticons, ee_33, R.drawable.ee_33);
 	    addPattern(emoticons, ee_34, R.drawable.ee_34);
 	    addPattern(emoticons, ee_35, R.drawable.ee_35);
+	    
+	    simleSize = emoticons.size();
 	}
 
 	private static void addPattern(Map<Pattern, Integer> map, String smile,

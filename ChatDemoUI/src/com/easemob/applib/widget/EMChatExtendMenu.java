@@ -1,12 +1,17 @@
 package com.easemob.applib.widget;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -14,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easemob.chatuidemo.R;
+import com.easemob.util.DensityUtil;
 
 /**
  * 按+按钮出来的扩展按钮
@@ -22,6 +28,7 @@ import com.easemob.chatuidemo.R;
 public class EMChatExtendMenu extends GridView{
 
     protected Context context;
+    private List<ChatMenuItemModel> itemModels = new ArrayList<ChatMenuItemModel>();
 
     public EMChatExtendMenu(Context context, AttributeSet attrs, int defStyle) {
         this(context, attrs);
@@ -39,16 +46,61 @@ public class EMChatExtendMenu extends GridView{
     
     private void init(Context context, AttributeSet attrs){
         this.context = context;
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EMChatExtendMenu);
+        int numColumns = ta.getInt(R.styleable.EMChatExtendMenu_numColumns, 4);
+        ta.recycle();
+        
+        setNumColumns(numColumns);
         setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
+        setGravity(Gravity.CENTER_VERTICAL);
+        setVerticalSpacing(DensityUtil.dip2px(context, 8));
+//        setBackgroundColor(getResources().getColor(android.R.color.white));
     }
     
     /**
-     * 填充数据并显示
-     * @param itemModels
+     * 初始化
      */
-    public void initView(List<ChatMenuItemModel> itemModels){
+    public void init(){
         setAdapter(new ItemAdapter(context, itemModels));
     }
+    
+    /**
+     * 注册menu item
+     * 
+     * @param name
+     *            item名字
+     * @param drawableRes
+     *            item背景
+     * @param itemId
+     *             id
+     * @param listener
+     *            item点击事件
+     */
+    public void registerMenuItem(String name, int drawableRes, int itemId, ChatExtendMenuItemClickListener listener) {
+        ChatMenuItemModel item = new ChatMenuItemModel();
+        item.name = name;
+        item.image = drawableRes;
+        item.id = itemId;
+        item.clickListener = listener;
+        itemModels.add(item);
+    }
+    
+    /**
+     * 注册menu item
+     * 
+     * @param nameRes
+     *            item名字的resource id
+     * @param drawableRes
+     *            item背景
+     * @param itemId
+     *             id
+     * @param listener
+     *            item点击事件
+     */
+    public void registerMenuItem(int nameRes, int drawableRes, int itemId, ChatExtendMenuItemClickListener listener) {
+        registerMenuItem(context.getString(nameRes), drawableRes, itemId, listener);
+    }
+    
     
     private class ItemAdapter extends ArrayAdapter<ChatMenuItemModel>{
 
@@ -60,7 +112,7 @@ public class EMChatExtendMenu extends GridView{
         }
         
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             ChatMenuItem menuItem = null;
             if(convertView == null){
                 convertView = new ChatMenuItem(context);
@@ -68,6 +120,15 @@ public class EMChatExtendMenu extends GridView{
             menuItem = (ChatMenuItem) convertView;
             menuItem.setImage(getItem(position).image);
             menuItem.setText(getItem(position).name);
+            menuItem.setOnClickListener(new OnClickListener() {
+                
+                @Override
+                public void onClick(View v) {
+                    if(getItem(position).clickListener != null){
+                        getItem(position).clickListener.onClick(getItem(position).id, v);
+                    }
+                }
+            });
             return convertView;
         }
         
@@ -75,9 +136,16 @@ public class EMChatExtendMenu extends GridView{
     }
     
     
+    public interface ChatExtendMenuItemClickListener{
+        void onClick(int itemId, View view);
+    }
+    
+    
     class ChatMenuItemModel{
         String name;
         int image;
+        int id;
+        ChatExtendMenuItemClickListener clickListener;
     }
     
     class ChatMenuItem extends LinearLayout {

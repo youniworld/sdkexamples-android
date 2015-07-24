@@ -56,7 +56,6 @@ public class EMChatRowFileWidget extends EMChatRowWidget {
 		setAvatar(message, position, convertView, holder);
 		updateAckDelivered(message, position, convertView, holder);
 		setResendListener(message, position, convertView, holder);
-		setOnBlackList(message, position, convertView, holder);
 		
 		handleFileMessage(message, position, convertView, holder);
 	}

@@ -17,7 +17,7 @@
     </declare-styleable>
     
     <declare-styleable name="EMChatExtendMenu">
-        <attr name="menuNumColumns" format="integer"/>
+        <attr name="numColumns" format="integer"/>
     </declare-styleable>
     
 </resources>

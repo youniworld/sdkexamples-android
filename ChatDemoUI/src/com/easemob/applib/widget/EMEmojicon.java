@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.adapter.ExpressionAdapter;
 import com.easemob.chatuidemo.adapter.ExpressionPagerAdapter;
+import com.easemob.chatuidemo.utils.SmileUtils;
 import com.easemob.chatuidemo.widget.ExpandGridView;
 
 /**
@@ -53,7 +54,7 @@ public class EMEmojicon extends LinearLayout{
 		TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EMEmojicon);
 		ta.recycle();
 		// 表情list
-		reslist = getExpressionRes(35);
+		reslist = getExpressionRes(SmileUtils.simleSize);
 		// 初始化表情viewpager
 		List<View> views = new ArrayList<View>();
 		View gv1 = getGridChildView(1);
@@ -94,9 +95,9 @@ public class EMEmojicon extends LinearLayout{
 				String filename = expressionAdapter.getItem(position);
 				if(listener != null){
 					if (filename != "delete_expression"){
-						listener.onDeleteMenuClicked();
-					}else{
 						listener.onExpressionClicked(filename);
+					}else{
+						listener.onDeleteImageClicked();
 					}
 				}
 
@@ -126,6 +127,6 @@ public class EMEmojicon extends LinearLayout{
 		/**
 		 * 删除按钮被点击
 		 */
-		void onDeleteMenuClicked();
+		void onDeleteImageClicked();
 	}
 }

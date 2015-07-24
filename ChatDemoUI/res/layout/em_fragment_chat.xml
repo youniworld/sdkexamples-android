@@ -11,37 +11,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.easemob.applib.widget.EMChatMessageList
-        android:id="@+id/message_list"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/chat_menu"
-        android:layout_below="@id/title_bar" />
+        android:layout_above="@+id/input_menu"
+        android:layout_below="@id/title_bar" >
 
-    <LinearLayout
-        android:id="@+id/chat_menu_container"
+        <com.easemob.applib.widget.EMChatMessageList
+            android:id="@+id/message_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        
+
+        <com.easemob.applib.widget.EMVoiceRecorder
+            android:id="@+id/voice_recorder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/em_recording_text_hint_bg"
+            android:padding="10dp"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+    <com.easemob.applib.widget.EMChatInputMenu 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/input_menu"
         android:layout_alignParentBottom="true"
-        android:orientation="vertical" >
-
-        <com.easemob.applib.widget.EMChatMenu
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-            <com.easemob.applib.widget.EMChatExtendMenu
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                easemob:menuNumColumns="4" />
-
-            <com.easemob.applib.widget.EMEmojicon
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </FrameLayout>
-    </LinearLayout>
-
+        />
+    
 </RelativeLayout>

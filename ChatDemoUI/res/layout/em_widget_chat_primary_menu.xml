@@ -82,29 +82,32 @@
                 android:paddingTop="3dp"
                 android:textSize="18sp" />
 
-            <ImageView
-                android:id="@+id/iv_emoticons_normal"
-                android:layout_width="24dip"
-                android:layout_height="24dip"
+            <RelativeLayout 
+                android:id="@+id/rl_face"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_gravity="center_vertical|right"
+                >
+            <ImageView
+                android:id="@+id/iv_face_normal"
+                android:layout_width="24dip"
+                android:layout_height="24dip"
                 android:layout_margin="1dip"
                 android:scaleType="fitCenter"
                 android:src="@drawable/chatting_biaoqing_btn_normal"
                 android:visibility="visible" />
 
             <ImageView
-                android:id="@+id/iv_emoticons_checked"
+                android:id="@+id/iv_face_checked"
                 android:layout_width="24dip"
                 android:layout_height="24dip"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center_vertical|right"
                 android:layout_margin="1dip"
                 android:scaleType="fitCenter"
                 android:src="@drawable/chatting_biaoqing_btn_enable"
                 android:visibility="invisible" />
+            
+            </RelativeLayout>
         </RelativeLayout>
 
         <Button
@@ -113,8 +116,7 @@
             android:layout_height="32dip"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/type_select_btn"
-             />
+            android:background="@drawable/type_select_btn" />
 
         <Button
             android:id="@+id/btn_send"
@@ -127,28 +129,5 @@
             android:textSize="16sp"
             android:visibility="gone" />
     </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/fl_more"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
-        android:orientation="vertical"
-        android:visibility="gone" >
-
-        <com.easemob.applib.widget.EMEmojicon
-            android:id="@+id/emojicon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        
-        <!-- 图片，表情，名片等按钮 -->
-        <LinearLayout
-            android:id="@+id/ll_btn_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone" >
-        </LinearLayout>
-    </FrameLayout>
 
 </LinearLayout>

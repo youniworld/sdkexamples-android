@@ -46,6 +46,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easemob.applib.ui.EMChatActivity;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMContact;
 import com.easemob.chat.EMConversation;
@@ -100,11 +101,11 @@ public class ChatHistoryFragment extends Fragment {
 					Toast.makeText(getActivity(), st, 0).show();
 				else {
 					// 进入聊天页面
-					  Intent intent = new Intent(getActivity(), ChatActivity.class);
+					  Intent intent = new Intent(getActivity(), EMChatActivity.class);
 					 if (emContact instanceof EMGroup) {
 		                    //it is group chat
 		                    intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-		                    intent.putExtra("groupId", ((EMGroup) emContact).getGroupId());
+		                    intent.putExtra("userId", ((EMGroup) emContact).getGroupId());
 		                } else {
 		                    //it is single chat
 		                    intent.putExtra("userId", emContact.getUsername());
