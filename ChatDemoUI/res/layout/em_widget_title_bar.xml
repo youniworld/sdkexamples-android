@@ -10,7 +10,7 @@
         android:layout_width="50dip"
         android:layout_height="match_parent"
         android:id="@+id/left_layout"
-        android:background="@drawable/common_tab_bg"
+        android:background="@drawable/em_common_tab_bg"
         android:clickable="true" >
 
         <ImageView
@@ -36,7 +36,7 @@
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:background="@drawable/common_tab_bg"
+        android:background="@drawable/em_common_tab_bg"
          >
 
         <ImageView

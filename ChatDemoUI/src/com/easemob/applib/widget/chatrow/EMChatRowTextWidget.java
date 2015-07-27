@@ -20,7 +20,7 @@ import com.easemob.chatuidemo.utils.SmileUtils;
 
 public class EMChatRowTextWidget extends EMChatRowWidget {
 	
-	private BaseAdapter adapter;
+	private MessageAdapter adapter;
 
     public EMChatRowTextWidget(Context context, EMMessage message, final int position, ViewGroup parent, MessageAdapter adapter) {
 		super(context, adapter);

@@ -23,13 +23,11 @@
             android:layout_height="match_parent" />
         
 
-        <com.easemob.applib.widget.EMVoiceRecorder
+        <com.easemob.applib.widget.EMVoiceRecorderView
             android:id="@+id/voice_recorder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@drawable/em_recording_text_hint_bg"
-            android:padding="10dp"
             android:visibility="invisible" />
     </RelativeLayout>
 

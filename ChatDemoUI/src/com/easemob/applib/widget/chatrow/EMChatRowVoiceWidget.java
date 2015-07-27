@@ -62,8 +62,7 @@ public class EMChatRowVoiceWidget extends EMChatRowWidget {
 
 	@Override
 	public void updateSendedView(EMMessage message, ViewHolder holder) {
-		// TODO Auto-generated method stub
-		
+	    adapter.notifyDataSetChanged();
 	}
 
 	@Override

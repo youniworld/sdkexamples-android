@@ -39,7 +39,7 @@
             android:divider="#E2E2E2"
             android:dividerHeight="1dp" />
 
-        <com.easemob.chatuidemo.widget.Sidebar
+        <com.easemob.applib.widget.Sidebar
             android:id="@+id/sidebar"
             android:layout_width="25dp"
             android:layout_height="match_parent"
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@drawable/show_head_toast_bg"
+            android:background="@drawable/em_show_head_toast_bg"
             android:gravity="center"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"

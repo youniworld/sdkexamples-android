@@ -28,12 +28,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.easemob.applib.widget.Sidebar;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.adapter.ContactAdapter;
 import com.easemob.chatuidemo.domain.User;
-import com.easemob.chatuidemo.widget.Sidebar;
 
 public class PickContactNoCheckboxActivity extends BaseActivity {
 

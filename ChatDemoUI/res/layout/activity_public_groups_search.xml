@@ -29,7 +29,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/common_tab_bg"
+            android:background="@drawable/em_common_tab_bg"
             android:onClick="searchGroup"
             android:text="@string/button_search"
             android:textColor="#fff"

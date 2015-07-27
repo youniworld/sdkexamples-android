@@ -45,6 +45,7 @@ import com.easemob.EMGroupChangeListener;
 import com.easemob.EMNotifierEvent;
 import com.easemob.EMValueCallBack;
 import com.easemob.applib.controller.HXSDKHelper;
+import com.easemob.applib.ui.EMConversationListFragment;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMContactListener;
@@ -82,8 +83,8 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 
 	private Button[] mTabs;
 	private ContactlistFragment contactListFragment;
-	// private ChatHistoryFragment chatHistoryFragment;
-	private ChatAllHistoryFragment chatHistoryFragment;
+	// private conversationListFragment conversationListFragment;
+//	private ChatAllHistoryFragment conversationListFragment;
 	private SettingsFragment settingFragment;
 	private Fragment[] fragments;
 	private int index;
@@ -137,16 +138,13 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 
 		inviteMessgeDao = new InviteMessgeDao(this);
 		userDao = new UserDao(this);
-		// 这个fragment只显示好友和群组的聊天记录
-		// chatHistoryFragment = new ChatHistoryFragment();
-		// 显示所有人消息记录的fragment
-		chatHistoryFragment = new ChatAllHistoryFragment();
+		conversationListFragment = new EMConversationListFragment();
 		contactListFragment = new ContactlistFragment();
 		settingFragment = new SettingsFragment();
-		fragments = new Fragment[] { chatHistoryFragment, contactListFragment, settingFragment };
+		fragments = new Fragment[] { conversationListFragment, contactListFragment, settingFragment };
 		// 添加显示第一个fragment
-		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, chatHistoryFragment)
-				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(chatHistoryFragment)
+		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, conversationListFragment)
+				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(conversationListFragment)
 				.commit();
 		
 		init();
@@ -396,8 +394,8 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 				updateUnreadLabel();
 				if (currentTabIndex == 0) {
 					// 当前页面如果为聊天历史页面，刷新此页面
-					if (chatHistoryFragment != null) {
-						chatHistoryFragment.refresh();
+					if (conversationListFragment != null) {
+						conversationListFragment.refresh();
 					}
 				}
 			}
@@ -543,7 +541,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 					updateUnreadLabel();
 					// 刷新ui
 					contactListFragment.refresh();
-					chatHistoryFragment.refresh();
+					conversationListFragment.refresh();
 				}
 			});
 
@@ -636,7 +634,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 
 				@Override
 				public void run() {
-					chatHistoryFragment.errorItem.setVisibility(View.GONE);
+					conversationListFragment.errorItem.setVisibility(View.GONE);
 				}
 
 			});
@@ -657,11 +655,11 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 						// 显示帐号在其他设备登陆dialog
 						showConflictDialog();
 					} else {
-						chatHistoryFragment.errorItem.setVisibility(View.VISIBLE);
+						conversationListFragment.errorItem.setVisibility(View.VISIBLE);
 						if (NetUtils.hasNetwork(MainActivity.this))
-							chatHistoryFragment.errorText.setText(st1);
+							conversationListFragment.errorText.setText(st1);
 						else
-							chatHistoryFragment.errorText.setText(st2);
+							conversationListFragment.errorText.setText(st2);
 
 					}
 				}
@@ -706,7 +704,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 					updateUnreadLabel();
 					// 刷新ui
 					if (currentTabIndex == 0)
-						chatHistoryFragment.refresh();
+						conversationListFragment.refresh();
 					if (CommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
 						GroupsActivity.instance.onResume();
 					}
@@ -735,7 +733,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 					try {
 						updateUnreadLabel();
 						if (currentTabIndex == 0)
-							chatHistoryFragment.refresh();
+							conversationListFragment.refresh();
 						if (CommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
 							GroupsActivity.instance.onResume();
 						}
@@ -756,7 +754,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 				public void run() {
 					updateUnreadLabel();
 					if (currentTabIndex == 0)
-						chatHistoryFragment.refresh();
+						conversationListFragment.refresh();
 					if (CommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
 						GroupsActivity.instance.onResume();
 					}
@@ -801,7 +799,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 					updateUnreadLabel();
 					// 刷新ui
 					if (currentTabIndex == 0)
-						chatHistoryFragment.refresh();
+						conversationListFragment.refresh();
 					if (CommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
 						GroupsActivity.instance.onResume();
 					}
@@ -925,6 +923,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	private boolean isConflictDialogShow;
 	private boolean isAccountRemovedDialogShow;
     private BroadcastReceiver internalDebugReceiver;
+    private EMConversationListFragment conversationListFragment;
 
 	/**
 	 * 显示帐号在别处登录dialog

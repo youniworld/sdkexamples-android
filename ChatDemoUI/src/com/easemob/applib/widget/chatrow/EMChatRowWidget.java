@@ -139,11 +139,19 @@ public abstract class EMChatRowWidget extends LinearLayout {
 		EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
 			@Override
 			public void onSuccess() {
-				updateSendedView(message, holder);
+			    activity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        updateSendedView(message, holder);
+                    }
+                });
 			}
 			@Override
 			public void onError(int code, String error) {
-				updateSendedView(message, holder);
+			    activity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        updateSendedView(message, holder);
+                    }
+                });
 			}
 			@Override
 			public void onProgress(int progress, String status) {

@@ -34,7 +34,7 @@ import com.easemob.applib.widget.EMChatInputMenu;
 import com.easemob.applib.widget.EMChatInputMenu.ChatInputMenuListener;
 import com.easemob.applib.widget.EMChatMessageList;
 import com.easemob.applib.widget.EMTitleBar;
-import com.easemob.applib.widget.EMVoiceRecorder;
+import com.easemob.applib.widget.EMVoiceRecorderView;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroup;
@@ -108,7 +108,7 @@ public class EMChatFragment extends Fragment {
 
     protected Handler handler = new Handler();
     private File cameraFile;
-    private EMVoiceRecorder voiceRecorder;
+    private EMVoiceRecorderView voiceRecorder;
             
     
     @Override
@@ -131,6 +131,12 @@ public class EMChatFragment extends Fragment {
     }
 
     protected void initView() {
+        // 标题栏
+        titleBar = (EMTitleBar) getView().findViewById(R.id.title_bar);
+        
+        //按住说话录音控件
+        voiceRecorder = (EMVoiceRecorderView) getView().findViewById(R.id.voice_recorder);
+        
         // 消息列表layout
         messageList = (EMChatMessageList) getView().findViewById(R.id.message_list);
         messageList.init(toChatUsername, chatType);
@@ -138,8 +144,11 @@ public class EMChatFragment extends Fragment {
         inputMenu = (EMChatInputMenu) getView().findViewById(R.id.input_menu);
         //注册扩展菜单栏按钮
         for(int i = 0; i < itemStrings.length; i++){
+            //init()需在这个方法后面调用
             inputMenu.registerExtendMenuItem(itemStrings[i], itemdrawables[i], itemIds[i], new MyItemClickListener());
         }
+        //设置按住说话控件
+        inputMenu.setPressToSpeakRecorderView(voiceRecorder);
         inputMenu.init();
         inputMenu.setChatInputMenuListener(new ChatInputMenuListener() {
             
@@ -148,13 +157,13 @@ public class EMChatFragment extends Fragment {
                 //发送文本消息
                 sendTextMessage(content);
             }
+
+            @Override
+            public void onSendVoiceMessage(String filePath, String fileName, int length) {
+                sendVoiceMessage(filePath, fileName, length);
+            }
         });
         
-        // 标题栏
-        titleBar = (EMTitleBar) getView().findViewById(R.id.title_bar);
-        
-        //按住说话录音控件
-//        voiceRecorder = (EMVoiceRecorder) getView().findViewById(R.id.voice_recorder);
     }
 
    
@@ -342,8 +351,8 @@ public class EMChatFragment extends Fragment {
     protected void sendTextMessage(String content) {
         messageList.sendTextMessage(content, null);
     }
-    protected void sendVoiceMessage() {
-        
+    protected void sendVoiceMessage(String filePath, String fileName, int length) {
+        messageList.sendVoiceMessage(filePath, fileName, length, null);
     }
     protected void sendImageMessage(String imagePath) {
         messageList.sendImageMessage(imagePath, false, null);

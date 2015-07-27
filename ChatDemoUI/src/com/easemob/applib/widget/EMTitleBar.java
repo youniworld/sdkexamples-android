@@ -1,11 +1,10 @@
 package com.easemob.applib.widget;
 
-import android.R.integer;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -46,6 +45,18 @@ public class EMTitleBar extends RelativeLayout{
         rightImage = (ImageView) findViewById(R.id.right_image);
         titleView = (TextView) findViewById(R.id.title);
         titleLayout = (RelativeLayout) findViewById(R.id.top_bar);
+        
+        parseStyle(context, attrs);
+    }
+    
+    private void parseStyle(Context context, AttributeSet attrs){
+        if(attrs != null){
+            TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EMTitleBar);
+            String title = ta.getString(R.styleable.EMTitleBar_title);
+            titleView.setText(title);
+            
+            ta.recycle();
+        }
     }
     
     public void setLeftImageResource(int resId) {

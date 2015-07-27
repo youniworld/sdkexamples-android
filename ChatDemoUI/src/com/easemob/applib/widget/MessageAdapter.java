@@ -77,13 +77,13 @@ public class MessageAdapter extends BaseAdapter{
 	EMMessage[] messages = null;
 	
 //	Map<Integer, View> views = new HashMap<Integer, View>();
-	EMChatMessageList messageList;
+	ListView listView;
 
     private String toChatUsername;
 
-	public MessageAdapter(Context context, String username, int chatType, EMChatMessageList messageList) {
+	public MessageAdapter(Context context, String username, int chatType, ListView listView) {
 		this.context = context;
-		this.messageList = messageList;
+		this.listView = listView;
 		toChatUsername = username;
 		this.conversation = EMChatManager.getInstance().getConversation(username);
 	}
@@ -102,7 +102,6 @@ public class MessageAdapter extends BaseAdapter{
 		
 		@Override
 		public void handleMessage(android.os.Message message) {
-			ListView listView = messageList.getListView();
 			switch (message.what) {
 			case HANDLER_MESSAGE_REFRESH_LIST:
 				refreshList();

@@ -21,9 +21,11 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chatuidemo.Constant;
+import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.util.EMLog;
 
@@ -92,7 +94,9 @@ public class CommonUtils {
             digest = getString(context, R.string.video);
             break;
         case TXT: // 文本消息
-            if(!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL,false)){
+            if(((DemoHXSDKHelper)HXSDKHelper.getInstance()).isRobotMenuMessage(message)){
+                digest = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getRobotMenuMessageDigest(message);
+            }else if(!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL,false)){
                 TextMessageBody txtBody = (TextMessageBody) message.getBody();
                 digest = txtBody.getMessage();
             }else{

@@ -90,6 +90,14 @@ public class EMChatInputMenu extends LinearLayout{
     }
     
     /**
+     * 设置长按说话录制控件
+     * @param voiceRecorderView
+     */
+    public void setPressToSpeakRecorderView(EMVoiceRecorderView voiceRecorderView){
+        chatPrimaryMenu.setPressToSpeakRecorderView(voiceRecorderView);
+    }
+    
+    /**
      * init view
      * 此方法需放在registerExtendMenuItem后面
      */
@@ -127,6 +135,12 @@ public class EMChatInputMenu extends LinearLayout{
             @Override
             public void onEditTextClicked() {
                 hideExtendMenuContainer();
+            }
+
+            @Override
+            public void onVoiceRecorded(String filePath, String fileName, int length) {
+                if(listener != null)
+                    listener.onSendVoiceMessage(filePath, fileName, length);
             }
         });
 
@@ -224,6 +238,14 @@ public class EMChatInputMenu extends LinearLayout{
          * @param content 文本内容
          */
         void onSendMessage(String content);
+        
+        /**
+         * 发送语音消息事件
+         * @param length 
+         * @param fileName 
+         * @param filePath 
+         */
+        void onSendVoiceMessage(String filePath, String fileName, int length);
     }
     
 }

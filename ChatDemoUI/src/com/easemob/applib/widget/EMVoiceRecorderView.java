@@ -21,26 +21,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.EMError;
+import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 
 /**
- * 语音录制控件
+ * 按住说话录制控件
  *
  */
-public class EMVoiceRecorder extends RelativeLayout  {
-    Context context;
+public class EMVoiceRecorderView extends RelativeLayout  {
+    protected Context context;
     protected LayoutInflater inflater;
-    private Drawable[] micImages;
-    private VoiceRecorder voiceRecorder;
+    protected Drawable[] micImages;
+    protected VoiceRecorder voiceRecorder;
     
-    private PowerManager.WakeLock wakeLock;
-    private ImageView micImage;
-    private TextView recordingHint;
+    protected PowerManager.WakeLock wakeLock;
+    protected ImageView micImage;
+    protected TextView recordingHint;
     
-    private Handler micImageHandler = new Handler() {
+    protected Handler micImageHandler = new Handler() {
         @Override
         public void handleMessage(android.os.Message msg) {
             // 切换msg切换图片
@@ -48,17 +49,17 @@ public class EMVoiceRecorder extends RelativeLayout  {
         }
     };
     
-    public EMVoiceRecorder(Context context) {
+    public EMVoiceRecorderView(Context context) {
         super(context);
         init(context);
     }
 
-    public EMVoiceRecorder(Context context, AttributeSet attrs) {
+    public EMVoiceRecorderView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
     
-    public EMVoiceRecorder(Context context, AttributeSet attrs, int defStyle) {
+    public EMVoiceRecorderView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
     }
@@ -66,12 +67,11 @@ public class EMVoiceRecorder extends RelativeLayout  {
     
     private void init(Context context) {
         this.context = context;
-        inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.em_widget_voice_recorder, this);
+        LayoutInflater.from(context).inflate(R.layout.em_widget_voice_recorder, this);
         
         
-        micImage = (ImageView) view.findViewById(R.id.mic_image);
-        recordingHint = (TextView) view.findViewById(R.id.recording_hint);
+        micImage = (ImageView) findViewById(R.id.mic_image);
+        recordingHint = (TextView) findViewById(R.id.recording_hint);
         
         voiceRecorder = new VoiceRecorder(micImageHandler);
         
@@ -96,10 +96,9 @@ public class EMVoiceRecorder extends RelativeLayout  {
                 PowerManager.SCREEN_DIM_WAKE_LOCK, "demo");
     }
     
-    public void startRecording(String appKey, String userId) throws Exception {
+    public void startRecording() throws Exception {
         if (!CommonUtils.isExitsSdcard()) {
-            String st4 = getResources().getString(R.string.Send_voice_need_sdcard_support);
-            Toast.makeText(context, st4, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.Send_voice_need_sdcard_support, Toast.LENGTH_SHORT).show();
             return;
         }
         try {
@@ -107,7 +106,7 @@ public class EMVoiceRecorder extends RelativeLayout  {
             this.setVisibility(View.VISIBLE);
             recordingHint.setText(context.getString(R.string.move_up_to_cancel));
             recordingHint.setBackgroundColor(Color.TRANSPARENT);
-            voiceRecorder.startRecording(appKey, userId, context);
+            voiceRecorder.startRecording(context);
         } catch (Exception e) {
             e.printStackTrace();
             if (wakeLock.isHeld())
@@ -120,12 +119,12 @@ public class EMVoiceRecorder extends RelativeLayout  {
         }
     }
     
-    public void showHint1() {
+    public void showReleaseToCancelHint() {
         recordingHint.setText(context.getString(R.string.release_to_cancel));
         recordingHint.setBackgroundResource(R.drawable.em_recording_text_hint_bg);
     }
     
-    public void showHint2() {
+    public void showMoveUpToCancelHint() {
         recordingHint.setText(context.getString(R.string.move_up_to_cancel));
         recordingHint.setBackgroundColor(Color.TRANSPARENT);
     }
@@ -151,11 +150,11 @@ public class EMVoiceRecorder extends RelativeLayout  {
     }
     
     public String getVoiceFilePath() {
-        return voiceRecorder.getVoiceFilePath();
+        return voiceRecorder.voiceFilePath;
     }
     
-    public String getVoiceFileName(String toChatUsername) {
-        return voiceRecorder.getVoiceFileName(toChatUsername);
+    public String getVoiceFileName() {
+        return voiceRecorder.voiceFileName;
     }
     
     public boolean isRecording() {
@@ -183,7 +182,7 @@ public class EMVoiceRecorder extends RelativeLayout  {
         /**
          * start recording to the file
          */
-        public String startRecording(String appKey, String userId, Context appContext) {
+        public String startRecording(Context appContext) {
             file = null;
             try {
                 // need to create recorder every time, otherwise, will got exception
@@ -204,7 +203,7 @@ public class EMVoiceRecorder extends RelativeLayout  {
                 // one easy way is to use temp file
                 // file = File.createTempFile(PREFIX + userId, EXTENSION,
                 // User.getVoicePath());
-                voiceFileName = getVoiceFileName(userId);
+                voiceFileName = getVoiceFileName(EMChatManager.getInstance().getCurrentUser());
                 voiceFilePath = getVoiceFilePath();
                 file = new File(voiceFilePath);
                 recorder.setOutputFile(file.getAbsolutePath());
@@ -286,7 +285,7 @@ public class EMVoiceRecorder extends RelativeLayout  {
             }
         }
 
-        public String getVoiceFileName(String uid) {
+        String getVoiceFileName(String uid) {
             Time now = new Time();
             now.setToNow();
             return uid + now.toString().substring(0, 15) + EXTENSION;
@@ -296,7 +295,7 @@ public class EMVoiceRecorder extends RelativeLayout  {
             return isRecording;
         }
 
-        public String getVoiceFilePath() {
+        String getVoiceFilePath() {
             return PathUtil.getInstance().getVoicePath() + "/" + voiceFileName;
         }
     }

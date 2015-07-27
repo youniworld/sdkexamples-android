@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -19,7 +20,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.easemob.EMError;
+import com.easemob.applib.widget.chatrow.EMChatRowVoiceWidget;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.activity.ChatActivity;
 import com.easemob.chatuidemo.utils.SmileUtils;
@@ -40,6 +44,7 @@ public class EMChatPrimaryMenu extends RelativeLayout implements OnClickListener
     private InputMethodManager inputManager;
     private RelativeLayout faceLayout;
     private Context context;
+    private EMVoiceRecorderView voiceRecorderView;
 
     public EMChatPrimaryMenu(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -55,7 +60,7 @@ public class EMChatPrimaryMenu extends RelativeLayout implements OnClickListener
         init(context, null);
     }
 
-    void init(Context context, AttributeSet attrs) {
+    void init(final Context context, AttributeSet attrs) {
         this.context = context;
         this.activity = (Activity) context;
         LayoutInflater.from(context).inflate(R.layout.em_widget_chat_primary_menu, this);
@@ -119,6 +124,70 @@ public class EMChatPrimaryMenu extends RelativeLayout implements OnClickListener
             }
         });
         
+        
+        buttonPressToSpeak.setOnTouchListener(new OnTouchListener() {
+            
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    try {
+                        if (EMChatRowVoiceWidget.VoicePlayClickListener.isPlaying)
+                            EMChatRowVoiceWidget.VoicePlayClickListener.currentPlayListener.stopPlayVoice();
+                        v.setPressed(true);
+                        voiceRecorderView.startRecording();
+                    } catch (Exception e) {
+                        v.setPressed(false);
+                    }
+                    return true;
+                case MotionEvent.ACTION_MOVE: {
+                    if (event.getY() < 0) {
+                        voiceRecorderView.showReleaseToCancelHint();
+                    } else {
+                        voiceRecorderView.showMoveUpToCancelHint();
+                    }
+                    return true;
+                }
+                case MotionEvent.ACTION_UP:
+                    v.setPressed(false);
+                    if (event.getY() < 0) {
+                        // discard the recorded audio.
+                        voiceRecorderView.discardRecording();
+                    } else {
+                        // stop recording and send voice file
+                        try {
+                            int length = voiceRecorderView.stopRecoding();
+                            if (length > 0) {
+                                if(listener != null)
+                                    listener.onVoiceRecorded(voiceRecorderView.getVoiceFilePath(), voiceRecorderView.getVoiceFileName(),
+                                        length);
+                            } else if (length == EMError.INVALID_FILE) {
+                                Toast.makeText(context, R.string.Recording_without_permission, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, R.string.The_recording_time_is_too_short, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(context, R.string.send_failure_please, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    return true;
+                default:
+                    if (voiceRecorderView != null) {
+                        voiceRecorderView.discardRecording();
+                    }
+                    return false;
+                }
+            }
+        });
+    }
+    
+    /**
+     * 设置长按说话录制控件
+     * @param voiceRecorderView
+     */
+    public void setPressToSpeakRecorderView(EMVoiceRecorderView voiceRecorderView){
+        this.voiceRecorderView = voiceRecorderView;
     }
 
     /**
@@ -278,8 +347,9 @@ public class EMChatPrimaryMenu extends RelativeLayout implements OnClickListener
         }
     }
     
+    
     /**
-     * 设置相关listener
+     * 设置主按钮栏相关listener
      * @param listener
      */
     public void setChatPrimaryMenuListener(ChatPrimaryMenuListener listener){
@@ -293,6 +363,17 @@ public class EMChatPrimaryMenu extends RelativeLayout implements OnClickListener
          */
         void onSendBtnClicked(String content);
         
+        /**
+         * 语音录制成功
+         * @param filePath
+         * @param fileName
+         * @param length
+         */
+        void onVoiceRecorded(String filePath, String fileName, int length);
+        
+        /**
+         * 长按说话按钮隐藏或显示事件
+         */
         void onToggleVoiceBtnClicked();
         
         /**

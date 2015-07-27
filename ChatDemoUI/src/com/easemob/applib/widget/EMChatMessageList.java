@@ -69,7 +69,7 @@ public class EMChatMessageList extends RelativeLayout{
         this.toChatUsername = toChatUsername;
         
         conversation = EMChatManager.getInstance().getConversation(toChatUsername);
-        messageAdapter = new MessageAdapter(context, toChatUsername, chatType, this);
+        messageAdapter = new MessageAdapter(context, toChatUsername, chatType, messageListView);
         // 设置adapter显示消息
         messageListView.setAdapter(messageAdapter);
         
@@ -130,7 +130,7 @@ public class EMChatMessageList extends RelativeLayout{
      * @param fileName
      * @param length
      */
-    public void sendVoiceMessage(String filePath, String fileName, String length, HashMap<String, Object> attrs) {
+    public void sendVoiceMessage(String filePath, String fileName, int length, HashMap<String, Object> attrs) {
         if (!(new File(filePath).exists())) {
             return;
         }
@@ -142,8 +142,7 @@ public class EMChatMessageList extends RelativeLayout{
             }else if(chatType == CHATTYPE_CHATROOM){
                 message.setChatType(ChatType.ChatRoom);
             }
-            int len = Integer.parseInt(length);
-            VoiceMessageBody body = new VoiceMessageBody(new File(filePath), len);
+            VoiceMessageBody body = new VoiceMessageBody(new File(filePath), length);
             message.addBody(body);
             
             setAttributes(attrs, message);
