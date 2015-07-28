@@ -2,6 +2,7 @@ package com.easemob.applib.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
@@ -16,12 +17,12 @@ import com.easemob.chatuidemo.R;
  */
 public class EMTitleBar extends RelativeLayout{
 
-    private RelativeLayout leftLayout;
-    private ImageView leftImage;
-    private RelativeLayout rightLayout;
-    private ImageView rightImage;
-    private TextView titleView;
-    private RelativeLayout titleLayout;
+    protected RelativeLayout leftLayout;
+    protected ImageView leftImage;
+    protected RelativeLayout rightLayout;
+    protected ImageView rightImage;
+    protected TextView titleView;
+    protected RelativeLayout titleLayout;
 
     public EMTitleBar(Context context, AttributeSet attrs, int defStyle) {
         this(context, attrs);
@@ -54,6 +55,19 @@ public class EMTitleBar extends RelativeLayout{
             TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EMTitleBar);
             String title = ta.getString(R.styleable.EMTitleBar_title);
             titleView.setText(title);
+            
+            if (ta.hasValue(R.styleable.EMTitleBar_leftImage)) {
+                Drawable drawable = ta.getDrawable(R.styleable.EMTitleBar_leftImage);
+                if (null != drawable) {
+                    leftImage.setImageDrawable(drawable);
+                }
+            }
+            if (ta.hasValue(R.styleable.EMTitleBar_rightImage)) {
+                Drawable drawable = ta.getDrawable(R.styleable.EMTitleBar_rightImage);
+                if (null != drawable) {
+                    rightImage.setImageDrawable(drawable);
+                }
+            }
             
             ta.recycle();
         }
@@ -91,4 +105,11 @@ public class EMTitleBar extends RelativeLayout{
         titleLayout.setBackgroundColor(color);
     }
     
+    public RelativeLayout getLeftLayout(){
+        return leftLayout;
+    }
+    
+    public RelativeLayout getRightLayout(){
+        return rightLayout;
+    }
 }

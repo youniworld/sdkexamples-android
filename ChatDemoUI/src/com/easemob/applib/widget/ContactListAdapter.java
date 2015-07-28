@@ -4,62 +4,153 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseIntArray;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
+import android.widget.ImageView;
 import android.widget.SectionIndexer;
+import android.widget.TextView;
 
+import com.easemob.chatuidemo.Constant;
+import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.domain.User;
+import com.easemob.chatuidemo.utils.UserUtils;
 import com.easemob.util.EMLog;
 
-public class ContactListAdapter extends ArrayAdapter<User> implements SectionIndexer{
+public class ContactListAdapter extends ArrayAdapter<User>  implements SectionIndexer{
     private static final String TAG = "ContactAdapter";
     List<String> list;
     List<User> userList;
     List<User> copyUserList;
-    private SparseIntArray positionForSection;
-    private SparseIntArray sectionForPosition;
+    private LayoutInflater layoutInflater;
+    private SparseIntArray positionOfSection;
+    private SparseIntArray sectionOfPosition;
+    private int res;
     private MyFilter myFilter;
     private boolean notiyfyByFilter;
 
     public ContactListAdapter(Context context, int resource, List<User> objects) {
         super(context, resource, objects);
+        this.res = resource;
         this.userList = objects;
         copyUserList = new ArrayList<User>();
         copyUserList.addAll(objects);
+        layoutInflater = LayoutInflater.from(context);
     }
     
-    public void updateSections() {
-        getSections();
+    private static class ViewHolder {
+        ImageView avatar;
+        TextView unreadMsgView;
+        TextView nameTextview;
+        TextView tvHeader;
+    }
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        if(convertView == null){
+            holder = new ViewHolder();
+            convertView = layoutInflater.inflate(res, null);
+            holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
+            holder.unreadMsgView = (TextView) convertView.findViewById(R.id.unread_msg_number);
+            holder.nameTextview = (TextView) convertView.findViewById(R.id.name);
+            holder.tvHeader = (TextView) convertView.findViewById(R.id.header);
+            convertView.setTag(holder);
+        }else{
+            holder = (ViewHolder) convertView.getTag();
+        }
+        
+        User user = getItem(position);
+        if(user == null)
+            Log.d("ContactAdapter", position + "");
+        //设置nick，demo里不涉及到完整user，用username代替nick显示
+        String username = user.getUsername();
+        String header = user.getHeader();
+        if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
+            if (TextUtils.isEmpty(header)) {
+                holder.tvHeader.setVisibility(View.GONE);
+            } else {
+                holder.tvHeader.setVisibility(View.VISIBLE);
+                holder.tvHeader.setText(header);
+            }
+        } else {
+            holder.tvHeader.setVisibility(View.GONE);
+        }
+        //显示申请与通知item
+        if(username.equals(Constant.NEW_FRIENDS_USERNAME)){
+            holder.nameTextview.setText(user.getNick());
+            holder.avatar.setImageResource(R.drawable.new_friends_icon);
+            if(user.getUnreadMsgCount() > 0){
+                holder.unreadMsgView.setVisibility(View.VISIBLE);
+//              holder.unreadMsgView.setText(user.getUnreadMsgCount()+"");
+            }else{
+                holder.unreadMsgView.setVisibility(View.INVISIBLE);
+            }
+        }else if(username.equals(Constant.GROUP_USERNAME)){
+            //群聊item
+            holder.nameTextview.setText(user.getNick());
+            holder.avatar.setImageResource(R.drawable.groups_icon);
+        }else if(username.equals(Constant.CHAT_ROOM)){
+            //群聊item
+            holder.nameTextview.setText(user.getNick());
+            holder.avatar.setImageResource(R.drawable.groups_icon);
+        }else if(username.equals(Constant.CHAT_ROBOT)){
+            //Robot item
+            holder.nameTextview.setText(user.getNick());
+            holder.avatar.setImageResource(R.drawable.groups_icon);
+        }else{
+            holder.nameTextview.setText(username);
+            //设置用户头像
+            UserUtils.setUserAvatar(getContext(), username, holder.avatar);
+            if(holder.unreadMsgView != null)
+                holder.unreadMsgView.setVisibility(View.INVISIBLE);
+        }
+        
+        return convertView;
+    }
+    
+    @Override
+    public User getItem(int position) {
+        return super.getItem(position);
+    }
+    
+    @Override
+    public int getCount() {
+        return super.getCount();
     }
 
     public int getPositionForSection(int section) {
-        return positionForSection.get(section);
+        return positionOfSection.get(section);
     }
 
     public int getSectionForPosition(int position) {
-        return sectionForPosition.get(position);
+        return sectionOfPosition.get(position);
     }
     
     @Override
     public Object[] getSections() {
-        positionForSection = new SparseIntArray();
-        sectionForPosition = new SparseIntArray();
+        positionOfSection = new SparseIntArray();
+        sectionOfPosition = new SparseIntArray();
         int count = getCount();
         list = new ArrayList<String>();
-        int section = 0;
-        String prev = "";
-        for (int i = 0; i < count; i++) {
-            String header = getItem(i).getHeader();
-            sectionForPosition.put(i, section);
-            if (getItem(i).getHeader() != null && !prev.equals(header)) {
-                list.add(header);
-                positionForSection.put(section, i);
+        list.add(getContext().getString(R.string.search_header));
+        positionOfSection.put(0, 0);
+        sectionOfPosition.put(0, 0);
+        for (int i = 1; i < count; i++) {
+
+            String letter = getItem(i).getHeader();
+            EMLog.d(TAG, "contactadapter getsection getHeader:" + letter + " name:" + getItem(i).getUsername());
+            int section = list.size() - 1;
+            if (list.get(section) != null && !list.get(section).equals(letter)) {
+                list.add(letter);
                 section++;
-                prev = header;
+                positionOfSection.put(section, i);
             }
+            sectionOfPosition.put(i, section);
         }
         return list.toArray(new String[list.size()]);
     }
@@ -122,7 +213,6 @@ public class ContactListAdapter extends ArrayAdapter<User> implements SectionInd
             return results;
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         protected synchronized void publishResults(CharSequence constraint,
                 FilterResults results) {
@@ -147,24 +237,5 @@ public class ContactListAdapter extends ArrayAdapter<User> implements SectionInd
             copyUserList.clear();
             copyUserList.addAll(userList);
         }
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view = EMContactWidgetFactory.getInstance(context).generateView(position, convertView, parent);
-        if (view != null) {
-            return view;
-        }
-        boolean isSectionIndex = false;
-        if (positionForSection != null) {
-            isSectionIndex = positionForSection.indexOfValue(position) >= 0;
-        }
-        User user = null;
-        if (position < userList.size()) {
-            user = userList.get(position);
-        } else {
-            return null;
-        }
-        return EMContactWidgetFactory.getInstance(context).generateView(user, convertView, parent, isSectionIndex);
     }
 }
