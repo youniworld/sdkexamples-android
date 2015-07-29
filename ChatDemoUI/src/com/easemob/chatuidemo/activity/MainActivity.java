@@ -45,8 +45,8 @@ import com.easemob.EMGroupChangeListener;
 import com.easemob.EMNotifierEvent;
 import com.easemob.EMValueCallBack;
 import com.easemob.applib.controller.HXSDKHelper;
+import com.easemob.applib.ui.EMContactListFragment;
 import com.easemob.applib.ui.EMConversationListFragment;
-import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMContactListener;
 import com.easemob.chat.EMContactManager;
@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	private TextView unreadAddressLable;
 
 	private Button[] mTabs;
-	private ContactlistFragment contactListFragment;
+	private EMContactListFragment contactListFragment;
 	// private conversationListFragment conversationListFragment;
 //	private ChatAllHistoryFragment conversationListFragment;
 	private SettingsFragment settingFragment;
@@ -139,7 +139,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		inviteMessgeDao = new InviteMessgeDao(this);
 		userDao = new UserDao(this);
 		conversationListFragment = new EMConversationListFragment();
-		contactListFragment = new ContactlistFragment();
+		contactListFragment = new EMContactListFragment();
 		settingFragment = new SettingsFragment();
 		fragments = new Fragment[] { conversationListFragment, contactListFragment, settingFragment };
 		// 添加显示第一个fragment
@@ -222,7 +222,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                 String strGroup = context.getString(R.string.group_chat);
                 groupUser.setUsername(Constant.GROUP_USERNAME);
                 groupUser.setNick(strGroup);
-                groupUser.setHeader("");
+                groupUser.setInitialLetter("");
                 userlist.put(Constant.GROUP_USERNAME, groupUser);
                 
                  // 添加"聊天室"
@@ -230,7 +230,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                 String strChatRoom = context.getString(R.string.chat_room);
                 chatRoomItem.setUsername(Constant.CHAT_ROOM);
                 chatRoomItem.setNick(strChatRoom);
-                chatRoomItem.setHeader("");
+                chatRoomItem.setInitialLetter("");
                 userlist.put(Constant.CHAT_ROOM, chatRoomItem);
                 
                 // 添加"Robot"
@@ -238,7 +238,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
         		String strRobot = context.getString(R.string.robot_chat);
         		robotUser.setUsername(Constant.CHAT_ROBOT);
         		robotUser.setNick(strRobot);
-        		robotUser.setHeader("");
+        		robotUser.setInitialLetter("");
         		userlist.put(Constant.CHAT_ROBOT, robotUser);
         		
                  // 存入内存
@@ -295,15 +295,15 @@ public class MainActivity extends BaseActivity implements EMEventListener {
             headerName = user.getUsername();
         }
         if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
-            user.setHeader("");
+            user.setInitialLetter("");
         } else if (Character.isDigit(headerName.charAt(0))) {
-            user.setHeader("#");
+            user.setInitialLetter("#");
         } else {
-            user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(0, 1)
+            user.setInitialLetter(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(0, 1)
                     .toUpperCase());
-            char header = user.getHeader().toLowerCase().charAt(0);
+            char header = user.getInitialLetter().toLowerCase().charAt(0);
             if (header < 'a' || header > 'z') {
-                user.setHeader("#");
+                user.setInitialLetter("#");
             }
         }
     }
@@ -860,15 +860,15 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			headerName = user.getUsername();
 		}
 		if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
-			user.setHeader("");
+			user.setInitialLetter("");
 		} else if (Character.isDigit(headerName.charAt(0))) {
-			user.setHeader("#");
+			user.setInitialLetter("#");
 		} else {
-			user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(0, 1)
+			user.setInitialLetter(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(0, 1)
 					.toUpperCase());
-			char header = user.getHeader().toLowerCase().charAt(0);
+			char header = user.getInitialLetter().toLowerCase().charAt(0);
 			if (header < 'a' || header > 'z') {
-				user.setHeader("#");
+				user.setInitialLetter("#");
 			}
 		}
 		return user;

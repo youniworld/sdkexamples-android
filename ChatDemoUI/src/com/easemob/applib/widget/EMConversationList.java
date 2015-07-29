@@ -174,6 +174,10 @@ public class EMConversationList extends ListView {
         adapter.getFilter().filter(str);
     }
     
+    /**
+     * adapter
+     *
+     */
     class ConverastionListAdapater extends ArrayAdapter<EMConversation> {
         List<EMConversation> conversationList;
         private ConversationFilter conversationFilter;
@@ -219,11 +223,7 @@ public class EMConversationList extends ListView {
                 holder.list_item_layout = (RelativeLayout) convertView.findViewById(R.id.list_item_layout);
                 convertView.setTag(holder);
             }
-            if (position % 2 == 0) {
-                holder.list_item_layout.setBackgroundResource(R.drawable.mm_listitem);
-            } else {
-                holder.list_item_layout.setBackgroundResource(R.drawable.mm_listitem_grey);
-            }
+            holder.list_item_layout.setBackgroundResource(R.drawable.mm_listitem);
 
             // 获取与此用户/群组的会话
             EMConversation conversation = getItem(position);

@@ -23,6 +23,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -39,10 +40,17 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
+import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.activity.AlertDialog;
 import com.easemob.chatuidemo.activity.BaiduMapActivity;
+import com.easemob.chatuidemo.activity.ChatActivity;
+import com.easemob.chatuidemo.activity.ChatRoomDetailsActivity;
+import com.easemob.chatuidemo.activity.GroupDetailsActivity;
 import com.easemob.chatuidemo.activity.ImageGridActivity;
+import com.easemob.chatuidemo.activity.VideoCallActivity;
+import com.easemob.chatuidemo.activity.VoiceCallActivity;
 import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
@@ -160,6 +168,7 @@ public class EMChatFragment extends Fragment {
 
             @Override
             public void onSendVoiceMessage(String filePath, String fileName, int length) {
+                //发送语音消息
                 sendVoiceMessage(filePath, fileName, length);
             }
         });
@@ -198,6 +207,26 @@ public class EMChatFragment extends Fragment {
                 return false;
             }
         });
+        
+        //设置标题栏点击事件
+        titleBar.setLeftLayoutClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
+        titleBar.setRightLayoutClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                if(chatType == EMChatMessageList.CHATTYPE_SINGLE){
+                    emptyHistory();
+                }else{
+                    toGroupDetails();
+                }
+            }
+        });
     }
     
     @Override
@@ -206,8 +235,8 @@ public class EMChatFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK) { // 清空消息
             if (requestCode == REQUEST_CODE_EMPTY_HISTORY) {
                 // 清空会话
-//                EMChatManager.getInstance().clearConversation(toChatUsername);
-//                adapter.refresh();
+                EMChatManager.getInstance().clearConversation(toChatUsername);
+                messageList.refresh();
             } else if (requestCode == REQUEST_CODE_CAMERA) { // 发送照片
                 if (cameraFile != null && cameraFile.exists())
                     sendImageMessage(cameraFile.getAbsolutePath());
@@ -267,45 +296,21 @@ public class EMChatFragment extends Fragment {
             }
         }
     }
-
-    protected void sendVideoMessageByResult(int duration, String videoPath) {
-        File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
-        Bitmap bitmap = null;
-        FileOutputStream fos = null;
-        try {
-            if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();
-            }
-            bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
-            if (bitmap == null) {
-                EMLog.d("chatactivity", "problem load video thumbnail bitmap,use default icon");
-                bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.app_panel_video_icon);
-            }
-            fos = new FileOutputStream(file);
-
-            bitmap.compress(CompressFormat.JPEG, 100, fos);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                fos = null;
-            }
-            if (bitmap != null) {
-                bitmap.recycle();
-                bitmap = null;
-            }
-
-        }
-        sendVideoMessage(videoPath, file.getAbsolutePath(), duration / 1000);
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        messageList.refresh();
     }
 
-    
+    public void onBackPressed(){
+        if(inputMenu.onBackPressed()){
+            getActivity().finish();
+            if(chatType == EMChatMessageList.CHATTYPE_CHATROOM){
+                EMChatManager.getInstance().leaveChatRoom(toChatUsername);
+            }
+        }
+    }
     
     /**
      * 扩展菜单栏item点击事件
@@ -332,11 +337,11 @@ public class EMChatFragment extends Fragment {
             case ITEM_FILE:
                 selectFileFromLocal();
                 break;
-            case ITEM_VOICE_CALL:
-                
+            case ITEM_VOICE_CALL: //语音通话
+                startVoiceCall();
                 break;
-            case ITEM_VIDEO_CALL:
-                
+            case ITEM_VIDEO_CALL: //视频通话
+                startVideoCall();
                 break;
 
             default:
@@ -345,7 +350,6 @@ public class EMChatFragment extends Fragment {
         }
         
     }
-    
     
 
     protected void sendTextMessage(String content) {
@@ -365,6 +369,29 @@ public class EMChatFragment extends Fragment {
     }
     protected void sendFileMessage(Uri uri) {
         messageList.sendFileMessage(uri, null);
+    }
+    
+    
+    protected void startVoiceCall(){
+        if (!EMChatManager.getInstance().isConnected()){
+            Toast.makeText(getActivity(), R.string.not_connect_to_server, 0).show();
+        }else{
+            startActivity(new Intent(getActivity(), VoiceCallActivity.class).putExtra("username",
+                    toChatUsername).putExtra("isComingCall", false));
+//            voiceCallBtn.setEnabled(false);
+            inputMenu.hideExtendMenuContainer();
+        }
+    }
+    
+    protected void startVideoCall(){
+        if (!EMChatManager.getInstance().isConnected())
+            Toast.makeText(getActivity(), R.string.not_connect_to_server, 0).show();
+        else{
+            startActivity(new Intent(getActivity(), VideoCallActivity.class).putExtra("username", toChatUsername).putExtra(
+                    "isComingCall", false));
+//            videoCallBtn.setEnabled(false);
+            inputMenu.hideExtendMenuContainer();
+        }
     }
     
     /**
@@ -450,6 +477,69 @@ public class EMChatFragment extends Fragment {
             intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         }
         startActivityForResult(intent, REQUEST_CODE_SELECT_FILE);
+    }
+    
+    private void sendVideoMessageByResult(int duration, String videoPath) {
+        File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
+        Bitmap bitmap = null;
+        FileOutputStream fos = null;
+        try {
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
+            if (bitmap == null) {
+                EMLog.d("chatactivity", "problem load video thumbnail bitmap,use default icon");
+                bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.app_panel_video_icon);
+            }
+            fos = new FileOutputStream(file);
+
+            bitmap.compress(CompressFormat.JPEG, 100, fos);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                fos = null;
+            }
+            if (bitmap != null) {
+                bitmap.recycle();
+                bitmap = null;
+            }
+
+        }
+        sendVideoMessage(videoPath, file.getAbsolutePath(), duration / 1000);
+    }
+    
+    /**
+     * 点击清空聊天记录
+     * 
+     */
+    public void emptyHistory() {
+        String msg = getResources().getString(R.string.Whether_to_empty_all_chats);
+        startActivityForResult(new Intent(getActivity(), AlertDialog.class).putExtra("titleIsCancel", true).putExtra("msg", msg)
+                .putExtra("cancel", true), REQUEST_CODE_EMPTY_HISTORY);
+    }
+
+    /**
+     * 点击进入群组详情
+     * 
+     */
+    public void toGroupDetails() {
+        if(chatType == EMChatMessageList.CHATTYPE_GROUP){
+            EMGroup group = EMGroupManager.getInstance().getGroup(toChatUsername);
+            if(group == null){
+                Toast.makeText(getActivity(), R.string.gorup_not_found, 0).show();
+                return;
+            }
+            startActivityForResult((new Intent(getActivity(), GroupDetailsActivity.class).putExtra("groupId", toChatUsername)),
+                    REQUEST_CODE_GROUP_DETAIL);
+        }
     }
     
     

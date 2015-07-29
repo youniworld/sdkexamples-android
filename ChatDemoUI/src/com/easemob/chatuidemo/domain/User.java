@@ -16,9 +16,16 @@ package com.easemob.chatuidemo.domain;
 import com.easemob.chat.EMContact;
 
 public class User extends EMContact {
-	private int unreadMsgCount;
-	private String header;
-	private String avatar;
+    protected int unreadMsgCount;
+    
+    /**
+     * 昵称首字母
+     */
+	protected String initialLetter;
+	/**
+	 * 用户头像
+	 */
+	protected String avatar;
 	
 	public User(){}
 	
@@ -26,12 +33,12 @@ public class User extends EMContact {
 	    this.username = username;
 	}
 
-	public String getHeader() {
-		return header;
+	public String getInitialLetter() {
+		return initialLetter;
 	}
 
-	public void setHeader(String header) {
-		this.header = header;
+	public void setInitialLetter(String initialLetter) {
+		this.initialLetter = initialLetter;
 	}
 
 	public int getUnreadMsgCount() {

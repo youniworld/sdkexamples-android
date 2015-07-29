@@ -9,7 +9,7 @@
 	<com.easemob.applib.widget.EMTitleBar 
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    easemob:title="@string/session"
+	    easemob:titleBarTitle="@string/session"
 	    />
     
     <include layout="@layout/search_bar" />

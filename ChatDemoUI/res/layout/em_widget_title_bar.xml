@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/top_bar"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="@dimen/height_top_bar"
     android:background="@color/top_bar_normal_bg"
     android:gravity="center_vertical" >
 
     <RelativeLayout
+        android:id="@+id/left_layout"
         android:layout_width="50dip"
         android:layout_height="match_parent"
-        android:id="@+id/left_layout"
         android:background="@drawable/em_common_tab_bg"
         android:clickable="true" >
 
@@ -17,10 +17,8 @@
             android:id="@+id/left_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="9dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/mm_title_back" />
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside" />
     </RelativeLayout>
 
     <TextView
@@ -36,19 +34,14 @@
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:background="@drawable/em_common_tab_bg"
-         >
+        android:background="@drawable/em_common_tab_bg" >
 
         <ImageView
             android:id="@+id/right_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="9dp"
-            android:scaleType="centerInside"
-             />
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside" />
     </RelativeLayout>
-
 
 </RelativeLayout>

@@ -27,14 +27,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.easemob.applib.Constant;
-import com.easemob.applib.widget.chatrow.EMChatRowCallWidget;
-import com.easemob.applib.widget.chatrow.EMChatRowFileWidget;
-import com.easemob.applib.widget.chatrow.EMChatRowImageWidget;
-import com.easemob.applib.widget.chatrow.EMChatRowLocationWidget;
-import com.easemob.applib.widget.chatrow.EMChatRowTextWidget;
-import com.easemob.applib.widget.chatrow.EMChatRowVideoWidget;
-import com.easemob.applib.widget.chatrow.EMChatRowVoiceWidget;
-import com.easemob.applib.widget.chatrow.EMChatRowWidget;
+import com.easemob.applib.widget.chatrow.EMChatRowCall;
+import com.easemob.applib.widget.chatrow.EMChatRowFile;
+import com.easemob.applib.widget.chatrow.EMChatRowImage;
+import com.easemob.applib.widget.chatrow.EMChatRowLocation;
+import com.easemob.applib.widget.chatrow.EMChatRowText;
+import com.easemob.applib.widget.chatrow.EMChatRowVideo;
+import com.easemob.applib.widget.chatrow.EMChatRowVoice;
+import com.easemob.applib.widget.chatrow.EMChatRowBase;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
@@ -212,25 +212,25 @@ public class MessageAdapter extends BaseAdapter{
 		return -1;// invalid
 	}
 
-	private EMChatRowWidget createViewByMessage(EMMessage message, int position, ViewGroup parent) {
+	private EMChatRowBase createViewByMessage(EMMessage message, int position, ViewGroup parent) {
 		switch (message.getType()) {
 		case LOCATION:
-			return new EMChatRowLocationWidget(context, message, position, parent, this);
+			return new EMChatRowLocation(context, message, position, parent, this);
 		case IMAGE:
-			return new EMChatRowImageWidget(context, message, position, parent, this);
+			return new EMChatRowImage(context, message, position, parent, this);
 		case VOICE:
-			return new EMChatRowVoiceWidget(context, message, position, parent, this);
+			return new EMChatRowVoice(context, message, position, parent, this);
 		case VIDEO:
-			return new EMChatRowVideoWidget(context, message, position, parent, this);
+			return new EMChatRowVideo(context, message, position, parent, this);
 		case FILE:
-			return new EMChatRowFileWidget(context, message, position, parent, this);
+			return new EMChatRowFile(context, message, position, parent, this);
 		default:
 			// 语音通话,  视频通话
 			if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
 				message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false))
-				return new EMChatRowCallWidget(context, message, position, parent, this);
+				return new EMChatRowCall(context, message, position, parent, this);
 			else
-				return new EMChatRowTextWidget(context, message, position, parent, this);
+				return new EMChatRowText(context, message, position, parent, this);
 		}
 	}
 
@@ -240,10 +240,9 @@ public class MessageAdapter extends BaseAdapter{
 		
 		if (convertView == null) {
 			convertView = createViewByMessage(message, position, parent);
-//			views.put(position, convertView);
 		} 
 		
-		((EMChatRowWidget)convertView).updateView(message, position, parent);
+		((EMChatRowBase)convertView).updateView(message, position, parent);
 
 		try {
 			TextView timestamp = (TextView) convertView

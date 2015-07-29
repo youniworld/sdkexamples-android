@@ -215,7 +215,7 @@ public class LoginActivity extends BaseActivity {
 		String strGroup = getResources().getString(R.string.group_chat);
 		groupUser.setUsername(Constant.GROUP_USERNAME);
 		groupUser.setNick(strGroup);
-		groupUser.setHeader("");
+		groupUser.setInitialLetter("");
 		userlist.put(Constant.GROUP_USERNAME, groupUser);
 		
 		// 添加"Robot"
@@ -223,7 +223,7 @@ public class LoginActivity extends BaseActivity {
 		String strRobot = getResources().getString(R.string.robot_chat);
 		robotUser.setUsername(Constant.CHAT_ROBOT);
 		robotUser.setNick(strRobot);
-		robotUser.setHeader("");
+		robotUser.setInitialLetter("");
 		userlist.put(Constant.CHAT_ROBOT, robotUser);
 		
 		// 存入内存

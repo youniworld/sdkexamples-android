@@ -23,6 +23,7 @@ public class EMTitleBar extends RelativeLayout{
     protected ImageView rightImage;
     protected TextView titleView;
     protected RelativeLayout titleLayout;
+    private RelativeLayout rootLayout;
 
     public EMTitleBar(Context context, AttributeSet attrs, int defStyle) {
         this(context, attrs);
@@ -40,6 +41,7 @@ public class EMTitleBar extends RelativeLayout{
     
     private void init(Context context, AttributeSet attrs){
         LayoutInflater.from(context).inflate(R.layout.em_widget_title_bar, this);
+        rootLayout = (RelativeLayout) findViewById(R.id.root);
         leftLayout = (RelativeLayout) findViewById(R.id.left_layout);
         leftImage = (ImageView) findViewById(R.id.left_image);
         rightLayout = (RelativeLayout) findViewById(R.id.right_layout);
@@ -53,20 +55,21 @@ public class EMTitleBar extends RelativeLayout{
     private void parseStyle(Context context, AttributeSet attrs){
         if(attrs != null){
             TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EMTitleBar);
-            String title = ta.getString(R.styleable.EMTitleBar_title);
+            String title = ta.getString(R.styleable.EMTitleBar_titleBarTitle);
             titleView.setText(title);
             
-            if (ta.hasValue(R.styleable.EMTitleBar_leftImage)) {
-                Drawable drawable = ta.getDrawable(R.styleable.EMTitleBar_leftImage);
-                if (null != drawable) {
-                    leftImage.setImageDrawable(drawable);
-                }
+            Drawable leftDrawable = ta.getDrawable(R.styleable.EMTitleBar_titleBarLeftImage);
+            if (null != leftDrawable) {
+                leftImage.setImageDrawable(leftDrawable);
             }
-            if (ta.hasValue(R.styleable.EMTitleBar_rightImage)) {
-                Drawable drawable = ta.getDrawable(R.styleable.EMTitleBar_rightImage);
-                if (null != drawable) {
-                    rightImage.setImageDrawable(drawable);
-                }
+            Drawable rightDrawable = ta.getDrawable(R.styleable.EMTitleBar_titleBarRightImage);
+            if (null != rightDrawable) {
+                rightImage.setImageDrawable(rightDrawable);
+            }
+        
+            Drawable background = ta.getDrawable(R.styleable.EMTitleBar_titleBarBackground);
+            if(null != background) {
+                rootLayout.setBackgroundDrawable(background);
             }
             
             ta.recycle();

@@ -23,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.EMError;
-import com.easemob.applib.widget.chatrow.EMChatRowVoiceWidget;
+import com.easemob.applib.widget.chatrow.EMChatRowVoice;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.activity.ChatActivity;
 import com.easemob.chatuidemo.utils.SmileUtils;
@@ -60,12 +60,10 @@ public class EMChatPrimaryMenu extends RelativeLayout implements OnClickListener
         init(context, null);
     }
 
-    void init(final Context context, AttributeSet attrs) {
+    private void init(final Context context, AttributeSet attrs) {
         this.context = context;
         this.activity = (Activity) context;
         LayoutInflater.from(context).inflate(R.layout.em_widget_chat_primary_menu, this);
-//        recordingContainer = findViewById(R.id.recording_container);
-//        micImage = (ImageView) findViewById(R.id.mic_image);
         editText = (PasteEditText) findViewById(R.id.et_sendmessage);
         buttonSetModeKeyboard = findViewById(R.id.btn_set_mode_keyboard);
         edittext_layout = (RelativeLayout) findViewById(R.id.edittext_layout);
@@ -132,8 +130,8 @@ public class EMChatPrimaryMenu extends RelativeLayout implements OnClickListener
                 switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     try {
-                        if (EMChatRowVoiceWidget.VoicePlayClickListener.isPlaying)
-                            EMChatRowVoiceWidget.VoicePlayClickListener.currentPlayListener.stopPlayVoice();
+                        if (EMChatRowVoice.VoicePlayClickListener.isPlaying)
+                            EMChatRowVoice.VoicePlayClickListener.currentPlayListener.stopPlayVoice();
                         v.setPressed(true);
                         voiceRecorderView.startRecording();
                     } catch (Exception e) {

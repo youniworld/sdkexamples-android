@@ -54,7 +54,7 @@ public class ContactListAdapter extends ArrayAdapter<User>  implements SectionIn
         ViewHolder holder;
         if(convertView == null){
             holder = new ViewHolder();
-            convertView = layoutInflater.inflate(res, null);
+            convertView = layoutInflater.inflate(R.layout.row_contact, null);
             holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
             holder.unreadMsgView = (TextView) convertView.findViewById(R.id.unread_msg_number);
             holder.nameTextview = (TextView) convertView.findViewById(R.id.name);
@@ -69,8 +69,8 @@ public class ContactListAdapter extends ArrayAdapter<User>  implements SectionIn
             Log.d("ContactAdapter", position + "");
         //设置nick，demo里不涉及到完整user，用username代替nick显示
         String username = user.getUsername();
-        String header = user.getHeader();
-        if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
+        String header = user.getInitialLetter();
+        if (position == 0 || header != null && !header.equals(getItem(position - 1).getInitialLetter())) {
             if (TextUtils.isEmpty(header)) {
                 holder.tvHeader.setVisibility(View.GONE);
             } else {
@@ -142,7 +142,7 @@ public class ContactListAdapter extends ArrayAdapter<User>  implements SectionIn
         sectionOfPosition.put(0, 0);
         for (int i = 1; i < count; i++) {
 
-            String letter = getItem(i).getHeader();
+            String letter = getItem(i).getInitialLetter();
             EMLog.d(TAG, "contactadapter getsection getHeader:" + letter + " name:" + getItem(i).getUsername());
             int section = list.size() - 1;
             if (list.get(section) != null && !list.get(section).equals(letter)) {

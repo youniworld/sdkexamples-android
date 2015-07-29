@@ -6,22 +6,45 @@
     android:background="@color/common_bg"
     android:orientation="vertical" >
 
-    <com.easemob.applib.widget.EMTitleBar 
+    <com.easemob.applib.widget.EMTitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        easemob:title="@string/address_book"
-        easemob:rightImage="@drawable/em_add"
-        />
-    
-    <include 
+        easemob:titleBarRightImage="@drawable/em_add"
+        easemob:titleBarTitle="@string/address_book" />
+
+    <include
         android:id="@+id/search_bar_view"
-        layout="@layout/em_search_bar_with_padding"/>
+        layout="@layout/em_search_bar_with_padding" />
 
-    <com.easemob.applib.widget.EMContactList
-        android:id="@+id/contact_list"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
 
+        <com.easemob.applib.widget.EMContactList
+            android:id="@+id/contact_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/now_refresh_list" />
+        </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>

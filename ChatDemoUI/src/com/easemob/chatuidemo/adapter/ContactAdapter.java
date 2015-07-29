@@ -89,8 +89,8 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 			Log.d("ContactAdapter", position + "");
 		//设置nick，demo里不涉及到完整user，用username代替nick显示
 		String username = user.getUsername();
-		String header = user.getHeader();
-		if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
+		String header = user.getInitialLetter();
+		if (position == 0 || header != null && !header.equals(getItem(position - 1).getInitialLetter())) {
 			if (TextUtils.isEmpty(header)) {
 			    holder.tvHeader.setVisibility(View.GONE);
 			} else {
@@ -162,7 +162,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 		sectionOfPosition.put(0, 0);
 		for (int i = 1; i < count; i++) {
 
-			String letter = getItem(i).getHeader();
+			String letter = getItem(i).getInitialLetter();
 			EMLog.d(TAG, "contactadapter getsection getHeader:" + letter + " name:" + getItem(i).getUsername());
 			int section = list.size() - 1;
 			if (list.get(section) != null && !list.get(section).equals(letter)) {

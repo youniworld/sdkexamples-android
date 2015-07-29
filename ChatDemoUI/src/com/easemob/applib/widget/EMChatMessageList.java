@@ -3,9 +3,11 @@ package com.easemob.applib.widget;
 import java.io.File;
 import java.util.HashMap;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -37,14 +39,18 @@ public class EMChatMessageList extends RelativeLayout{
     private int chatType;
     private String toChatUsername;
     private MessageAdapter messageAdapter;
+    private boolean showUserNick;
+    private boolean showAvatar;
+    private Drawable myBubbleBg;
+    private Drawable otherBuddleBg;
 
 	public EMChatMessageList(Context context, AttributeSet attrs, int defStyle) {
-//        parseStyle(context, attrs, defStyle);
         this(context, attrs);
     }
 
     public EMChatMessageList(Context context, AttributeSet attrs) {
     	super(context, attrs);
+    	parseStyle(context, attrs);
     	init(context);
     }
 
@@ -77,9 +83,17 @@ public class EMChatMessageList extends RelativeLayout{
         
     }
     
+    protected void parseStyle(Context context, AttributeSet attrs) {
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EMChatMessageList);
+        showAvatar = ta.getBoolean(R.styleable.EMChatMessageList_msgListShowUserAvatar, true);
+        myBubbleBg = ta.getDrawable(R.styleable.EMChatMessageList_msgListMyBubbleBackground);
+        otherBuddleBg = ta.getDrawable(R.styleable.EMChatMessageList_msgListMyBubbleBackground);
+        showUserNick = ta.getBoolean(R.styleable.EMChatMessageList_msgListShowUserNick, false);
+        ta.recycle();
+    }
     /**
      * 发送消息
-     * @param message 要发送的消息
+     * @param message 要发送的消息.
      */
     public void sendMessage(EMMessage message){
         // 把messgage加到conversation中
@@ -106,9 +120,6 @@ public class EMChatMessageList extends RelativeLayout{
             } else if (chatType == CHATTYPE_CHATROOM) {
                 message.setChatType(ChatType.ChatRoom);
             }
-            // if(isRobot){
-            // message.setAttribute("em_robot_message", true);
-            // }
             setAttributes(attrs, message);
             
             TextMessageBody txtBody = new TextMessageBody(content);
@@ -303,12 +314,12 @@ public class EMChatMessageList extends RelativeLayout{
         }
     }
     
-    
-    
-    protected void parseStyle(Context context, AttributeSet attrs, int defStyle) {
-    	TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.EMChatMessageList, 0, defStyle);
-		ta.recycle();
-	}
+    /**
+     * 刷新列表
+     */
+    public void refresh(){
+        messageAdapter.refresh();
+    }
 
     /**
      * 获取里面的listview
@@ -317,4 +328,16 @@ public class EMChatMessageList extends RelativeLayout{
 	public ListView getListView() {
 		return messageListView;
 	} 
+	
+	/**
+	 * 设置是否显示用户昵称
+	 * @param showUserNick
+	 */
+	public void setShowUserNick(boolean showUserNick){
+	    this.showUserNick = showUserNick;
+	}
+	
+	public boolean isShowUserNick(){
+	    return showUserNick;
+	}
 }

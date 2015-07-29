@@ -225,6 +225,22 @@ public class EMChatInputMenu extends LinearLayout{
         chatExtendMenu.setVisibility(View.GONE);
         emojicon.setVisibility(View.GONE);
         chatExtendMenuContainer.setVisibility(View.GONE);
+        chatPrimaryMenu.showNormalFaceImage();
+    }
+    
+    /**
+     * 系统返回键被按时调用此方法
+     * @return 返回false表示返回键时扩展菜单栏时打开状态，true则表示按返回键时扩展栏是关闭状态<br/>
+     * 如果返回时打开状态状态，会先关闭扩展栏再返回值
+     */
+    public boolean onBackPressed() {
+        if(chatExtendMenuContainer.getVisibility() == View.VISIBLE){
+            hideExtendMenuContainer();
+            return false;
+        }else{
+            return true;
+        }
+        
     }
     
     

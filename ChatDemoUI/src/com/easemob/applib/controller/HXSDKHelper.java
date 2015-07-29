@@ -32,6 +32,7 @@ import com.easemob.applib.model.HXNotifier.HXNotificationInfoProvider;
 import com.easemob.applib.model.HXSDKModel;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatConfig.EMEnvMode;
+import com.easemob.chatuidemo.domain.User;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
 import com.easemob.chat.EMContactManager;
@@ -133,6 +134,8 @@ public abstract class HXSDKHelper {
 	
 	public boolean isVoiceCalling;
     public boolean isVideoCalling;
+
+    protected UserInfoProvider userInfoProvider;
 
     protected HXSDKHelper(){
         me = this;
@@ -675,5 +678,26 @@ public abstract class HXSDKHelper {
         isBlackListSyncedWithServer = false;
         
         alreadyNotified = false;
+    }
+    
+    /**
+     * 设置用户属性提供者
+     * @param provider
+     */
+    public void setUserInfoProvider(UserInfoProvider provider){
+        userInfoProvider = provider;
+    }
+    
+    public UserInfoProvider getUserInfoProvider(){
+        return userInfoProvider;
+    }
+    
+    public interface UserInfoProvider{
+        /**
+         * 返回此username对应的user
+         * @param username 环信id
+         * @return
+         */
+        User getUser(String username);
     }
 }

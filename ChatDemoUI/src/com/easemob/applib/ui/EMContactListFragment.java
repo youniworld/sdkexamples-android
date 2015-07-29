@@ -257,7 +257,7 @@ public class EMContactListFragment extends Fragment {
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		if (((AdapterContextMenuInfo) menuInfo).position > 3) {
-		    toBeProcessUser = adapter.getItem(((AdapterContextMenuInfo) menuInfo).position);
+		    toBeProcessUser = (User) listView.getItemAtPosition(((AdapterContextMenuInfo) menuInfo).position);
 		    toBeProcessUsername = toBeProcessUser.getUsername();
 			getActivity().getMenuInflater().inflate(R.menu.context_contact_list, menu);
 		}
@@ -323,8 +323,8 @@ public class EMContactListFragment extends Fragment {
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							adapter.remove(tobeDeleteUser);
-							adapter.notifyDataSetChanged();
+							contactList.remove(tobeDeleteUser);
+							contactListLayout.refresh();
 
 						}
 					});
@@ -387,7 +387,7 @@ public class EMContactListFragment extends Fragment {
 			getActivity().runOnUiThread(new Runnable() {
 				public void run() {
 					getContactList();
-					adapter.notifyDataSetChanged();
+					contactListLayout.refresh();
 				}
 			});
 		} catch (Exception e) {

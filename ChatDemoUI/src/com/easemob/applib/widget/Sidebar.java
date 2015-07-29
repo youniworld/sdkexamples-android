@@ -25,9 +25,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.easemob.applib.utils.HXPreferenceUtils;
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuidemo.adapter.ContactAdapter;
 import com.easemob.util.DensityUtil;
 
 public class Sidebar extends View{
@@ -88,7 +86,7 @@ public class Sidebar extends View{
 		    }
 		String headerString = sections[sectionForPoint(event.getY())];
 		header.setText(headerString);
-		ContactAdapter adapter = (ContactAdapter) mListView.getAdapter();
+		ContactListAdapter adapter = (ContactListAdapter) mListView.getAdapter();
 		String[] adapterSections = (String[]) adapter.getSections();
 		try {
 			for (int i = adapterSections.length - 1; i > -1; i--) {

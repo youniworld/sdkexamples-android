@@ -86,6 +86,11 @@ public class EMContactList extends RelativeLayout {
         this.contactList = contactList;
     }
     
+    public void refresh(){
+        Message msg = handler.obtainMessage(MSG_UPDATE_LIST);
+        handler.sendMessage(msg);
+    }
+    
     public void filter(CharSequence str) {
         adapter.getFilter().filter(str);
     }
@@ -93,5 +98,6 @@ public class EMContactList extends RelativeLayout {
     public ListView getListView(){
         return listView;
     }
+
 
 }

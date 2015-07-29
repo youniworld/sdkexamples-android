@@ -10,14 +10,21 @@ import com.easemob.chatuidemo.activity.BaseActivity;
  *
  */
 public class EMChatActivity extends BaseActivity{
+    private EMChatFragment chatFragment;
+
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         setContentView(R.layout.em_activity_chat);
         
-        EMChatFragment chatFragment = new EMChatFragment();
+        chatFragment = new EMChatFragment();
         chatFragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager().beginTransaction().add(R.id.container, chatFragment).commit();
         
+    }
+    
+    @Override
+    public void onBackPressed() {
+        chatFragment.onBackPressed();
     }
 }
