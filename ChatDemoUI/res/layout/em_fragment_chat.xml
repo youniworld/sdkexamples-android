@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="#f2f0eb" xmlns:app="http://schemas.android.com/apk/res/com.easemob.chatuidemo">
+    android:background="#f2f0eb">
 
     <com.easemob.applib.widget.EMTitleBar
         android:id="@+id/title_bar"
@@ -23,7 +23,6 @@
             android:id="@+id/message_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" 
-            app:msgListMyBubbleBackground=""
             />
         
 

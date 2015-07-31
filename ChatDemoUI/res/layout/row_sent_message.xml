@@ -27,6 +27,8 @@
             android:background="@drawable/mini_avatar_shadow"
             android:scaleType="fitXY" />
 
+
+       
        <TextView
             android:id="@+id/tv_chatcontent"
             style="@style/chat_content_date_style"
@@ -41,17 +43,17 @@
             android:maxWidth="225.0dip"
             android:paddingLeft="8dip"
             android:textSize="15sp" />
-
-        <!--
-             <TextView
+       
+       <TextView
+           android:text="aaaa"
             android:id="@+id/tv_userid"
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_toRightOf="@id/tv_chatcontent"
-            android:layout_below="@id/iv_userhead"/>
-        -->
+            android:layout_above="@id/iv_userhead"/>
+
 
         <ImageView
             android:id="@+id/msg_status"

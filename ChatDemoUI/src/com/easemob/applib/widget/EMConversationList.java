@@ -8,12 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.R.integer;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Pair;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +49,13 @@ import com.easemob.chatuidemo.utils.UserUtils;
 
 public class EMConversationList extends ListView {
     
+    private int primaryColor;
+    private int secondaryColor;
+    private int timeColor;
+    private int primarySize;
+    private int secondarySize;
+    private float timeSize;
+    
     public interface EMConversationListWidgetUser {
         public void onClick(EMConversation conversation);
     }
@@ -56,26 +66,30 @@ public class EMConversationList extends ListView {
     private ConverastionListAdapater adapter;
     private List<EMConversation> allConversations = new ArrayList<EMConversation>();
     
-    public EMConversationList(Context context) {
-        super(context);
-        init(context);
-    }
-
     public EMConversationList(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init(context, attrs);
     }
     
     public EMConversationList(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(context);
+        init(context, attrs);
     }
 
     
-    private void init(Context context) {
+    private void init(Context context, AttributeSet attrs) {
         this.context = context;
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EMConversationList);
+        primaryColor = ta.getColor(R.styleable.EMConversationList_cvsListPrimaryTextColor, R.color.list_item_primary_color);
+        secondaryColor = ta.getColor(R.styleable.EMConversationList_cvsListSecondaryTextColor, R.color.list_item_secondary_color);
+        timeColor = ta.getColor(R.styleable.EMConversationList_cvsListTimeTextColor, R.color.list_item_secondary_color);
+        primarySize = ta.getDimensionPixelSize(R.styleable.EMConversationList_cvsListPrimaryTextSize, 0);
+        secondarySize = ta.getDimensionPixelSize(R.styleable.EMConversationList_cvsListSecondaryTextSize, 0);
+        timeSize = ta.getDimension(R.styleable.EMConversationList_cvsListTimeTextSize, 0);
+        
+        ta.recycle();
+        
         adapter = new ConverastionListAdapater(context, 0, allConversations);
-
         setAdapter(adapter);
 
         refresh();
@@ -97,6 +111,7 @@ public class EMConversationList extends ListView {
             }
         }
     };
+
     
 
     /**
@@ -209,7 +224,7 @@ public class EMConversationList extends ListView {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.row_chat_history, parent, false);
+                convertView = LayoutInflater.from(context).inflate(R.layout.em_row_chat_history, parent, false);
             }
             ViewHolder holder = (ViewHolder) convertView.getTag();
             if (holder == null) {
@@ -274,6 +289,17 @@ public class EMConversationList extends ListView {
                     holder.msgState.setVisibility(View.GONE);
                 }
             }
+            
+            //设置自定义属性
+            holder.name.setTextColor(primaryColor);
+            holder.message.setTextColor(secondaryColor);
+            holder.time.setTextColor(timeColor);
+            if(primarySize != 0)
+                holder.name.setTextSize(TypedValue.COMPLEX_UNIT_PX, primarySize);
+            if(secondarySize != 0)
+                holder.message.setTextSize(TypedValue.COMPLEX_UNIT_PX, secondarySize);
+            if(timeSize != 0)
+                holder.time.setTextSize(TypedValue.COMPLEX_UNIT_PX, timeSize);
 
             return convertView;
         }
