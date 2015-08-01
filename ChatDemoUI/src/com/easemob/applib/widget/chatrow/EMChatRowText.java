@@ -35,7 +35,7 @@ public class EMChatRowText extends EMChatRowBase {
 		holder = new ViewHolder();
 		convertView.setTag(holder);
 
-		holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
+		holder.pb = (ProgressBar) convertView.findViewById(R.id.progress_bar);
 		holder.staus_iv = (ImageView) convertView
 				.findViewById(R.id.msg_status);
 		holder.iv_avatar = (ImageView) convertView

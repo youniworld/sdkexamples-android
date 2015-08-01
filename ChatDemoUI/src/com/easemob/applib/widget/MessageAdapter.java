@@ -14,8 +14,6 @@
 package com.easemob.applib.widget;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -27,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.easemob.applib.Constant;
+import com.easemob.applib.widget.chatrow.EMChatRowBase;
 import com.easemob.applib.widget.chatrow.EMChatRowCall;
 import com.easemob.applib.widget.chatrow.EMChatRowFile;
 import com.easemob.applib.widget.chatrow.EMChatRowImage;
@@ -34,7 +33,6 @@ import com.easemob.applib.widget.chatrow.EMChatRowLocation;
 import com.easemob.applib.widget.chatrow.EMChatRowText;
 import com.easemob.applib.widget.chatrow.EMChatRowVideo;
 import com.easemob.applib.widget.chatrow.EMChatRowVoice;
-import com.easemob.applib.widget.chatrow.EMChatRowBase;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
@@ -71,6 +69,8 @@ public class MessageAdapter extends BaseAdapter{
 	private static final int MESSAGE_TYPE_RECV_VOICE_CALL = 13;
 	private static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 14;
 	private static final int MESSAGE_TYPE_RECV_VIDEO_CALL = 15;
+	
+	public int itemTypeCount; 
 	
 	// reference to conversation object in chatsdk
 	private EMConversation conversation;
@@ -239,6 +239,8 @@ public class MessageAdapter extends BaseAdapter{
 		final EMMessage message = getItem(position);
 		
 		if (convertView == null) {
+		    convertView = EMChatRow.create
+		    
 			convertView = createViewByMessage(message, position, parent);
 		} 
 		

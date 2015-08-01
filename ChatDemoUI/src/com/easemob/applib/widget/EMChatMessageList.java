@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.easemob.applib.widget.chatrow.EMChatRow;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
@@ -102,6 +103,16 @@ public class EMChatMessageList extends RelativeLayout{
         messageAdapter.refreshSelectLast();
     }
     
+    /**
+     * 刷新列表
+     */
+    public void refresh(){
+        messageAdapter.refresh();
+    }
+    
+    public void registerChatRow(EMChatRow chatRow){
+        
+    }
     /**
      * 发送文本消息
      * 
@@ -314,12 +325,6 @@ public class EMChatMessageList extends RelativeLayout{
         }
     }
     
-    /**
-     * 刷新列表
-     */
-    public void refresh(){
-        messageAdapter.refresh();
-    }
 
     /**
      * 获取里面的listview
@@ -340,4 +345,6 @@ public class EMChatMessageList extends RelativeLayout{
 	public boolean isShowUserNick(){
 	    return showUserNick;
 	}
+	
+	
 }

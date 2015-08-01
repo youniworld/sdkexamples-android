@@ -76,7 +76,7 @@ public abstract class EMChatRowBase extends LinearLayout {
 	protected Activity activity;
 	protected MessageAdapter adapter;
 	
-	public static class ViewHolder {
+	class ViewHolder {
 		ImageView iv;
 		TextView tv;
 		ProgressBar pb;
