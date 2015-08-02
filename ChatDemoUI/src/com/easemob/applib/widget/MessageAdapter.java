@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.easemob.applib.Constant;
+import com.easemob.applib.widget.chatrow.EMChatRow;
 import com.easemob.applib.widget.chatrow.EMChatRowBase;
 import com.easemob.applib.widget.chatrow.EMChatRowCall;
 import com.easemob.applib.widget.chatrow.EMChatRowFile;
@@ -237,9 +238,13 @@ public class MessageAdapter extends BaseAdapter{
 	@SuppressLint("NewApi")
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		final EMMessage message = getItem(position);
+		if(convertView == null){
+			convertView = EMChatRow.createChatRow(context, message, position, this);
+		}
+		((EMChatRow)convertView).setUpView();
+		
 		
 		if (convertView == null) {
-		    convertView = EMChatRow.create
 		    
 			convertView = createViewByMessage(message, position, parent);
 		} 

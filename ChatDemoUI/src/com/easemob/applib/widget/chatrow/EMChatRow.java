@@ -1,60 +1,91 @@
 package com.easemob.applib.widget.chatrow;
 
-import com.easemob.applib.Constant;
-import com.easemob.chat.EMMessage;
-
 import android.content.Context;
-import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class EMChatRow extends LinearLayout{
+import com.easemob.chat.EMMessage;
+import com.easemob.chatuidemo.R;
 
-    protected Context context;
+public abstract class EMChatRow extends LinearLayout {
 
-    public EMChatRow(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context, attrs);
-    }
+	protected LayoutInflater inflater;
+	protected Context context;
+	protected BaseAdapter adapter;
+	protected EMMessage message;
+	protected int position;
+	
+	protected TextView timeStampView;
+	protected ImageView userAvatarView;
+	protected RelativeLayout bubbleLayout;
+	protected TextView usernickView;
+//	protected ChatRowViewHolder viewHolder;
 
-    public EMChatRow(Context context) {
-        super(context);
-        init(context, null);
-    }
-    
-    private void init(Context context, AttributeSet attrs){
-        this.context = context;
-    }
-    
-    public EMChatRow createChatRow(EMMessage message){
-        switch (message.getType()) {
-        case LOCATION:
-            return new EMChatRowLocation(context, message, position, parent, this);
-        case IMAGE:
-            return new EMChatRowImage(context, message, position, parent, this);
-        case VOICE:
-            return new EMChatRowVoice(context, message, position, parent, this);
-        case VIDEO:
-            return new EMChatRowVideo(context, message, position, parent, this);
-        case FILE:
-            return new EMChatRowFile(context, message, position, parent, this);
-        default:
-            // 语音通话,  视频通话
-            if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
-                message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false))
-                return new EMChatRowCall(context, message, position, parent, this);
-            else
-                return new EMChatRowText(context, message, position, parent, this);
-    }
-    
-    
-    class ChatRowBaseViewHolder {
-        TextView timeStampView;
-        ImageView userAvatarView;
-        RelativeLayout bubbleLayout;
-        TextView usernickView;
-        
-    }
+	public EMChatRow(Context context, EMMessage message, int position, BaseAdapter adapter) {
+		super(context);
+		this.context = context;
+		this.message = message;
+		this.position = position;
+		this.adapter = adapter;
+		inflater = LayoutInflater.from(context);
+		
+		initView();
+	}
+	
+	private void initView(){
+		inflatView();
+		timeStampView = (TextView) findViewById(R.id.timestamp);
+		userAvatarView = (ImageView) findViewById(R.id.iv_userhead);
+		bubbleLayout = (RelativeLayout) findViewById(R.id.rl_bubble);
+		usernickView = (TextView) findViewById(R.id.tv_userid);
+		findViewById();
+		
+	}
+	
+	/**
+	 * 设置属性等
+	 */
+	public void setUpView() {
+		
+	}
+
+	
+	
+
+
+	/**
+	 * 填充layout
+	 */
+	protected abstract void inflatView();
+	
+	protected abstract void findViewById();
+	
+//	/**
+//	 * 设置ViewHolder
+//	 * @return
+//	 */
+//	protected abstract ChatRowViewHolder setViewHolder();
+
+	
+	public static EMChatRow createChatRow(Context context, EMMessage message, int position, BaseAdapter adapter) {
+		EMChatRow chatRow = null;
+		switch (message.getType()) {
+		case TXT:
+			chatRow = new EMChatRowText1(context, message, position, adapter);
+			break;
+		default:
+			break;
+		}
+		
+		return chatRow;
+	}
+
+//	class ChatRowViewHolder {
+//		
+//
+//	}
 }
