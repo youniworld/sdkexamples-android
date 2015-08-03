@@ -13,8 +13,6 @@
  */
 package com.easemob.applib.widget;
 
-import java.util.Date;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
@@ -22,23 +20,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.easemob.applib.Constant;
 import com.easemob.applib.widget.chatrow.EMChatRow;
-import com.easemob.applib.widget.chatrow.EMChatRowBase;
-import com.easemob.applib.widget.chatrow.EMChatRowCall;
-import com.easemob.applib.widget.chatrow.EMChatRowFile;
-import com.easemob.applib.widget.chatrow.EMChatRowImage;
-import com.easemob.applib.widget.chatrow.EMChatRowLocation;
-import com.easemob.applib.widget.chatrow.EMChatRowText;
-import com.easemob.applib.widget.chatrow.EMChatRowVideo;
-import com.easemob.applib.widget.chatrow.EMChatRowVoice;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
-import com.easemob.chatuidemo.R;
-import com.easemob.util.DateUtils;
 
 public class MessageAdapter extends BaseAdapter{
 
@@ -213,65 +200,16 @@ public class MessageAdapter extends BaseAdapter{
 		return -1;// invalid
 	}
 
-	private EMChatRowBase createViewByMessage(EMMessage message, int position, ViewGroup parent) {
-		switch (message.getType()) {
-		case LOCATION:
-			return new EMChatRowLocation(context, message, position, parent, this);
-		case IMAGE:
-			return new EMChatRowImage(context, message, position, parent, this);
-		case VOICE:
-			return new EMChatRowVoice(context, message, position, parent, this);
-		case VIDEO:
-			return new EMChatRowVideo(context, message, position, parent, this);
-		case FILE:
-			return new EMChatRowFile(context, message, position, parent, this);
-		default:
-			// 语音通话,  视频通话
-			if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
-				message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false))
-				return new EMChatRowCall(context, message, position, parent, this);
-			else
-				return new EMChatRowText(context, message, position, parent, this);
-		}
-	}
 
 	@SuppressLint("NewApi")
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		final EMMessage message = getItem(position);
+		EMMessage message = getItem(position);
 		if(convertView == null){
 			convertView = EMChatRow.createChatRow(context, message, position, this);
 		}
-		((EMChatRow)convertView).setUpView();
+		//缓存的view的message很可能不是当前item的，传入当前message和position更新ui
+		((EMChatRow)convertView).setUpView(message, position);
 		
-		
-		if (convertView == null) {
-		    
-			convertView = createViewByMessage(message, position, parent);
-		} 
-		
-		((EMChatRowBase)convertView).updateView(message, position, parent);
-
-		try {
-			TextView timestamp = (TextView) convertView
-					.findViewById(R.id.timestamp);
-
-			if (position == 0) {
-				timestamp.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
-				timestamp.setVisibility(View.VISIBLE);
-			} else {
-				// 两条消息时间离得如果稍长，显示时间
-				EMMessage prevMessage = getItem(position - 1);
-				if (prevMessage != null
-						&& DateUtils.isCloseEnough(message.getMsgTime(),
-								prevMessage.getMsgTime())) {
-					timestamp.setVisibility(View.GONE);
-				} else {
-					timestamp.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
-					timestamp.setVisibility(View.VISIBLE);
-				}
-			}
-		} catch (Exception e) {
-		}
 		return convertView;
 	}
 

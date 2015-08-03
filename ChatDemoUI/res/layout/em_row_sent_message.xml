@@ -24,7 +24,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="@dimen/margin_chat_activity"
-            android:background="@drawable/mini_avatar_shadow"
+            android:background="@drawable/default_avatar"
             android:scaleType="fitXY" />
 
         <RelativeLayout
@@ -34,23 +34,25 @@
             android:layout_marginRight="@dimen/margin_chat_activity"
             android:layout_toLeftOf="@id/iv_userhead"
             android:layout_below="@+id/tv_userid"
+             android:background="@drawable/chatto_bg"
             >
 
             <TextView
                 android:id="@+id/tv_chatcontent"
-                style="@style/chat_content_date_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autoLink="web"
-                android:background="@drawable/chatto_bg"
-                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:paddingRight="6dp"
+                android:paddingLeft="1dp"
                 android:lineSpacingExtra="2dp"
+              	android:textColor="#000000"
                 android:maxWidth="225.0dip"
                 android:textSize="15sp" />
         </RelativeLayout>
         
         <TextView
-            android:id="@+id/tv_usernick"
+            android:id="@+id/tv_userid"
             android:visibility="gone"
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"

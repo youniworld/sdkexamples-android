@@ -110,6 +110,13 @@ public class EMChatMessageList extends RelativeLayout{
         messageAdapter.refresh();
     }
     
+    /**
+     * 刷新列表，并且跳至最后一个item
+     */
+    public void refreshSelectLast(){
+        messageAdapter.refreshSelectLast();
+    }
+    
     public void registerChatRow(EMChatRow chatRow){
         
     }
@@ -320,7 +327,7 @@ public class EMChatMessageList extends RelativeLayout{
         if(attrs != null && attrs.size() != 0){
             String[] keys = attrs.keySet().toArray(new String[]{});
             for(int i = 0; i < attrs.size(); i++){
-                message.setAttribute(keys[i], attrs.get(keys[i]));
+                message.setObjectAttribute(keys[i], attrs.get(keys[i]));
             }
         }
     }

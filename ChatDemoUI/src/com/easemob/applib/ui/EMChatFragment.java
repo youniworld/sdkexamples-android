@@ -30,6 +30,9 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.easemob.EMEventListener;
+import com.easemob.EMNotifierEvent;
+import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.applib.widget.EMChatExtendMenu.ChatExtendMenuItemClickListener;
 import com.easemob.applib.widget.EMChatInputMenu;
 import com.easemob.applib.widget.EMChatInputMenu.ChatInputMenuListener;
@@ -41,7 +44,9 @@ import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chatuidemo.DemoApplication;
+import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.activity.AlertDialog;
 import com.easemob.chatuidemo.activity.BaiduMapActivity;
@@ -55,7 +60,7 @@ import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 
-public class EMChatFragment extends Fragment {
+public class EMChatFragment extends Fragment implements EMEventListener {
     private static final String TAG = "ChatActivity";
     private static final int REQUEST_CODE_EMPTY_HISTORY = 2;
     public static final int REQUEST_CODE_CONTEXT_MENU = 3;
@@ -96,8 +101,7 @@ public class EMChatFragment extends Fragment {
     static final int ITEM_FILE = 5;
     static final int ITEM_VOICE_CALL = 6;
     static final int ITEM_VIDEO_CALL = 7;
-    
-    
+
     protected int chatType;
     protected String toChatUsername;
     protected EMChatMessageList messageList;
@@ -108,8 +112,9 @@ public class EMChatFragment extends Fragment {
     protected int[] itemdrawables = { R.drawable.chat_takepic_selector, R.drawable.chat_image_selector,
             R.drawable.chat_location_selector, R.drawable.chat_video_selector, R.drawable.chat_file_selector,
             R.drawable.chat_voice_call_selector, R.drawable.chat_video_call_selector };
-    protected int[] itemIds = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION, ITEM_VIDEO, ITEM_FILE, ITEM_VOICE_CALL, ITEM_VIDEO_CALL};
-    
+    protected int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION, ITEM_VIDEO, ITEM_FILE, ITEM_VOICE_CALL,
+            ITEM_VIDEO_CALL };
+
     protected EMConversation conversation;
     protected EMTitleBar titleBar;
     protected InputMethodManager inputManager;
@@ -117,8 +122,7 @@ public class EMChatFragment extends Fragment {
     protected Handler handler = new Handler();
     private File cameraFile;
     private EMVoiceRecorderView voiceRecorder;
-            
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.em_fragment_chat, container, false);
@@ -141,53 +145,52 @@ public class EMChatFragment extends Fragment {
     protected void initView() {
         // 标题栏
         titleBar = (EMTitleBar) getView().findViewById(R.id.title_bar);
-        
-        //按住说话录音控件
+
+        // 按住说话录音控件
         voiceRecorder = (EMVoiceRecorderView) getView().findViewById(R.id.voice_recorder);
-        
+
         // 消息列表layout
         messageList = (EMChatMessageList) getView().findViewById(R.id.message_list);
         messageList.init(toChatUsername, chatType);
-        
+
         inputMenu = (EMChatInputMenu) getView().findViewById(R.id.input_menu);
-        //注册扩展菜单栏按钮
-        for(int i = 0; i < itemStrings.length; i++){
-            //init()需在这个方法后面调用
+        // 注册扩展菜单栏按钮
+        for (int i = 0; i < itemStrings.length; i++) {
+            // init()需在这个方法后面调用
             inputMenu.registerExtendMenuItem(itemStrings[i], itemdrawables[i], itemIds[i], new MyItemClickListener());
         }
-        //设置按住说话控件
+        // 设置按住说话控件
         inputMenu.setPressToSpeakRecorderView(voiceRecorder);
         inputMenu.init();
         inputMenu.setChatInputMenuListener(new ChatInputMenuListener() {
-            
+
             @Override
             public void onSendMessage(String content) {
-                //发送文本消息
+                // 发送文本消息
                 sendTextMessage(content);
             }
 
             @Override
             public void onSendVoiceMessage(String filePath, String fileName, int length) {
-                //发送语音消息
+                // 发送语音消息
                 sendVoiceMessage(filePath, fileName, length);
             }
         });
-        
+
     }
 
-   
     protected void setUpView() {
-        
+
         inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        //获取当前conversation对象
+        // 获取当前conversation对象
         conversation = EMChatManager.getInstance().getConversation(toChatUsername);
         // 把此会话的未读数置为0
         conversation.markAllMessagesAsRead();
 
         titleBar.setTitle(toChatUsername);
         if (chatType == EMChatMessageList.CHATTYPE_SINGLE) { // 单聊
-            //设置标题
+            // 设置标题
             titleBar.setRightImageResource(R.drawable.mm_title_remove);
         } else {
             // 群聊
@@ -196,10 +199,9 @@ public class EMChatFragment extends Fragment {
                 titleBar.setTitle(group.getGroupName());
             titleBar.setRightImageResource(R.drawable.to_group_details_normal);
         }
-        
 
         messageList.getListView().setOnTouchListener(new OnTouchListener() {
-            
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 hideKeyboard();
@@ -207,28 +209,28 @@ public class EMChatFragment extends Fragment {
                 return false;
             }
         });
-        
-        //设置标题栏点击事件
+
+        // 设置标题栏点击事件
         titleBar.setLeftLayoutClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
         titleBar.setRightLayoutClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
-                if(chatType == EMChatMessageList.CHATTYPE_SINGLE){
+                if (chatType == EMChatMessageList.CHATTYPE_SINGLE) {
                     emptyHistory();
-                }else{
+                } else {
                     toGroupDetails();
                 }
             }
         });
     }
-    
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -271,76 +273,149 @@ public class EMChatFragment extends Fragment {
                     Toast.makeText(getActivity(), R.string.unable_to_get_loaction, 0).show();
                 }
                 // 重发消息
-//            } else if (requestCode == REQUEST_CODE_TEXT || requestCode == REQUEST_CODE_VOICE
-//                    || requestCode == REQUEST_CODE_PICTURE || requestCode == REQUEST_CODE_LOCATION
-//                    || requestCode == REQUEST_CODE_VIDEO || requestCode == REQUEST_CODE_FILE) {
-//                resendMessage();
+                // } else if (requestCode == REQUEST_CODE_TEXT || requestCode ==
+                // REQUEST_CODE_VOICE
+                // || requestCode == REQUEST_CODE_PICTURE || requestCode ==
+                // REQUEST_CODE_LOCATION
+                // || requestCode == REQUEST_CODE_VIDEO || requestCode ==
+                // REQUEST_CODE_FILE) {
+                // resendMessage();
             } else if (requestCode == REQUEST_CODE_COPY_AND_PASTE) {
-//                // 粘贴
-//                if (!TextUtils.isEmpty(clipboard.getText())) {
-//                    String pasteText = clipboard.getText().toString();
-//                    if (pasteText.startsWith(COPY_IMAGE)) {
-//                        // 把图片前缀去掉，还原成正常的path
-//                        sendPicture(pasteText.replace(COPY_IMAGE, ""));
-//                    }
-//
-//                }
+                // // 粘贴
+                // if (!TextUtils.isEmpty(clipboard.getText())) {
+                // String pasteText = clipboard.getText().toString();
+                // if (pasteText.startsWith(COPY_IMAGE)) {
+                // // 把图片前缀去掉，还原成正常的path
+                // sendPicture(pasteText.replace(COPY_IMAGE, ""));
+                // }
+                //
+                // }
             } else if (requestCode == REQUEST_CODE_ADD_TO_BLACKLIST) { // 移入黑名单
-//                EMMessage deleteMsg = (EMMessage) adapter.getItem(data.getIntExtra("position", -1));
-//                addUserToBlacklist(deleteMsg.getFrom());
+            // EMMessage deleteMsg = (EMMessage)
+            // adapter.getItem(data.getIntExtra("position", -1));
+            // addUserToBlacklist(deleteMsg.getFrom());
             } else if (conversation.getMsgCount() > 0) {
-//                adapter.refresh();
-//                setResult(RESULT_OK);
+                // adapter.refresh();
+                // setResult(RESULT_OK);
             } else if (requestCode == REQUEST_CODE_GROUP_DETAIL) {
-//                adapter.refresh();
+                // adapter.refresh();
             }
         }
     }
-    
+
     @Override
     public void onResume() {
         super.onResume();
         messageList.refresh();
+        DemoHXSDKHelper sdkHelper = (DemoHXSDKHelper) DemoHXSDKHelper.getInstance();
+        sdkHelper.pushActivity(getActivity());
+        // register the event listener when enter the foreground
+        EMChatManager.getInstance().registerEventListener(
+                this,
+                new EMNotifierEvent.Event[] { EMNotifierEvent.Event.EventNewMessage,
+                        EMNotifierEvent.Event.EventOfflineMessage, EMNotifierEvent.Event.EventDeliveryAck,
+                        EMNotifierEvent.Event.EventReadAck });
+    }
+    
+    @Override
+    public void onStop() {
+        super.onStop();
+        // unregister this event listener when this activity enters the background
+        EMChatManager.getInstance().unregisterEventListener(this);
+
+        DemoHXSDKHelper sdkHelper = (DemoHXSDKHelper) DemoHXSDKHelper.getInstance();
+
+        // 把此activity 从foreground activity 列表里移除
+        sdkHelper.popActivity(getActivity());
     }
 
-    public void onBackPressed(){
-        if(inputMenu.onBackPressed()){
+    /**
+     * 事件监听,registerEventListener后的回调事件
+     * 
+     * see {@link EMNotifierEvent}
+     */
+    @Override
+    public void onEvent(EMNotifierEvent event) {
+        switch (event.getEvent()) {
+        case EventNewMessage:
+            // 获取到message
+            EMMessage message = (EMMessage) event.getData();
+
+            String username = null;
+            // 群组消息
+            if (message.getChatType() == ChatType.GroupChat || message.getChatType() == ChatType.ChatRoom) {
+                username = message.getTo();
+            } else {
+                // 单聊消息
+                username = message.getFrom();
+            }
+
+            // 如果是当前会话的消息，刷新聊天页面
+            if (username.equals(toChatUsername)) {
+                messageList.refreshSelectLast();
+                // 声音和震动提示有新消息
+                HXSDKHelper.getInstance().getNotifier().viberateAndPlayTone(message);
+            } else {
+                // 如果消息不是和当前聊天ID的消息
+                HXSDKHelper.getInstance().getNotifier().onNewMsg(message);
+            }
+
+            break;
+        case EventDeliveryAck:
+        case EventReadAck:
+            // 获取到message
+            messageList.refresh();
+            break;
+        case EventOfflineMessage:
+            // a list of offline messages
+            // List<EMMessage> offlineMessages = (List<EMMessage>)
+            // event.getData();
+            messageList.refresh();
+            break;
+        default:
+            break;
+        }
+
+    }
+
+    public void onBackPressed() {
+        if (inputMenu.onBackPressed()) {
             getActivity().finish();
-            if(chatType == EMChatMessageList.CHATTYPE_CHATROOM){
+            if (chatType == EMChatMessageList.CHATTYPE_CHATROOM) {
                 EMChatManager.getInstance().leaveChatRoom(toChatUsername);
             }
         }
     }
-    
+
     /**
      * 扩展菜单栏item点击事件
      *
      */
-    class MyItemClickListener implements ChatExtendMenuItemClickListener{
+    class MyItemClickListener implements ChatExtendMenuItemClickListener {
 
         @Override
         public void onClick(int itemId, View view) {
             switch (itemId) {
-            case ITEM_TAKE_PICTURE: //拍照
+            case ITEM_TAKE_PICTURE: // 拍照
                 selectPicFromCamera();
                 break;
             case ITEM_PICTURE:
-                selectPicFromLocal(); //图库选择图片
+                selectPicFromLocal(); // 图库选择图片
                 break;
-            case ITEM_LOCATION: //位置
-                startActivityForResult(new Intent(getActivity(), BaiduMapActivity.class), REQUEST_CODE_MAP); 
+            case ITEM_LOCATION: // 位置
+                startActivityForResult(new Intent(getActivity(), BaiduMapActivity.class), REQUEST_CODE_MAP);
                 break;
-            case ITEM_VIDEO: //视频
+            case ITEM_VIDEO: // 视频
                 Intent intent = new Intent(getActivity(), ImageGridActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_SELECT_VIDEO);
                 break;
             case ITEM_FILE:
                 selectFileFromLocal();
                 break;
-            case ITEM_VOICE_CALL: //语音通话
+            case ITEM_VOICE_CALL: // 语音通话
                 startVoiceCall();
                 break;
-            case ITEM_VIDEO_CALL: //视频通话
+            case ITEM_VIDEO_CALL: // 视频通话
                 startVideoCall();
                 break;
 
@@ -348,52 +423,55 @@ public class EMChatFragment extends Fragment {
                 break;
             }
         }
-        
+
     }
-    
 
     protected void sendTextMessage(String content) {
         messageList.sendTextMessage(content, null);
     }
+
     protected void sendVoiceMessage(String filePath, String fileName, int length) {
         messageList.sendVoiceMessage(filePath, fileName, length, null);
     }
+
     protected void sendImageMessage(String imagePath) {
         messageList.sendImageMessage(imagePath, false, null);
     }
+
     protected void sendLocationMessage(double latitude, double longitude, String locationAddress) {
         messageList.sendLocationMessage(latitude, longitude, locationAddress, null);
     }
+
     protected void sendVideoMessage(String filePath, String thumbPath, int length) {
         messageList.sendVideoMessage(filePath, thumbPath, length, null);
     }
+
     protected void sendFileMessage(Uri uri) {
         messageList.sendFileMessage(uri, null);
     }
-    
-    
-    protected void startVoiceCall(){
-        if (!EMChatManager.getInstance().isConnected()){
+
+    protected void startVoiceCall() {
+        if (!EMChatManager.getInstance().isConnected()) {
             Toast.makeText(getActivity(), R.string.not_connect_to_server, 0).show();
-        }else{
-            startActivity(new Intent(getActivity(), VoiceCallActivity.class).putExtra("username",
-                    toChatUsername).putExtra("isComingCall", false));
-//            voiceCallBtn.setEnabled(false);
+        } else {
+            startActivity(new Intent(getActivity(), VoiceCallActivity.class).putExtra("username", toChatUsername)
+                    .putExtra("isComingCall", false));
+            // voiceCallBtn.setEnabled(false);
             inputMenu.hideExtendMenuContainer();
         }
     }
-    
-    protected void startVideoCall(){
+
+    protected void startVideoCall() {
         if (!EMChatManager.getInstance().isConnected())
             Toast.makeText(getActivity(), R.string.not_connect_to_server, 0).show();
-        else{
-            startActivity(new Intent(getActivity(), VideoCallActivity.class).putExtra("username", toChatUsername).putExtra(
-                    "isComingCall", false));
-//            videoCallBtn.setEnabled(false);
+        else {
+            startActivity(new Intent(getActivity(), VideoCallActivity.class).putExtra("username", toChatUsername)
+                    .putExtra("isComingCall", false));
+            // videoCallBtn.setEnabled(false);
             inputMenu.hideExtendMenuContainer();
         }
     }
-    
+
     /**
      * 根据图库图片uri发送图片
      * 
@@ -430,7 +508,7 @@ public class EMChatFragment extends Fragment {
         }
 
     }
-    
+
     /**
      * 照相获取图片
      */
@@ -447,7 +525,7 @@ public class EMChatFragment extends Fragment {
                 new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile)),
                 REQUEST_CODE_CAMERA);
     }
-    
+
     /**
      * 从图库获取图片
      */
@@ -478,7 +556,7 @@ public class EMChatFragment extends Fragment {
         }
         startActivityForResult(intent, REQUEST_CODE_SELECT_FILE);
     }
-    
+
     private void sendVideoMessageByResult(int duration, String videoPath) {
         File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
         Bitmap bitmap = null;
@@ -515,15 +593,16 @@ public class EMChatFragment extends Fragment {
         }
         sendVideoMessage(videoPath, file.getAbsolutePath(), duration / 1000);
     }
-    
+
     /**
      * 点击清空聊天记录
      * 
      */
     public void emptyHistory() {
         String msg = getResources().getString(R.string.Whether_to_empty_all_chats);
-        startActivityForResult(new Intent(getActivity(), AlertDialog.class).putExtra("titleIsCancel", true).putExtra("msg", msg)
-                .putExtra("cancel", true), REQUEST_CODE_EMPTY_HISTORY);
+        startActivityForResult(
+                new Intent(getActivity(), AlertDialog.class).putExtra("titleIsCancel", true).putExtra("msg", msg)
+                        .putExtra("cancel", true), REQUEST_CODE_EMPTY_HISTORY);
     }
 
     /**
@@ -531,25 +610,26 @@ public class EMChatFragment extends Fragment {
      * 
      */
     public void toGroupDetails() {
-        if(chatType == EMChatMessageList.CHATTYPE_GROUP){
+        if (chatType == EMChatMessageList.CHATTYPE_GROUP) {
             EMGroup group = EMGroupManager.getInstance().getGroup(toChatUsername);
-            if(group == null){
+            if (group == null) {
                 Toast.makeText(getActivity(), R.string.gorup_not_found, 0).show();
                 return;
             }
-            startActivityForResult((new Intent(getActivity(), GroupDetailsActivity.class).putExtra("groupId", toChatUsername)),
+            startActivityForResult(
+                    (new Intent(getActivity(), GroupDetailsActivity.class).putExtra("groupId", toChatUsername)),
                     REQUEST_CODE_GROUP_DETAIL);
         }
     }
-    
-    
+
     /**
      * 隐藏软键盘
      */
     protected void hideKeyboard() {
         if (getActivity().getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
             if (getActivity().getCurrentFocus() != null)
-                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 }
