@@ -203,6 +203,9 @@ public abstract class EMChatRow extends LinearLayout {
         case TXT:
             chatRow = new EMChatRowText(context, message, position, adapter);
             break;
+        case LOCATION:
+        	chatRow = new EMChatRowLocation(context, message, position, adapter);
+        	break;
         default:
             break;
         }
