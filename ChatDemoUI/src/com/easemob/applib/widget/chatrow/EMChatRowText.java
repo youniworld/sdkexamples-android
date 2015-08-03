@@ -24,8 +24,6 @@ import com.easemob.chatuidemo.utils.SmileUtils;
 public class EMChatRowText extends EMChatRow{
 
 	private TextView contentView;
-    private ProgressBar progressBar;
-    private ImageView statusView;
 
     public EMChatRowText(Context context, EMMessage message, int position, BaseAdapter adapter) {
 		super(context, message, position, adapter);
@@ -40,8 +38,6 @@ public class EMChatRowText extends EMChatRow{
 	@Override
 	protected void onFindViewById() {
 		contentView = (TextView) findViewById(R.id.tv_chatcontent);
-		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        statusView = (ImageView) findViewById(R.id.msg_status);
 	}
 
     @Override

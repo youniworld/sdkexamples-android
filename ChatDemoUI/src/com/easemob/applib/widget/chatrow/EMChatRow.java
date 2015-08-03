@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +56,10 @@ public abstract class EMChatRow extends LinearLayout {
     protected ImageView userAvatarView;
     protected RelativeLayout bubbleLayout;
     protected TextView usernickView;
+    
+    protected ProgressBar progressBar;
+    protected ImageView statusView;
+    
     // protected ChatRowViewHolder viewHolder;
     protected Activity activity;
 
@@ -76,6 +81,9 @@ public abstract class EMChatRow extends LinearLayout {
         userAvatarView = (ImageView) findViewById(R.id.iv_userhead);
         bubbleLayout = (RelativeLayout) findViewById(R.id.rl_bubble);
         usernickView = (TextView) findViewById(R.id.tv_userid);
+        
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        statusView = (ImageView) findViewById(R.id.msg_status);
         onFindViewById();
     }
 
@@ -134,7 +142,7 @@ public abstract class EMChatRow extends LinearLayout {
         });
     }
 
-    private void updateView(final EMMessage message) {
+    protected void updateView(final EMMessage message) {
         activity.runOnUiThread(new Runnable() {
             public void run() {
                 if (message.status == EMMessage.Status.FAIL) {

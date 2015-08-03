@@ -4,55 +4,36 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.ContextMenu;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.easemob.applib.widget.MessageAdapter;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.LocationMessageBody;
 import com.easemob.chatuidemo.R;
 import com.easemob.util.LatLng;
 
-public class EMChatRowLocation extends EMChatRowBase {
+public class EMChatRowLocation extends EMChatRow{
 
-	public EMChatRowLocation(Context context, EMMessage message, int position,
-			ViewGroup parent, MessageAdapter adapter) {
-		super(context, adapter);
-		setupView(message, position, parent);
-	}
+    private TextView locationView;
 
-	@Override
-	public void setupView(EMMessage message, int position, ViewGroup parent) {
-		convertView = inflater.inflate(message.direct == EMMessage.Direct.RECEIVE ?
-				R.layout.em_row_received_location : R.layout.em_row_sent_location, this);
-		
-		holder.iv_avatar = (ImageView) convertView.findViewById(R.id.iv_userhead);
-		holder.tv = (TextView) convertView.findViewById(R.id.tv_location);
-		holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
-		holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
-		holder.tv_usernick = (TextView) convertView.findViewById(R.id.tv_userid);
-	}
-	
-	public void updateView(final EMMessage message, final int position, ViewGroup parent) {
-		setAvatar(message, position, convertView, holder);
-		updateAckDelivered(message, position, convertView, holder);
-		setResendListener(message, position, convertView, holder);
-		setOnBlackList(message, position, convertView, holder);
-		handleLocationMessage(message, position, convertView, holder);
-	}
+	public EMChatRowLocation(Context context, EMMessage message, int position, BaseAdapter adapter) {
+        super(context, message, position, adapter);
+    }
 
-	/**
-	 * 处理位置消息
-	 * 
-	 * @param message
-	 * @param holder
-	 * @param position
-	 * @param convertView
-	 */
-	private void handleLocationMessage(final EMMessage message, final int position, final View convertView, final ViewHolder holder) {
-		TextView locationView = ((TextView) convertView.findViewById(R.id.tv_location));
+    @Override
+    protected void onInflatView() {
+        inflater.inflate(message.direct == EMMessage.Direct.RECEIVE ?
+                R.layout.em_row_received_location : R.layout.em_row_sent_location, this);
+    }
+
+    @Override
+    protected void onFindViewById() {
+    	locationView = (TextView) findViewById(R.id.tv_location);
+    }
+
+
+    @Override
+    protected void onSetUpView() {
 		LocationMessageBody locBody = (LocationMessageBody) message.getBody();
 		locationView.setText(locBody.getAddress());
 		LatLng loc = new LatLng(locBody.getLatitude(), locBody.getLongitude());
@@ -67,31 +48,42 @@ public class EMChatRowLocation extends EMChatRowBase {
 			}
 		});
 
-		if (message.direct == EMMessage.Direct.RECEIVE) {
-			return;
-		}
 		// deal with send message
-		switch (message.status) {
-		case SUCCESS:
-			holder.pb.setVisibility(View.GONE);
-			holder.staus_iv.setVisibility(View.GONE);
-			break;
-		case FAIL:
-			holder.pb.setVisibility(View.GONE);
-			holder.staus_iv.setVisibility(View.VISIBLE);
-			break;
-		case INPROGRESS:
-			holder.pb.setVisibility(View.VISIBLE);
-			break;
-		default:
-			sendMsgInBackground(message, holder);
-		}
-	}
-
-	/*
+		if (message.direct == EMMessage.Direct.SEND) {
+            switch (message.status) {
+            case CREATE: 
+                progressBar.setVisibility(View.VISIBLE);
+                statusView.setVisibility(View.GONE);
+                // 发送消息
+                sendMsgInBackground(message);
+                break;
+            case SUCCESS: // 发送成功
+                progressBar.setVisibility(View.GONE);
+                statusView.setVisibility(View.GONE);
+                break;
+            case FAIL: // 发送失败
+                progressBar.setVisibility(View.GONE);
+                statusView.setVisibility(View.VISIBLE);
+                break;
+            case INPROGRESS: // 发送中
+                progressBar.setVisibility(View.VISIBLE);
+                statusView.setVisibility(View.GONE);
+                break;
+            default:
+               break;
+            }
+        }
+    }
+    
+    @Override
+    protected void onUpdateView() {
+        adapter.notifyDataSetChanged();
+    }
+    
+    /*
 	 * 点击地图消息listener
 	 */
-	class MapClickListener implements View.OnClickListener {
+	protected class MapClickListener implements View.OnClickListener {
 
 		LatLng location;
 		String address;
@@ -114,18 +106,6 @@ public class EMChatRowLocation extends EMChatRowBase {
 //			activity.startActivity(intent);
 		}
 
-	}
-
-	@Override
-	public void updateSendedView(EMMessage message, ViewHolder holder) {
-	    adapter.notifyDataSetChanged();
-	}
-
-	@Override
-	public void onProgress(EMMessage message, ViewHolder holder, int progress,
-			String status) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
