@@ -22,6 +22,8 @@ import com.easemob.chatuidemo.R;
 import com.easemob.util.DateUtils;
 
 public abstract class EMChatRow extends LinearLayout {
+    protected static final String TAG = EMChatRow.class.getSimpleName();
+    
     protected static final int REQUEST_CODE_EMPTY_HISTORY = 2;
     protected static final int REQUEST_CODE_CONTEXT_MENU = 3;
     protected static final int REQUEST_CODE_MAP = 4;
@@ -54,11 +56,13 @@ public abstract class EMChatRow extends LinearLayout {
 
     protected TextView timeStampView;
     protected ImageView userAvatarView;
-    protected RelativeLayout bubbleLayout;
+    protected View bubbleLayout;
     protected TextView usernickView;
     
     protected ProgressBar progressBar;
     protected ImageView statusView;
+    
+    protected EMCallBack sendMessageCallBack;
     
     // protected ChatRowViewHolder viewHolder;
     protected Activity activity;
@@ -79,7 +83,7 @@ public abstract class EMChatRow extends LinearLayout {
         onInflatView();
         timeStampView = (TextView) findViewById(R.id.timestamp);
         userAvatarView = (ImageView) findViewById(R.id.iv_userhead);
-        bubbleLayout = (RelativeLayout) findViewById(R.id.rl_bubble);
+        bubbleLayout = findViewById(R.id.bubble);
         usernickView = (TextView) findViewById(R.id.tv_userid);
         
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
@@ -127,41 +131,32 @@ public abstract class EMChatRow extends LinearLayout {
 
             @Override
             public void onSuccess() {
-                updateView(message);
+                updateView();
             }
 
             @Override
             public void onProgress(int progress, String status) {
-
+                
             }
 
             @Override
             public void onError(int code, String error) {
-                updateView(message);
+                updateView();
             }
         });
     }
 
-    protected void updateView(final EMMessage message) {
+    protected void updateView() {
         activity.runOnUiThread(new Runnable() {
             public void run() {
                 if (message.status == EMMessage.Status.FAIL) {
 
                     if (message.getError() == EMError.MESSAGE_SEND_INVALID_CONTENT) {
-                        Toast.makeText(
-                                activity,
-                                activity.getString(R.string.send_fail)
-                                        + activity.getString(R.string.error_send_invalid_content), 0).show();
+                        Toast.makeText(activity,activity.getString(R.string.send_fail)+ activity.getString(R.string.error_send_invalid_content), 0).show();
                     } else if (message.getError() == EMError.MESSAGE_SEND_NOT_IN_THE_GROUP) {
-                        Toast.makeText(
-                                activity,
-                                activity.getString(R.string.send_fail)
-                                        + activity.getString(R.string.error_send_not_in_the_group), 0).show();
+                        Toast.makeText(activity,activity.getString(R.string.send_fail)+ activity.getString(R.string.error_send_not_in_the_group), 0).show();
                     } else {
-                        Toast.makeText(
-                                activity,
-                                activity.getString(R.string.send_fail)
-                                        + activity.getString(R.string.connect_failuer_toast), 0).show();
+                        Toast.makeText(activity,activity.getString(R.string.send_fail)+ activity.getString(R.string.connect_failuer_toast), 0).show();
                     }
                 }
 
@@ -191,30 +186,5 @@ public abstract class EMChatRow extends LinearLayout {
      */
     protected abstract void onSetUpView();
 
-    // /**
-    // * 设置ViewHolder
-    // * @return
-    // */
-    // protected abstract ChatRowViewHolder setViewHolder();
 
-    public static EMChatRow createChatRow(Context context, EMMessage message, int position, BaseAdapter adapter) {
-        EMChatRow chatRow = null;
-        switch (message.getType()) {
-        case TXT:
-            chatRow = new EMChatRowText(context, message, position, adapter);
-            break;
-        case LOCATION:
-        	chatRow = new EMChatRowLocation(context, message, position, adapter);
-        	break;
-        default:
-            break;
-        }
-
-        return chatRow;
-    }
-
-    // class ChatRowViewHolder {
-    //
-    //
-    // }
 }

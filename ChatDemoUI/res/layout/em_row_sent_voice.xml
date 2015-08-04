@@ -24,25 +24,33 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="@dimen/margin_chat_activity"
-            android:background="@drawable/mini_avatar_shadow"
+            android:background="@drawable/default_avatar"
             android:scaleType="fitXY" />
 
-        <ImageView
-            android:id="@+id/iv_voice"
+        <RelativeLayout 
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginRight="10dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/bubble"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/chatto_bg"
-            android:src="@drawable/chatto_voice_playing" />
-
+            android:layout_marginRight="10dp"
+             android:background="@drawable/chatto_bg"
+            >
+	        <ImageView
+	            android:id="@+id/iv_voice"
+	            android:layout_centerInParent="true"
+	            android:paddingLeft="12dp"
+	            android:paddingRight="10dp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/chatto_voice_playing" />
+		</RelativeLayout>
         <TextView
             android:id="@+id/tv_length"
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/iv_voice"
+            android:layout_toLeftOf="@id/bubble"
             android:gravity="center" />
         
         <ImageView
@@ -79,7 +87,7 @@
             />
           <ProgressBar 
             android:visibility="visible"
-            android:id="@+id/pb_sending"
+            android:id="@+id/progress_bar"
             android:layout_width="25dp"
             android:layout_height="25dp"
               android:layout_centerVertical="true"

@@ -50,19 +50,9 @@ public class VoicePlayClickListener implements View.OnClickListener {
 
 	public static boolean isPlaying = false;
 	public static VoicePlayClickListener currentPlayListener = null;
+	public static String playMsgId;
 
-	/**
-	 * 
-	 * @param message
-	 * @param v
-	 * @param iv_read_status
-	 * @param context
-	 * @param activity
-	 * @param user
-	 * @param chatType
-	 */
-	public VoicePlayClickListener(EMMessage message, ImageView v, ImageView iv_read_status, BaseAdapter adapter, Activity activity,
-			String username) {
+	public VoicePlayClickListener(EMMessage message, ImageView v, ImageView iv_read_status, BaseAdapter adapter, Activity activity) {
 		this.message = message;
 		voiceBody = (VoiceMessageBody) message.getBody();
 		this.iv_read_status = iv_read_status;
@@ -85,7 +75,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 			mediaPlayer.release();
 		}
 		isPlaying = false;
-		((ChatActivity) activity).playMsgId = null;
+		playMsgId = null;
 		adapter.notifyDataSetChanged();
 	}
 
@@ -93,7 +83,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 		if (!(new File(filePath).exists())) {
 			return;
 		}
-		((ChatActivity) activity).playMsgId = message.getMsgId();
+		playMsgId = message.getMsgId();
 		AudioManager audioManager = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
 
 		mediaPlayer = new MediaPlayer();
@@ -166,7 +156,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 	public void onClick(View v) {
 		String st = activity.getResources().getString(R.string.Is_download_voice_click_later);
 		if (isPlaying) {
-			if (((ChatActivity) activity).playMsgId != null && ((ChatActivity) activity).playMsgId.equals(message.getMsgId())) {
+			if (playMsgId != null && playMsgId.equals(message.getMsgId())) {
 				currentPlayListener.stopPlayVoice();
 				return;
 			}

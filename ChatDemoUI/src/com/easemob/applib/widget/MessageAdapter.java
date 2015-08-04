@@ -23,6 +23,7 @@ import android.widget.ListView;
 
 import com.easemob.applib.Constant;
 import com.easemob.applib.widget.chatrow.EMChatRow;
+import com.easemob.applib.widget.chatrow.EMChatRowFactory;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
@@ -205,7 +206,7 @@ public class MessageAdapter extends BaseAdapter{
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		EMMessage message = getItem(position);
 		if(convertView == null){
-			convertView = EMChatRow.createChatRow(context, message, position, this);
+			convertView = EMChatRowFactory.createChatRow(context, message, position, this);
 		}
 		//缓存的view的message很可能不是当前item的，传入当前message和position更新ui
 		((EMChatRow)convertView).setUpView(message, position);

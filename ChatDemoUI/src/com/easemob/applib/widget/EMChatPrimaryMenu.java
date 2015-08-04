@@ -26,6 +26,7 @@ import com.easemob.EMError;
 import com.easemob.applib.widget.chatrow.EMChatRowVoice;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.activity.ChatActivity;
+import com.easemob.chatuidemo.adapter.VoicePlayClickListener;
 import com.easemob.chatuidemo.utils.SmileUtils;
 import com.easemob.chatuidemo.widget.PasteEditText;
 
@@ -130,8 +131,8 @@ public class EMChatPrimaryMenu extends RelativeLayout implements OnClickListener
                 switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     try {
-                        if (EMChatRowVoice.VoicePlayClickListener.isPlaying)
-                            EMChatRowVoice.VoicePlayClickListener.currentPlayListener.stopPlayVoice();
+                        if (VoicePlayClickListener.isPlaying)
+                            VoicePlayClickListener.currentPlayListener.stopPlayVoice();
                         v.setPressed(true);
                         voiceRecorderView.startRecording();
                     } catch (Exception e) {

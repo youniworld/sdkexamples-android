@@ -958,7 +958,7 @@ public class MessageAdapter extends BaseAdapter{
 		}else{
 			holder.tv.setVisibility(View.INVISIBLE);
 		}
-		holder.iv.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, username));
+		holder.iv.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity));
 		holder.iv.setOnLongClickListener(new OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {

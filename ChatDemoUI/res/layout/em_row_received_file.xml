@@ -35,10 +35,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/iv_userhead"
-            android:layout_toLeftOf="@+id/ll_file_container" />
+            android:layout_toLeftOf="@+id/bubble" />
 
         <LinearLayout
-            android:id="@+id/ll_file_container"
+            android:id="@+id/bubble"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_chat_activity"
@@ -65,7 +65,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text=""
+                    android:singleLine="true"
+                    android:ellipsize="middle"
                     android:textColor="#000"
                     android:textSize="15sp" />
 
@@ -96,7 +97,7 @@
         </LinearLayout>
 
         <ProgressBar
-            android:id="@+id/pb_sending"
+            android:id="@+id/progress_bar"
             style="?android:attr/progressBarStyleSmall"
             android:layout_width="30dp"
             android:layout_height="30dp"

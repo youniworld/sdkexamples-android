@@ -24,11 +24,11 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="@dimen/margin_chat_activity"
-            android:background="@drawable/mini_avatar_shadow"
+            android:background="@drawable/default_avatar"
             android:scaleType="fitXY" />
 
         <LinearLayout
-            android:id="@+id/ll_location"
+            android:id="@+id/bubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/margin_chat_activity"
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/ll_location"
+            android:layout_toLeftOf="@id/bubble"
             android:clickable="true"
             android:src="@drawable/msg_state_failed_resend"
             android:visibility="gone" />
@@ -63,7 +63,7 @@
             android:layout_centerVertical="true"
             android:text="@string/text_ack_msg"
             android:textSize="12sp"
-            android:layout_toLeftOf="@id/ll_location"
+            android:layout_toLeftOf="@id/bubble"
             android:visibility="invisible"
             />
 
@@ -80,11 +80,11 @@
             />
         
         <ProgressBar
-            android:id="@+id/pb_sending"
+            android:id="@+id/progress_bar"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/ll_location"
+            android:layout_toLeftOf="@id/bubble"
             android:visibility="visible" />
     </RelativeLayout>
 

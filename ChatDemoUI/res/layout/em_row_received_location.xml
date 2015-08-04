@@ -24,11 +24,11 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/margin_chat_activity"
-            android:background="@drawable/mini_avatar_shadow"
+            android:background="@drawable/default_avatar"
             android:scaleType="fitXY" />
 
         <LinearLayout
-            android:id="@+id/row_rec_location"
+            android:id="@+id/bubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_chat_activity"
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@id/row_rec_location"
+            android:layout_toLeftOf="@id/bubble"
             android:layout_below="@id/iv_userhead"/>
     </RelativeLayout>
 
