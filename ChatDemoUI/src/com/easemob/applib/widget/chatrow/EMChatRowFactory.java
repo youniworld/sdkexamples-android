@@ -19,7 +19,7 @@ public class EMChatRowFactory {
             chatRow = new EMChatRowFile(context, message, position, adapter);
             break;
         case IMAGE:
-            chatRow = new EMChatRowImage1(context, message, position, adapter);
+            chatRow = new EMChatRowImage(context, message, position, adapter);
             break;
         case VOICE:
             chatRow = new EMChatRowVoice(context, message, position, adapter);

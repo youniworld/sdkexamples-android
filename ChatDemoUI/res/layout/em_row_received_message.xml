@@ -58,7 +58,7 @@
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="17dp"
+            android:layout_marginLeft="@dimen/chat_nick_margin_left"
             android:layout_toRightOf="@id/iv_userhead"
             android:visibility="gone" />
     </RelativeLayout>

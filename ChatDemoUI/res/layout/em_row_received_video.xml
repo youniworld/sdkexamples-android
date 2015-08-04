@@ -24,7 +24,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/margin_chat_activity"
-            android:background="@drawable/mini_avatar_shadow"
+            android:background="@drawable/default_avatar"
             android:scaleType="fitXY" />
 
         <TextView
@@ -32,15 +32,17 @@
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/iv_userhead"
-            android:layout_toLeftOf="@+id/ll_click_area" />
+            android:layout_toRightOf="@id/iv_userhead"
+            android:layout_marginLeft="@dimen/chat_nick_margin_left"
+            android:visibility="gone"
+            />
 
         <LinearLayout
-            android:id="@+id/ll_click_area"
+            android:id="@+id/bubble"
             android:layout_width="130dp"
             android:layout_height="145dp"
             android:layout_marginLeft="@dimen/margin_chat_activity"
+            android:layout_below="@+id/tv_userid"
             android:layout_toRightOf="@id/iv_userhead" >
 
             <FrameLayout
