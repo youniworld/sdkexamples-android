@@ -39,7 +39,7 @@ public class EMChatMessageList extends RelativeLayout{
     private EMConversation conversation;
     private int chatType;
     private String toChatUsername;
-    private MessageAdapter messageAdapter;
+    private EMChatMessageAdapter messageAdapter;
     private boolean showUserNick;
     private boolean showAvatar;
     private Drawable myBubbleBg;
@@ -76,7 +76,7 @@ public class EMChatMessageList extends RelativeLayout{
         this.toChatUsername = toChatUsername;
         
         conversation = EMChatManager.getInstance().getConversation(toChatUsername);
-        messageAdapter = new MessageAdapter(context, toChatUsername, chatType, messageListView);
+        messageAdapter = new EMChatMessageAdapter(context, toChatUsername, chatType, messageListView);
         // 设置adapter显示消息
         messageListView.setAdapter(messageAdapter);
         
@@ -116,6 +116,15 @@ public class EMChatMessageList extends RelativeLayout{
     public void refreshSelectLast(){
         messageAdapter.refreshSelectLast();
     }
+    
+    /**
+     * 刷新页面,并跳至给定position
+     * @param position
+     */
+    public void refreshSeekTo(int position){
+        messageAdapter.refreshSeekTo(position);
+    }
+    
     
     public void registerChatRow(EMChatRow chatRow){
         
@@ -334,12 +343,16 @@ public class EMChatMessageList extends RelativeLayout{
     
 
     /**
-     * 获取里面的listview
+     * 获取listview
      * @return
      */
 	public ListView getListView() {
 		return messageListView;
 	} 
+	
+	public EMMessage getItem(int position){
+	    return messageAdapter.getItem(position);
+	}
 	
 	/**
 	 * 设置是否显示用户昵称

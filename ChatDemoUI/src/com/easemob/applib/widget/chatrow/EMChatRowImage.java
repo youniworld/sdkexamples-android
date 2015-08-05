@@ -78,7 +78,20 @@ public class EMChatRowImage extends EMChatRowFile{
             return;
         }
         
+        // 发送的消息
+        // process send message
+        // send pic, show the pic directly
+        ImageMessageBody imgBody = (ImageMessageBody) message.getBody();
+        String filePath = imgBody.getLocalUrl();
+        if (filePath != null) {
+            showImageView(ImageUtils.getThumbnailImagePath(filePath), imageView, filePath, null, message);
+        } 
         handleSendMessage((ImageMessageBody)message.getBody());
+    }
+    
+    @Override
+    protected void onUpdateView() {
+        super.onUpdateView();
     }
     
     /**

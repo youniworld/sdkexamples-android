@@ -61,11 +61,13 @@ public abstract class EMChatRow extends LinearLayout {
     
     protected ProgressBar progressBar;
     protected ImageView statusView;
+    protected Activity activity;
+    protected TextView ackedView;
     
     protected EMCallBack sendMessageCallBack;
+
+    protected TextView deliveredView;
     
-    // protected ChatRowViewHolder viewHolder;
-    protected Activity activity;
 
     public EMChatRow(Context context, EMMessage message, int position, BaseAdapter adapter) {
         super(context);
@@ -88,14 +90,16 @@ public abstract class EMChatRow extends LinearLayout {
         
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         statusView = (ImageView) findViewById(R.id.msg_status);
+        ackedView = (TextView) findViewById(R.id.tv_ack);
+        deliveredView = (TextView) findViewById(R.id.tv_delivered);
+        
         onFindViewById();
     }
 
     private void setUpBaseView() {
         // 设置用户昵称头像，bubble背景等
-        try {
-            TextView timestamp = (TextView) findViewById(R.id.timestamp);
-
+        TextView timestamp = (TextView) findViewById(R.id.timestamp);
+        if(timestamp != null){
             if (position == 0) {
                 timestamp.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
                 timestamp.setVisibility(View.VISIBLE);
@@ -109,7 +113,6 @@ public abstract class EMChatRow extends LinearLayout {
                     timestamp.setVisibility(View.VISIBLE);
                 }
             }
-        } catch (Exception e) {
         }
     }
 

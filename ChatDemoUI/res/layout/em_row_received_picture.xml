@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_toRightOf="@id/iv_userhead"
+            android:layout_below="@+id/tv_userid"
              >
 
             <ImageView
@@ -51,7 +52,7 @@
                 android:orientation="vertical" >
 
                 <ProgressBar
-                    android:id="@+id/progressBar"
+                    android:id="@+id/progress_bar"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:visibility="visible" />
@@ -71,9 +72,9 @@
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/iv_userhead"
-            android:layout_toLeftOf="@id/bubble" />
+            android:layout_marginLeft="@dimen/chat_nick_margin_left"
+            android:visibility="gone"
+             />
     </RelativeLayout>
 
 </LinearLayout>

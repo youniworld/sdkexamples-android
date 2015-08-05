@@ -33,17 +33,18 @@
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/iv_userhead"
-            android:layout_toLeftOf="@+id/bubble" />
+            android:layout_marginLeft="@dimen/chat_nick_margin_left"
+            android:visibility="gone"
+             />
 
         <LinearLayout
             android:id="@+id/bubble"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_chat_activity"
-            android:layout_toLeftOf="@+id/pb_sending"
+            android:layout_toLeftOf="@+id/progress_bar"
             android:layout_toRightOf="@id/iv_userhead"
+            android:layout_below="@+id/tv_userid"
             android:background="@drawable/chatfrom_bg" >
 
             <ImageView

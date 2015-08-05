@@ -23,12 +23,20 @@ import android.widget.ListView;
 
 import com.easemob.applib.Constant;
 import com.easemob.applib.widget.chatrow.EMChatRow;
+import com.easemob.applib.widget.chatrow.EMChatRowCall;
 import com.easemob.applib.widget.chatrow.EMChatRowFactory;
+import com.easemob.applib.widget.chatrow.EMChatRowFile;
+import com.easemob.applib.widget.chatrow.EMChatRowImage;
+import com.easemob.applib.widget.chatrow.EMChatRowLocation;
+import com.easemob.applib.widget.chatrow.EMChatRowText;
+import com.easemob.applib.widget.chatrow.EMChatRowVideo;
+import com.easemob.applib.widget.chatrow.EMChatRowVoice;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
+import com.easemob.util.EMLog;
 
-public class MessageAdapter extends BaseAdapter{
+public class EMChatMessageAdapter extends BaseAdapter{
 
 	private final static String TAG = "msg";
 
@@ -65,12 +73,11 @@ public class MessageAdapter extends BaseAdapter{
 	private EMConversation conversation;
 	EMMessage[] messages = null;
 	
-//	Map<Integer, View> views = new HashMap<Integer, View>();
 	ListView listView;
 
     private String toChatUsername;
 
-	public MessageAdapter(Context context, String username, int chatType, ListView listView) {
+	public EMChatMessageAdapter(Context context, String username, int chatType, ListView listView) {
 		this.context = context;
 		this.listView = listView;
 		toChatUsername = username;
@@ -110,13 +117,6 @@ public class MessageAdapter extends BaseAdapter{
 		}
 	};
 
-
-	/**
-	 * 获取item数
-	 */
-	public int getCount() {
-		return messages == null ? 0 : messages.length;
-	}
 
 	/**
 	 * 刷新页面
@@ -159,9 +159,18 @@ public class MessageAdapter extends BaseAdapter{
 	}
 	
 	/**
+     * 获取item数
+     */
+    public int getCount() {
+        EMLog.d(TAG, "getCount");
+        return messages == null ? 0 : messages.length;
+    }
+	
+	/**
 	 * 获取item类型数
 	 */
 	public int getViewTypeCount() {
+	    EMLog.d(TAG, "getViewTypeCount");
         return 16;
     }
 	
@@ -200,13 +209,46 @@ public class MessageAdapter extends BaseAdapter{
 
 		return -1;// invalid
 	}
+	
+	protected EMChatRow createChatRow(Context context, EMMessage message, int position) {
+        EMChatRow chatRow = null;
+        switch (message.getType()) {
+        case TXT:
+            // 语音通话,  视频通话
+            if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
+                message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false))
+                chatRow = new EMChatRowCall(context, message, position, this);
+            else
+                chatRow = new EMChatRowText(context, message, position, this);
+            break;
+        case LOCATION:
+            chatRow = new EMChatRowLocation(context, message, position, this);
+            break;
+        case FILE:
+            chatRow = new EMChatRowFile(context, message, position, this);
+            break;
+        case IMAGE:
+            chatRow = new EMChatRowImage(context, message, position, this);
+            break;
+        case VOICE:
+            chatRow = new EMChatRowVoice(context, message, position, this);
+            break;
+        case VIDEO:
+            chatRow = new EMChatRowVideo(context, message, position, this);
+            break;
+        default:
+            break;
+        }
 
+        return chatRow;
+    }
+    
 
 	@SuppressLint("NewApi")
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		EMMessage message = getItem(position);
 		if(convertView == null){
-			convertView = EMChatRowFactory.createChatRow(context, message, position, this);
+			convertView = createChatRow(context, message, position);
 		}
 		//缓存的view的message很可能不是当前item的，传入当前message和position更新ui
 		((EMChatRow)convertView).setUpView(message, position);

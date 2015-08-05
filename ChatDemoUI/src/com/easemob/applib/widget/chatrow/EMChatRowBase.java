@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.easemob.EMCallBack;
 import com.easemob.applib.Constant;
 import com.easemob.applib.widget.EMChatMessageList;
-import com.easemob.applib.widget.MessageAdapter;
+import com.easemob.applib.widget.EMChatMessageAdapter;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
@@ -74,7 +74,7 @@ public abstract class EMChatRowBase extends LinearLayout {
 	public static final String VIDEO_DIR = "chat/video";
 	
 	protected Activity activity;
-	protected MessageAdapter adapter;
+	protected EMChatMessageAdapter adapter;
 	
 	class ViewHolder {
 		ImageView iv;
@@ -99,7 +99,7 @@ public abstract class EMChatRowBase extends LinearLayout {
 		TextView tv_file_download_state;
 	}
 	
-	public EMChatRowBase(Context context, MessageAdapter adapter) {
+	public EMChatRowBase(Context context, EMChatMessageAdapter adapter) {
 		super(context);
 		this.adapter = adapter;
 		init(context);
@@ -237,7 +237,7 @@ public abstract class EMChatRowBase extends LinearLayout {
 								public void onClick(DialogInterface dialog, int which) {
 									dialog.dismiss();
 									message.status = EMMessage.Status.CREATE;
-									((MessageAdapter) adapter).refreshSeekTo(position);
+									((EMChatMessageAdapter) adapter).refreshSeekTo(position);
 								}
 							})
 					.setNegativeButton(R.string.cancel,

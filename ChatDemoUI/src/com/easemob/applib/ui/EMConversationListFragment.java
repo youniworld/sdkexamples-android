@@ -145,11 +145,11 @@ public class EMConversationListFragment extends Fragment{
     public boolean onContextItemSelected(MenuItem item) {
         boolean handled = false;
         boolean deleteMessage = false;
-        if (item.getItemId() == R.id.delete_message) {
+        /*if (item.getItemId() == R.id.delete_message) {
             deleteMessage = true;
             handled = true;
-        } else if (item.getItemId() == R.id.delete_conversation) {
-            deleteMessage = false;
+        } else*/ if (item.getItemId() == R.id.delete_conversation) {
+            deleteMessage = true;
             handled = true;
         }
         EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);

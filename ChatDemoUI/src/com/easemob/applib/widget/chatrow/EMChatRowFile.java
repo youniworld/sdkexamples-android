@@ -28,7 +28,6 @@ public class EMChatRowFile extends EMChatRow{
     protected TextView percentageView;
     
     protected EMCallBack sendfileCallBack;
-    protected EMCallBack downloadfileCallBack;
     
     protected boolean isNotifyProcessed;
 
@@ -164,10 +163,42 @@ public class EMChatRowFile extends EMChatRow{
      * @param fileMessageBody
      */
     protected void showDownloadPregress(FileMessageBody fileMessageBody) {
-        if(downloadfileCallBack == null){
-//            downloadfileCallBack = new downlo
-            fileMessageBody.setDownloadCallback(downloadfileCallBack);
-        }
+        final FileMessageBody msgbody = (FileMessageBody) message.getBody();
+        progressBar.setVisibility(View.VISIBLE);
+        if(percentageView !=null)
+            percentageView.setVisibility(View.VISIBLE);
+
+        msgbody.setDownloadCallback(new EMCallBack() {
+
+            @Override
+            public void onSuccess() {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateView();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                updateView();
+            }
+
+            @Override
+            public void onProgress(final int progress, String status) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(percentageView != null)
+                            percentageView.setText(progress + "%");
+
+                    }
+                });
+
+            }
+
+        });
     }
     
 	

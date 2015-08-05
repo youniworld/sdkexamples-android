@@ -3,9 +3,10 @@ package com.easemob.applib.ui;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,6 +20,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,11 +31,15 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.easemob.EMChatRoomChangeListener;
 import com.easemob.EMEventListener;
 import com.easemob.EMNotifierEvent;
+import com.easemob.EMValueCallBack;
 import com.easemob.applib.controller.HXSDKHelper;
+import com.easemob.applib.model.GroupRemoveListener;
 import com.easemob.applib.widget.EMChatExtendMenu.ChatExtendMenuItemClickListener;
 import com.easemob.applib.widget.EMChatInputMenu;
 import com.easemob.applib.widget.EMChatInputMenu.ChatInputMenuListener;
@@ -40,6 +47,7 @@ import com.easemob.applib.widget.EMChatMessageList;
 import com.easemob.applib.widget.EMTitleBar;
 import com.easemob.applib.widget.EMVoiceRecorderView;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMChatRoom;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
@@ -50,8 +58,6 @@ import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.activity.AlertDialog;
 import com.easemob.chatuidemo.activity.BaiduMapActivity;
-import com.easemob.chatuidemo.activity.ChatActivity;
-import com.easemob.chatuidemo.activity.ChatRoomDetailsActivity;
 import com.easemob.chatuidemo.activity.GroupDetailsActivity;
 import com.easemob.chatuidemo.activity.ImageGridActivity;
 import com.easemob.chatuidemo.activity.VideoCallActivity;
@@ -94,6 +100,27 @@ public class EMChatFragment extends Fragment implements EMEventListener {
     public static final int RESULT_CODE_TO_CLOUD = 6;
     public static final int RESULT_CODE_EXIT_GROUP = 7;
 
+
+    protected int chatType;
+    protected String toChatUsername;
+    protected EMChatMessageList messageList;
+    protected EMChatInputMenu inputMenu;
+
+    protected EMConversation conversation;
+    protected EMTitleBar titleBar;
+    protected InputMethodManager inputManager;
+
+    protected Handler handler = new Handler();
+    protected File cameraFile;
+    protected EMVoiceRecorderView voiceRecorder;
+    protected SwipeRefreshLayout swipeRefreshLayout;
+    protected ListView listView;
+
+    protected boolean isloading;
+    protected boolean haveMoreData = true;
+    protected final int pagesize = 20;
+    private GroupListener groupListener;
+    
     static final int ITEM_TAKE_PICTURE = 1;
     static final int ITEM_PICTURE = 2;
     static final int ITEM_LOCATION = 3;
@@ -101,12 +128,7 @@ public class EMChatFragment extends Fragment implements EMEventListener {
     static final int ITEM_FILE = 5;
     static final int ITEM_VOICE_CALL = 6;
     static final int ITEM_VIDEO_CALL = 7;
-
-    protected int chatType;
-    protected String toChatUsername;
-    protected EMChatMessageList messageList;
-    protected EMChatInputMenu inputMenu;
-
+    
     protected int[] itemStrings = { R.string.attach_take_pic, R.string.attach_picture, R.string.attach_location,
             R.string.attach_video, R.string.attach_file, R.string.attach_voice_call, R.string.attach_video_call };
     protected int[] itemdrawables = { R.drawable.chat_takepic_selector, R.drawable.chat_image_selector,
@@ -114,14 +136,6 @@ public class EMChatFragment extends Fragment implements EMEventListener {
             R.drawable.chat_voice_call_selector, R.drawable.chat_video_call_selector };
     protected int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION, ITEM_VIDEO, ITEM_FILE, ITEM_VOICE_CALL,
             ITEM_VIDEO_CALL };
-
-    protected EMConversation conversation;
-    protected EMTitleBar titleBar;
-    protected InputMethodManager inputManager;
-
-    protected Handler handler = new Handler();
-    private File cameraFile;
-    private EMVoiceRecorderView voiceRecorder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -152,12 +166,24 @@ public class EMChatFragment extends Fragment implements EMEventListener {
         // 消息列表layout
         messageList = (EMChatMessageList) getView().findViewById(R.id.message_list);
         messageList.init(toChatUsername, chatType);
+        listView = messageList.getListView();
 
         inputMenu = (EMChatInputMenu) getView().findViewById(R.id.input_menu);
-        // 注册扩展菜单栏按钮
-        for (int i = 0; i < itemStrings.length; i++) {
-            // init()需在这个方法后面调用
-            inputMenu.registerExtendMenuItem(itemStrings[i], itemdrawables[i], itemIds[i], new MyItemClickListener());
+        if (chatType == EMChatMessageList.CHATTYPE_SINGLE) {
+            // 注册扩展菜单栏按钮
+            for (int i = 0; i < itemStrings.length; i++) {
+                // init()需在这个方法后面调用
+                inputMenu.registerExtendMenuItem(itemStrings[i], itemdrawables[i], itemIds[i],
+                        new MyItemClickListener());
+            }
+        } else {
+            int len = itemStrings.length - 2;
+            // 群聊不显示通话按钮
+            for (int i = 0; i < len; i++) {
+                // init()需在这个方法后面调用
+                inputMenu.registerExtendMenuItem(itemStrings[i], itemdrawables[i], itemIds[i],
+                        new MyItemClickListener());
+            }
         }
         // 设置按住说话控件
         inputMenu.setPressToSpeakRecorderView(voiceRecorder);
@@ -177,12 +203,17 @@ public class EMChatFragment extends Fragment implements EMEventListener {
             }
         });
 
+        swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.chat_swipe_layout);
+
+        swipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright, R.color.holo_green_light,
+                R.color.holo_orange_light, R.color.holo_red_light);
+
+        inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     protected void setUpView() {
 
-        inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         // 获取当前conversation对象
         conversation = EMChatManager.getInstance().getConversation(toChatUsername);
         // 把此会话的未读数置为0
@@ -193,11 +224,36 @@ public class EMChatFragment extends Fragment implements EMEventListener {
             // 设置标题
             titleBar.setRightImageResource(R.drawable.mm_title_remove);
         } else {
-            // 群聊
-            EMGroup group = EMGroupManager.getInstance().getGroup(toChatUsername);
-            if (group != null)
-                titleBar.setTitle(group.getGroupName());
-            titleBar.setRightImageResource(R.drawable.to_group_details_normal);
+            if (chatType == EMChatMessageList.CHATTYPE_GROUP) {
+                // 群聊
+                EMGroup group = EMGroupManager.getInstance().getGroup(toChatUsername);
+                if (group != null)
+                    titleBar.setTitle(group.getGroupName());
+                titleBar.setRightImageResource(R.drawable.to_group_details_normal);
+                // 监听当前会话的群聊解散被T事件
+                groupListener = new GroupListener();
+                EMGroupManager.getInstance().addGroupChangeListener(groupListener);
+            } else {
+                onChatRoomViewCreation();
+            }
+
+        }
+        if (chatType != EMChatMessageList.CHATTYPE_CHATROOM) {
+            // 初始化db时，每个conversation加载数目是getChatOptions().getNumberOfMessagesLoaded
+            // 这个数目如果比用户期望进入会话界面时显示的个数不一样，就多加载一些
+            final List<EMMessage> msgs = conversation.getAllMessages();
+            int msgCount = msgs != null ? msgs.size() : 0;
+            if (msgCount < conversation.getAllMsgCount() && msgCount < pagesize) {
+                String msgId = null;
+                if (msgs != null && msgs.size() > 0) {
+                    msgId = msgs.get(0).getMsgId();
+                }
+                if (chatType == EMChatMessageList.CHATTYPE_SINGLE) {
+                    conversation.loadMoreMsgFromDB(msgId, pagesize);
+                } else {
+                    conversation.loadMoreGroupMsgFromDB(msgId, pagesize);
+                }
+            }
         }
 
         messageList.getListView().setOnTouchListener(new OnTouchListener() {
@@ -227,6 +283,53 @@ public class EMChatFragment extends Fragment implements EMEventListener {
                 } else {
                     toGroupDetails();
                 }
+            }
+        });
+
+        setRefreshLayoutListener();
+    }
+
+    protected void setRefreshLayoutListener() {
+        swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        if (listView.getFirstVisiblePosition() == 0 && !isloading && haveMoreData) {
+                            List<EMMessage> messages;
+                            try {
+                                if (chatType == EMChatMessageList.CHATTYPE_SINGLE) {
+                                    messages = conversation.loadMoreMsgFromDB(messageList.getItem(0).getMsgId(),
+                                            pagesize);
+                                } else {
+                                    messages = conversation.loadMoreGroupMsgFromDB(messageList.getItem(0).getMsgId(),
+                                            pagesize);
+                                }
+                            } catch (Exception e1) {
+                                swipeRefreshLayout.setRefreshing(false);
+                                return;
+                            }
+                            if (messages.size() > 0) {
+                                messageList.refreshSeekTo(messages.size() - 1);
+                                if (messages.size() != pagesize) {
+                                    haveMoreData = false;
+                                }
+                            } else {
+                                haveMoreData = false;
+                            }
+
+                            isloading = false;
+
+                        } else {
+                            Toast.makeText(getActivity(), getResources().getString(R.string.no_more_messages),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 600);
             }
         });
     }
@@ -272,33 +375,25 @@ public class EMChatFragment extends Fragment implements EMEventListener {
                 } else {
                     Toast.makeText(getActivity(), R.string.unable_to_get_loaction, 0).show();
                 }
+                
+            } else if (requestCode == REQUEST_CODE_TEXT || requestCode == REQUEST_CODE_VOICE
+                    || requestCode == REQUEST_CODE_PICTURE || requestCode == REQUEST_CODE_LOCATION
+                    || requestCode == REQUEST_CODE_VIDEO || requestCode == REQUEST_CODE_FILE) {
                 // 重发消息
-                // } else if (requestCode == REQUEST_CODE_TEXT || requestCode ==
-                // REQUEST_CODE_VOICE
-                // || requestCode == REQUEST_CODE_PICTURE || requestCode ==
-                // REQUEST_CODE_LOCATION
-                // || requestCode == REQUEST_CODE_VIDEO || requestCode ==
-                // REQUEST_CODE_FILE) {
-                // resendMessage();
+                resendMessage();
             } else if (requestCode == REQUEST_CODE_COPY_AND_PASTE) {
-                // // 粘贴
-                // if (!TextUtils.isEmpty(clipboard.getText())) {
-                // String pasteText = clipboard.getText().toString();
-                // if (pasteText.startsWith(COPY_IMAGE)) {
-                // // 把图片前缀去掉，还原成正常的path
-                // sendPicture(pasteText.replace(COPY_IMAGE, ""));
-                // }
-                //
-                // }
+                // 粘贴
+                if (!TextUtils.isEmpty(clipboard.getText())) {
+                    String pasteText = clipboard.getText().toString();
+                    if (pasteText.startsWith(COPY_IMAGE)) {
+                        // 把图片前缀去掉，还原成正常的path
+                        sendPicture(pasteText.replace(COPY_IMAGE, ""));
+                    }
+
+                }
             } else if (requestCode == REQUEST_CODE_ADD_TO_BLACKLIST) { // 移入黑名单
-            // EMMessage deleteMsg = (EMMessage)
-            // adapter.getItem(data.getIntExtra("position", -1));
-            // addUserToBlacklist(deleteMsg.getFrom());
-            } else if (conversation.getMsgCount() > 0) {
-                // adapter.refresh();
-                // setResult(RESULT_OK);
-            } else if (requestCode == REQUEST_CODE_GROUP_DETAIL) {
-                // adapter.refresh();
+                EMMessage deleteMsg = (EMMessage) adapter.getItem(data.getIntExtra("position", -1));
+                addUserToBlacklist(deleteMsg.getFrom());
             }
         }
     }
@@ -316,17 +411,26 @@ public class EMChatFragment extends Fragment implements EMEventListener {
                         EMNotifierEvent.Event.EventOfflineMessage, EMNotifierEvent.Event.EventDeliveryAck,
                         EMNotifierEvent.Event.EventReadAck });
     }
-    
+
     @Override
     public void onStop() {
         super.onStop();
-        // unregister this event listener when this activity enters the background
+        // unregister this event listener when this activity enters the
+        // background
         EMChatManager.getInstance().unregisterEventListener(this);
 
         DemoHXSDKHelper sdkHelper = (DemoHXSDKHelper) DemoHXSDKHelper.getInstance();
 
         // 把此activity 从foreground activity 列表里移除
         sdkHelper.popActivity(getActivity());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (groupListener != null) {
+            EMGroupManager.getInstance().removeGroupChangeListener(groupListener);
+        }
     }
 
     /**
@@ -385,6 +489,80 @@ public class EMChatFragment extends Fragment implements EMEventListener {
                 EMChatManager.getInstance().leaveChatRoom(toChatUsername);
             }
         }
+    }
+
+    protected void onChatRoomViewCreation() {
+        final ProgressDialog pd = ProgressDialog.show(getActivity(), "", "Joining......");
+        EMChatManager.getInstance().joinChatRoom(toChatUsername, new EMValueCallBack<EMChatRoom>() {
+
+            @Override
+            public void onSuccess(EMChatRoom value) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        pd.dismiss();
+                        EMChatRoom room = EMChatManager.getInstance().getChatRoom(toChatUsername);
+                        if (room != null) {
+                            titleBar.setTitle(room.getName());
+                        } else {
+                            titleBar.setTitle(toChatUsername);
+                        }
+                        EMLog.d(TAG, "join room success : " + room.getName());
+
+                        addChatRoomChangeListenr();
+                        // onConversationInit();
+                        //
+                        // onListViewCreation();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(final int error, String errorMsg) {
+                // TODO Auto-generated method stub
+                EMLog.d(TAG, "join room failure : " + error);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        pd.dismiss();
+                    }
+                });
+                getActivity().finish();
+            }
+        });
+    }
+
+    protected void addChatRoomChangeListenr() {
+        EMChatManager.getInstance().addChatRoomChangeListener(new EMChatRoomChangeListener() {
+
+            @Override
+            public void onChatRoomDestroyed(String roomId, String roomName) {
+                if (roomId.equals(toChatUsername)) {
+                    getActivity().finish();
+                }
+            }
+
+            @Override
+            public void onMemberJoined(String roomId, String participant) {
+            }
+
+            @Override
+            public void onMemberExited(String roomId, String roomName, String participant) {
+
+            }
+
+            @Override
+            public void onMemberKicked(String roomId, String roomName, String participant) {
+                if (roomId.equals(toChatUsername)) {
+                    String curUser = EMChatManager.getInstance().getCurrentUser();
+                    if (curUser.equals(participant)) {
+                        EMChatManager.getInstance().leaveChatRoom(toChatUsername);
+                        getActivity().finish();
+                    }
+                }
+            }
+
+        });
     }
 
     /**
@@ -631,5 +809,43 @@ public class EMChatFragment extends Fragment implements EMEventListener {
                 inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
         }
+    }
+
+    /**
+     * 监测群组解散或者被T事件
+     * 
+     */
+    class GroupListener extends GroupRemoveListener {
+
+        @Override
+        public void onUserRemoved(final String groupId, String groupName) {
+            getActivity().runOnUiThread(new Runnable() {
+
+                public void run() {
+                    if (toChatUsername.equals(groupId)) {
+                        Toast.makeText(getActivity(), R.string.you_are_group, 1).show();
+                        if (GroupDetailsActivity.instance != null)
+                            GroupDetailsActivity.instance.finish();
+                        getActivity().finish();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onGroupDestroy(final String groupId, String groupName) {
+            // 群组解散正好在此页面，提示群组被解散，并finish此页面
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    if (toChatUsername.equals(groupId)) {
+                        Toast.makeText(getActivity(), R.string.the_current_group, 1).show();
+                        if (GroupDetailsActivity.instance != null)
+                            GroupDetailsActivity.instance.finish();
+                        getActivity().finish();
+                    }
+                }
+            });
+        }
+
     }
 }

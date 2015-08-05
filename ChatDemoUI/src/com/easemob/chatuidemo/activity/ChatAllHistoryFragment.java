@@ -177,10 +177,10 @@ public class ChatAllHistoryFragment extends Fragment implements View.OnClickList
 	public boolean onContextItemSelected(MenuItem item) {
 		boolean handled = false;
 		boolean deleteMessage = false;
-		if (item.getItemId() == R.id.delete_message) {
+		/*if (item.getItemId() == R.id.delete_message) {
 			deleteMessage = true;
 			handled = true;
-		} else if (item.getItemId() == R.id.delete_conversation) {
+		} else */if (item.getItemId() == R.id.delete_conversation) {
 			deleteMessage = false;
 			handled = true;
 		}
