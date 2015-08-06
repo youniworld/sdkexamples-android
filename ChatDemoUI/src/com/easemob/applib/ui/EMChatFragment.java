@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import android.R.integer;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -22,6 +23,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.text.ClipboardManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -40,10 +42,13 @@ import com.easemob.EMNotifierEvent;
 import com.easemob.EMValueCallBack;
 import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.applib.model.GroupRemoveListener;
+import com.easemob.applib.widget.EMAlertDialog;
+import com.easemob.applib.widget.EMAlertDialog.AlertDialogUser;
 import com.easemob.applib.widget.EMChatExtendMenu.ChatExtendMenuItemClickListener;
 import com.easemob.applib.widget.EMChatInputMenu;
 import com.easemob.applib.widget.EMChatInputMenu.ChatInputMenuListener;
 import com.easemob.applib.widget.EMChatMessageList;
+import com.easemob.applib.widget.EMChatMessageList.MessageListItemClickListener;
 import com.easemob.applib.widget.EMTitleBar;
 import com.easemob.applib.widget.EMVoiceRecorderView;
 import com.easemob.chat.EMChatManager;
@@ -52,12 +57,15 @@ import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.activity.AlertDialog;
 import com.easemob.chatuidemo.activity.BaiduMapActivity;
+import com.easemob.chatuidemo.activity.ContextMenu;
+import com.easemob.chatuidemo.activity.ForwardMessageActivity;
 import com.easemob.chatuidemo.activity.GroupDetailsActivity;
 import com.easemob.chatuidemo.activity.ImageGridActivity;
 import com.easemob.chatuidemo.activity.VideoCallActivity;
@@ -71,12 +79,6 @@ public class EMChatFragment extends Fragment implements EMEventListener {
     private static final int REQUEST_CODE_EMPTY_HISTORY = 2;
     public static final int REQUEST_CODE_CONTEXT_MENU = 3;
     private static final int REQUEST_CODE_MAP = 4;
-    public static final int REQUEST_CODE_TEXT = 5;
-    public static final int REQUEST_CODE_VOICE = 6;
-    public static final int REQUEST_CODE_PICTURE = 7;
-    public static final int REQUEST_CODE_LOCATION = 8;
-    public static final int REQUEST_CODE_NET_DISK = 9;
-    public static final int REQUEST_CODE_FILE = 10;
     public static final int REQUEST_CODE_COPY_AND_PASTE = 11;
     public static final int REQUEST_CODE_PICK_VIDEO = 12;
     public static final int REQUEST_CODE_DOWNLOAD_VIDEO = 13;
@@ -108,7 +110,9 @@ public class EMChatFragment extends Fragment implements EMEventListener {
 
     protected EMConversation conversation;
     protected EMTitleBar titleBar;
+    
     protected InputMethodManager inputManager;
+    private ClipboardManager clipboard;
 
     protected Handler handler = new Handler();
     protected File cameraFile;
@@ -120,6 +124,7 @@ public class EMChatFragment extends Fragment implements EMEventListener {
     protected boolean haveMoreData = true;
     protected final int pagesize = 20;
     private GroupListener groupListener;
+    private EMMessage contextMenuMessage;
     
     static final int ITEM_TAKE_PICTURE = 1;
     static final int ITEM_PICTURE = 2;
@@ -203,12 +208,12 @@ public class EMChatFragment extends Fragment implements EMEventListener {
             }
         });
 
-        swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.chat_swipe_layout);
-
+        swipeRefreshLayout = messageList.getSwipeRefreshLayout();
         swipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright, R.color.holo_green_light,
                 R.color.holo_orange_light, R.color.holo_red_light);
 
         inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
@@ -256,6 +261,8 @@ public class EMChatFragment extends Fragment implements EMEventListener {
             }
         }
 
+        setListItemClickListener();
+        
         messageList.getListView().setOnTouchListener(new OnTouchListener() {
 
             @Override
@@ -287,6 +294,41 @@ public class EMChatFragment extends Fragment implements EMEventListener {
         });
 
         setRefreshLayoutListener();
+    }
+
+    protected void setListItemClickListener() {
+        messageList.setItemClickListener(new MessageListItemClickListener() {
+            
+            @Override
+            public void onUserAvatarClick(String username) {
+                
+            }
+            
+            @Override
+            public void onResendClick(final EMMessage message) {
+                new EMAlertDialog(getActivity(), R.string.resend, R.string.confirm_resend, null, new AlertDialogUser() {
+                    @Override
+                    public void onResult(boolean confirmed, Bundle bundle) {
+                        if (!confirmed) {
+                            return;
+                        }
+                        messageList.resendMessage(message);
+                    }
+                }, true).show();
+            }
+            
+            @Override
+            public void onBubbleLongClick(EMMessage message) {
+                contextMenuMessage = message;
+                startActivityForResult((new Intent(getActivity(), ContextMenu.class)).putExtra("message",message),
+                        REQUEST_CODE_CONTEXT_MENU);
+            }
+            
+            @Override
+            public boolean onBubbleClick(EMMessage message) {
+                return false;
+            }
+        });
     }
 
     protected void setRefreshLayoutListener() {
@@ -337,6 +379,33 @@ public class EMChatFragment extends Fragment implements EMEventListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_CODE_EXIT_GROUP) {
+            getActivity().setResult(Activity.RESULT_OK);
+            getActivity().finish();
+            return;
+        }
+        if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
+            switch (resultCode) {
+            case RESULT_CODE_COPY: // 复制消息
+                clipboard.setText(((TextMessageBody) contextMenuMessage.getBody()).getMessage());
+                break;
+            case RESULT_CODE_DELETE: // 删除消息|
+                conversation.removeMessage(contextMenuMessage.getMsgId());
+                messageList.refresh();
+                break;
+
+            case RESULT_CODE_FORWARD: // 转发消息
+                Intent intent = new Intent(getActivity(), ForwardMessageActivity.class);
+                intent.putExtra("forward_msg_id", contextMenuMessage.getMsgId());
+                startActivity(intent);
+                
+                break;
+
+            default:
+                break;
+            }
+        }
+        
         if (resultCode == Activity.RESULT_OK) { // 清空消息
             if (requestCode == REQUEST_CODE_EMPTY_HISTORY) {
                 // 清空会话
@@ -376,24 +445,11 @@ public class EMChatFragment extends Fragment implements EMEventListener {
                     Toast.makeText(getActivity(), R.string.unable_to_get_loaction, 0).show();
                 }
                 
-            } else if (requestCode == REQUEST_CODE_TEXT || requestCode == REQUEST_CODE_VOICE
-                    || requestCode == REQUEST_CODE_PICTURE || requestCode == REQUEST_CODE_LOCATION
-                    || requestCode == REQUEST_CODE_VIDEO || requestCode == REQUEST_CODE_FILE) {
-                // 重发消息
-                resendMessage();
             } else if (requestCode == REQUEST_CODE_COPY_AND_PASTE) {
-                // 粘贴
-                if (!TextUtils.isEmpty(clipboard.getText())) {
-                    String pasteText = clipboard.getText().toString();
-                    if (pasteText.startsWith(COPY_IMAGE)) {
-                        // 把图片前缀去掉，还原成正常的path
-                        sendPicture(pasteText.replace(COPY_IMAGE, ""));
-                    }
-
-                }
+                
             } else if (requestCode == REQUEST_CODE_ADD_TO_BLACKLIST) { // 移入黑名单
-                EMMessage deleteMsg = (EMMessage) adapter.getItem(data.getIntExtra("position", -1));
-                addUserToBlacklist(deleteMsg.getFrom());
+                EMMessage deleteMsg = (EMMessage) messageList.getItem(data.getIntExtra("position", -1));
+//                addUserToBlacklist(deleteMsg.getFrom());
             }
         }
     }

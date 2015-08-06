@@ -30,6 +30,7 @@ import com.easemob.util.EMLog;
 public class EMChatRowImage extends EMChatRowFile{
 
     protected ImageView imageView;
+    private ImageMessageBody imgBody;
 
     public EMChatRowImage(Context context, EMMessage message, int position, BaseAdapter adapter) {
         super(context, message, position, adapter);
@@ -49,15 +50,7 @@ public class EMChatRowImage extends EMChatRowFile{
     
     @Override
     protected void onSetUpView() {
-        bubbleLayout.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                ((Activity)context).startActivityForResult(
-                        (new Intent(context, ContextMenu.class)).putExtra("position", position).putExtra("type",
-                                EMMessage.Type.IMAGE.ordinal()), EMChatMessageList.REQUEST_CODE_MESSAGE_LIST);
-                return true;
-            }
-        });
+        imgBody = (ImageMessageBody) message.getBody();
         // 接收方向的消息
         if (message.direct == EMMessage.Direct.RECEIVE) {
             if (message.status == EMMessage.Status.INPROGRESS) {
@@ -67,7 +60,6 @@ public class EMChatRowImage extends EMChatRowFile{
                 progressBar.setVisibility(View.GONE);
                 percentageView.setVisibility(View.GONE);
                 imageView.setImageResource(R.drawable.default_image);
-                ImageMessageBody imgBody = (ImageMessageBody) message.getBody();
                 if (imgBody.getLocalUrl() != null) {
                     // String filePath = imgBody.getLocalUrl();
                     String remotePath = imgBody.getRemoteUrl();
@@ -80,10 +72,6 @@ public class EMChatRowImage extends EMChatRowFile{
             return;
         }
         
-        // 发送的消息
-        // process send message
-        // send pic, show the pic directly
-        ImageMessageBody imgBody = (ImageMessageBody) message.getBody();
         String filePath = imgBody.getLocalUrl();
         if (filePath != null) {
             showImageView(ImageUtils.getThumbnailImagePath(filePath), imageView, filePath, null, message);
@@ -94,6 +82,35 @@ public class EMChatRowImage extends EMChatRowFile{
     @Override
     protected void onUpdateView() {
         super.onUpdateView();
+    }
+    
+    @Override
+    protected void onBuubleClick() {
+        Intent intent = new Intent(context, ShowBigImage.class);
+        File file = new File(imgBody.getLocalUrl());
+        if (file.exists()) {
+            Uri uri = Uri.fromFile(file);
+            intent.putExtra("uri", uri);
+        } else {
+            // The local full size pic does not exist yet.
+            // ShowBigImage needs to download it from the server
+            // first
+            intent.putExtra("secret", imgBody.getSecret());
+            intent.putExtra("remotepath", imgBody.getRemoteUrl());
+        }
+        if (message != null
+                && message.direct == EMMessage.Direct.RECEIVE
+                && !message.isAcked
+                && message.getChatType() != ChatType.GroupChat) {
+            try {
+                EMChatManager.getInstance().ackMessageRead(
+                        message.getFrom(), message.getMsgId());
+                message.isAcked = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        context.startActivity(intent);
     }
     
     /**
@@ -113,39 +130,6 @@ public class EMChatRowImage extends EMChatRowFile{
         if (bitmap != null) {
             // thumbnail image is already loaded, reuse the drawable
             iv.setImageBitmap(bitmap);
-            bubbleLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EMLog.d(TAG, "image view on click");
-                    Intent intent = new Intent(context, ShowBigImage.class);
-                    File file = new File(localFullSizePath);
-                    if (file.exists()) {
-                        Uri uri = Uri.fromFile(file);
-                        intent.putExtra("uri", uri);
-                    } else {
-                        // The local full size pic does not exist yet.
-                        // ShowBigImage needs to download it from the server
-                        // first
-                        ImageMessageBody body = (ImageMessageBody) message
-                                .getBody();
-                        intent.putExtra("secret", body.getSecret());
-                        intent.putExtra("remotepath", remote);
-                    }
-                    if (message != null
-                            && message.direct == EMMessage.Direct.RECEIVE
-                            && !message.isAcked
-                            && message.getChatType() != ChatType.GroupChat) {
-                        try {
-                            EMChatManager.getInstance().ackMessageRead(
-                                    message.getFrom(), message.getMsgId());
-                            message.isAcked = true;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    context.startActivity(intent);
-                }
-            });
             return true;
         } else {
 

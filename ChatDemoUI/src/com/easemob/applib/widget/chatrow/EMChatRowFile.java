@@ -30,6 +30,7 @@ public class EMChatRowFile extends EMChatRow{
     protected EMCallBack sendfileCallBack;
     
     protected boolean isNotifyProcessed;
+    private NormalFileMessageBody fileMessageBody;
 
     public EMChatRowFile(Context context, EMMessage message, int position, BaseAdapter adapter) {
 		super(context, message, position, adapter);
@@ -52,33 +53,10 @@ public class EMChatRowFile extends EMChatRow{
 
 	@Override
 	protected void onSetUpView() {
-	    final NormalFileMessageBody fileMessageBody = (NormalFileMessageBody) message.getBody();
-        final String filePath = fileMessageBody.getLocalUrl();
+	    fileMessageBody = (NormalFileMessageBody) message.getBody();
+        String filePath = fileMessageBody.getLocalUrl();
         fileNameView.setText(fileMessageBody.getFileName());
         fileSizeView.setText(TextFormater.getDataSize(fileMessageBody.getFileSize()));
-        bubbleLayout.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                File file = new File(filePath);
-                if (file != null && file.exists()) {
-                    // 文件存在，直接打开
-                    FileUtils.openFile(file, (Activity) context);
-                } else {
-                    // 下载
-                    context.startActivity(new Intent(context, ShowNormalFileActivity.class).putExtra("msgbody", fileMessageBody));
-                }
-                if (message.direct == EMMessage.Direct.RECEIVE && !message.isAcked) {
-                    try {
-                        EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
-                        message.isAcked = true;
-                    } catch (EaseMobException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
         if (message.direct == EMMessage.Direct.RECEIVE) { // 接收的消息
             File file = new File(filePath);
             if (file != null && file.exists()) {
@@ -229,5 +207,28 @@ public class EMChatRowFile extends EMChatRow{
 	@Override
     protected void onUpdateView() {
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onBuubleClick() {
+        String filePath = fileMessageBody.getLocalUrl();
+        File file = new File(filePath);
+        if (file != null && file.exists()) {
+            // 文件存在，直接打开
+            FileUtils.openFile(file, (Activity) context);
+        } else {
+            // 下载
+            context.startActivity(new Intent(context, ShowNormalFileActivity.class).putExtra("msgbody", message.getBody()));
+        }
+        if (message.direct == EMMessage.Direct.RECEIVE && !message.isAcked) {
+            try {
+                EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
+                message.isAcked = true;
+            } catch (EaseMobException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        
     }
 }

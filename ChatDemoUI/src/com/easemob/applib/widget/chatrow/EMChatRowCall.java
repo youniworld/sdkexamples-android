@@ -47,6 +47,11 @@ public class EMChatRowCall extends EMChatRow{
         
     }
 
+    @Override
+    protected void onBuubleClick() {
+        
+    }
+
   
 
 }

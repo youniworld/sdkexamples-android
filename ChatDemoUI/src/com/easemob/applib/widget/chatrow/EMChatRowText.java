@@ -47,16 +47,6 @@ public class EMChatRowText extends EMChatRow{
         Spannable span = SmileUtils.getSmiledText(context, txtBody.getMessage());
         // 设置内容
         contentView.setText(span, BufferType.SPANNABLE);
-        // 设置长按事件监听
-        bubbleLayout.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                activity.startActivityForResult(
-                        (new Intent(context, ContextMenu.class)).putExtra("position", position).putExtra("type",
-                                EMMessage.Type.TXT.ordinal()), EMChatMessageList.REQUEST_CODE_MESSAGE_LIST);
-                return true;
-            }
-        });
 
         if (message.direct == EMMessage.Direct.SEND) {
             switch (message.status) {
@@ -87,6 +77,12 @@ public class EMChatRowText extends EMChatRow{
     @Override
     protected void onUpdateView() {
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onBuubleClick() {
+        // TODO Auto-generated method stub
+        
     }
 
 

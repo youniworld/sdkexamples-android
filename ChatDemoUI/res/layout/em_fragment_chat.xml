@@ -18,16 +18,10 @@
         android:layout_above="@+id/input_menu"
         android:layout_below="@id/title_bar" >
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/chat_swipe_layout"
+        <com.easemob.applib.widget.EMChatMessageList
+            android:id="@+id/message_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-            <com.easemob.applib.widget.EMChatMessageList
-                android:id="@+id/message_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </android.support.v4.widget.SwipeRefreshLayout>
+            android:layout_height="match_parent" />
 
         <com.easemob.applib.widget.EMVoiceRecorderView
             android:id="@+id/voice_recorder"

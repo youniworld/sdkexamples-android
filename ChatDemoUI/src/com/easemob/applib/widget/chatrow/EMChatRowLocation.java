@@ -17,6 +17,7 @@ import com.easemob.util.LatLng;
 public class EMChatRowLocation extends EMChatRow{
 
     private TextView locationView;
+    private LocationMessageBody locBody;
 
 	public EMChatRowLocation(Context context, EMMessage message, int position, BaseAdapter adapter) {
         super(context, message, position, adapter);
@@ -36,19 +37,8 @@ public class EMChatRowLocation extends EMChatRow{
 
     @Override
     protected void onSetUpView() {
-		LocationMessageBody locBody = (LocationMessageBody) message.getBody();
+		locBody = (LocationMessageBody) message.getBody();
 		locationView.setText(locBody.getAddress());
-		LatLng loc = new LatLng(locBody.getLatitude(), locBody.getLongitude());
-		bubbleLayout.setOnClickListener(new MapClickListener(loc, locBody.getAddress()));
-		bubbleLayout.setOnLongClickListener(new OnLongClickListener() {
-			@Override
-			public boolean onLongClick(View v) {
-				activity.startActivityForResult(
-						(new Intent(context, ContextMenu.class)).putExtra("position", position).putExtra("type",
-								EMMessage.Type.LOCATION.ordinal()), EMChatMessageList.REQUEST_CODE_MESSAGE_LIST);
-				return false;
-			}
-		});
 
 		// deal with send message
 		if (message.direct == EMMessage.Direct.SEND) {
@@ -82,6 +72,15 @@ public class EMChatRowLocation extends EMChatRow{
         adapter.notifyDataSetChanged();
     }
     
+    @Override
+    protected void onBuubleClick() {
+        Intent intent = new Intent(context, BaiduMapActivity.class);
+        intent.putExtra("latitude", locBody.getLatitude());
+        intent.putExtra("longitude", locBody.getLongitude());
+        intent.putExtra("address", locBody.getAddress());
+        activity.startActivity(intent);
+    }
+    
     /*
 	 * 点击地图消息listener
 	 */
@@ -98,13 +97,10 @@ public class EMChatRowLocation extends EMChatRow{
 
 		@Override
 		public void onClick(View v) {
-		    Intent intent = new Intent(context, BaiduMapActivity.class);
-			intent.putExtra("latitude", location.latitude);
-			intent.putExtra("longitude", location.longitude);
-			intent.putExtra("address", address);
-			activity.startActivity(intent);
+		   
 		}
 
 	}
+
 
 }

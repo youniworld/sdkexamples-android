@@ -51,16 +51,6 @@ public class EMChatRowVoice extends EMChatRowFile{
         }else{
             voiceLengthView.setVisibility(View.INVISIBLE);
         }
-        voiceImageView.setOnClickListener(new VoicePlayClickListener(message, voiceImageView, readStutausView, adapter, activity));
-        bubbleLayout.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                activity.startActivityForResult(
-                        (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
-                                EMMessage.Type.VOICE.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
-                return true;
-            }
-        });
         if (VoicePlayClickListener.playMsgId != null
                 && VoicePlayClickListener.playMsgId.equals(message.getMsgId()) && VoicePlayClickListener.isPlaying) {
             AnimationDrawable voiceAnimation;
@@ -106,5 +96,9 @@ public class EMChatRowVoice extends EMChatRowFile{
         super.onUpdateView();
     }
 
+    @Override
+    protected void onBuubleClick() {
+        new VoicePlayClickListener(message, voiceImageView, readStutausView, adapter, activity).onClick(bubbleLayout);
+    }
     
 }

@@ -3,12 +3,12 @@ package com.easemob.applib.widget;
 import java.io.File;
 import java.util.HashMap;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ListView;
@@ -35,11 +35,12 @@ public class EMChatMessageList extends RelativeLayout{
 	
 	
     protected ListView messageListView;
+    protected SwipeRefreshLayout swipeRefreshLayout;
 	private Context context;
     private EMConversation conversation;
     private int chatType;
     private String toChatUsername;
-    private EMChatMessageAdapter messageAdapter;
+    private MessageAdapter messageAdapter;
     private boolean showUserNick;
     private boolean showAvatar;
     private Drawable myBubbleBg;
@@ -63,6 +64,7 @@ public class EMChatMessageList extends RelativeLayout{
     private void init(Context context){
         this.context = context;
         LayoutInflater.from(context).inflate(R.layout.em_chat_message_list, this);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.chat_swipe_layout);
         messageListView = (ListView) findViewById(R.id.list);
     }
     
@@ -76,7 +78,11 @@ public class EMChatMessageList extends RelativeLayout{
         this.toChatUsername = toChatUsername;
         
         conversation = EMChatManager.getInstance().getConversation(toChatUsername);
-        messageAdapter = new EMChatMessageAdapter(context, toChatUsername, chatType, messageListView);
+        messageAdapter = new MessageAdapter(context, toChatUsername, chatType, messageListView);
+        messageAdapter.showAvatar = showAvatar;
+        messageAdapter.showUserNick = showUserNick;
+        messageAdapter.myBubbleBg = myBubbleBg;
+        messageAdapter.otherBuddleBg = otherBuddleBg;
         // 设置adapter显示消息
         messageListView.setAdapter(messageAdapter);
         
@@ -355,6 +361,14 @@ public class EMChatMessageList extends RelativeLayout{
 		return messageListView;
 	} 
 	
+	/**
+	 * 获取SwipeRefreshLayout
+	 * @return
+	 */
+	public SwipeRefreshLayout getSwipeRefreshLayout(){
+	    return swipeRefreshLayout;
+	}
+	
 	public EMMessage getItem(int position){
 	    return messageAdapter.getItem(position);
 	}
@@ -371,11 +385,21 @@ public class EMChatMessageList extends RelativeLayout{
 	    return showUserNick;
 	}
 	
-	interface MessageListItemClickListener{
-	    void onResendClick(EMMessage messgae);
-	    void onBubbleClick(EMMessage message);
+	public interface MessageListItemClickListener{
+	    void onResendClick(EMMessage message);
+	    /**
+	     * 控件有对气泡做点击事件默认实现，如果需要自己实现，return true。
+	     * 当然也可以在相应的chatrow的onBubbleClick()方法里实现点击事件
+	     * @param message
+	     * @return
+	     */
+	    boolean onBubbleClick(EMMessage message);
 	    void onBubbleLongClick(EMMessage message);
 	    void onUserAvatarClick(String username);
+	}
+	
+	public void setItemClickListener(MessageListItemClickListener listener){
+	    messageAdapter.itemClickListener = listener;
 	}
 	
 }

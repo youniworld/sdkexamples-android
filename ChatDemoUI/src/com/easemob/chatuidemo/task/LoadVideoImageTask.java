@@ -48,7 +48,6 @@ public class LoadVideoImageTask extends AsyncTask<Object, Void, Bitmap> {
 		if (result != null) {
 			iv.setImageBitmap(result);
 			ImageCache.getInstance().put(thumbnailPath, result);
-			iv.setClickable(true);
 			iv.setTag(thumbnailPath);
 			iv.setOnClickListener(new View.OnClickListener() {
 

@@ -38,10 +38,11 @@
             <TextView
                 android:id="@+id/tv_location"
                 style="@style/chat_content_date_style"
-                android:layout_width="wrap_content"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/location_msg"
-                android:gravity="center"
+                android:gravity="center|left"
+                android:textSize="13sp"
                 android:textColor="@android:color/white" />
         </LinearLayout>
         <TextView

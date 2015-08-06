@@ -13,26 +13,29 @@
  */
 package com.easemob.chatuidemo.activity;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.easemob.applib.Constant;
 import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.R;
 
 public class ContextMenu extends BaseActivity {
 
-	private int position;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		int txtValue = EMMessage.Type.TXT.ordinal();
-		int type = getIntent().getIntExtra("type", -1);
+		EMMessage message = getIntent().getParcelableExtra("message");
+		
+		int type = message.getType().ordinal();
 		if (type == EMMessage.Type.TXT.ordinal()) {
-		    setContentView(R.layout.context_menu_for_text);
+		    if(message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false) ||
+		            message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)){
+		        setContentView(R.layout.context_menu_for_location);
+		    }else{
+		        setContentView(R.layout.context_menu_for_text);
+		    }
 		} else if (type == EMMessage.Type.LOCATION.ordinal()) {
 		    setContentView(R.layout.context_menu_for_location);
 		} else if (type == EMMessage.Type.IMAGE.ordinal()) {
@@ -41,34 +44,10 @@ public class ContextMenu extends BaseActivity {
 		    setContentView(R.layout.context_menu_for_voice);
 		} else if (type == EMMessage.Type.VIDEO.ordinal()) {
 			setContentView(R.layout.context_menu_for_video);
+		} else if (type == EMMessage.Type.FILE.ordinal()) {
+		    setContentView(R.layout.context_menu_for_location);
 		}
 		    
-		/*    
-		switch (getIntent().getIntExtra("type", -1)) {
-		case txtValue:
-			setContentView(R.layout.context_menu_for_text);
-			break;
-		case EMMessage.Type.LOCATION.ordinal():
-			setContentView(R.layout.context_menu_for_location);
-			break;
-		case EMMessage.Type.IMAGE.ordinal():
-			setContentView(R.layout.context_menu_for_image);
-			break;
-		case EMMessage.Type.VOICE.ordinal():
-			setContentView(R.layout.context_menu_for_voice);
-			break;
-			//need to support netdisk and send netsdk?
-		case Message.TYPE_NETDISK:
-		    setContentView(R.layout.context_menu_for_netdisk);
-		    break;
-		case Message.TYPE_SENT_NETDISK:
-		    setContentView(R.layout.context_menu_for_sent_netdisk);
-		    break;
-		default:
-			break;
-		}
-		*/
-		position = getIntent().getIntExtra("position", -1);
 	}
 
 	@Override
@@ -78,15 +57,15 @@ public class ContextMenu extends BaseActivity {
 	}
 
 	public void copy(View view){
-		setResult(ChatActivity.RESULT_CODE_COPY, new Intent().putExtra("position", position));
+		setResult(ChatActivity.RESULT_CODE_COPY);
 		finish();
 	}
 	public void delete(View view){
-		setResult(ChatActivity.RESULT_CODE_DELETE, new Intent().putExtra("position", position));
+		setResult(ChatActivity.RESULT_CODE_DELETE);
 		finish();
 	}
 	public void forward(View view){
-		setResult(ChatActivity.RESULT_CODE_FORWARD, new Intent().putExtra("position", position));
+		setResult(ChatActivity.RESULT_CODE_FORWARD);
 		finish();
 	}
 	

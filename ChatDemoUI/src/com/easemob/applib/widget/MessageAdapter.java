@@ -15,6 +15,7 @@ package com.easemob.applib.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +23,9 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import com.easemob.applib.Constant;
+import com.easemob.applib.widget.EMChatMessageList.MessageListItemClickListener;
 import com.easemob.applib.widget.chatrow.EMChatRow;
 import com.easemob.applib.widget.chatrow.EMChatRowCall;
-import com.easemob.applib.widget.chatrow.EMChatRowFactory;
 import com.easemob.applib.widget.chatrow.EMChatRowFile;
 import com.easemob.applib.widget.chatrow.EMChatRowImage;
 import com.easemob.applib.widget.chatrow.EMChatRowLocation;
@@ -34,9 +35,8 @@ import com.easemob.applib.widget.chatrow.EMChatRowVoice;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
-import com.easemob.util.EMLog;
 
-public class EMChatMessageAdapter extends BaseAdapter{
+public class MessageAdapter extends BaseAdapter{
 
 	private final static String TAG = "msg";
 
@@ -77,7 +77,14 @@ public class EMChatMessageAdapter extends BaseAdapter{
 
     private String toChatUsername;
 
-	public EMChatMessageAdapter(Context context, String username, int chatType, ListView listView) {
+    public MessageListItemClickListener itemClickListener;
+    
+    public boolean showUserNick;
+    public boolean showAvatar;
+    public Drawable myBubbleBg;
+    public Drawable otherBuddleBg;
+
+	public MessageAdapter(Context context, String username, int chatType, ListView listView) {
 		this.context = context;
 		this.listView = listView;
 		toChatUsername = username;
@@ -162,7 +169,6 @@ public class EMChatMessageAdapter extends BaseAdapter{
      * 获取item数
      */
     public int getCount() {
-        EMLog.d(TAG, "getCount");
         return messages == null ? 0 : messages.length;
     }
 	
@@ -170,7 +176,6 @@ public class EMChatMessageAdapter extends BaseAdapter{
 	 * 获取item类型数
 	 */
 	public int getViewTypeCount() {
-	    EMLog.d(TAG, "getViewTypeCount");
         return 16;
     }
 	
@@ -251,7 +256,7 @@ public class EMChatMessageAdapter extends BaseAdapter{
 			convertView = createChatRow(context, message, position);
 		}
 		//缓存的view的message很可能不是当前item的，传入当前message和position更新ui
-		((EMChatRow)convertView).setUpView(message, position);
+		((EMChatRow)convertView).setUpView(message, position, itemClickListener);
 		
 		return convertView;
 	}

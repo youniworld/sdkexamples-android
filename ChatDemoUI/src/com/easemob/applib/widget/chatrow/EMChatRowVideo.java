@@ -2,9 +2,11 @@ package com.easemob.applib.widget.chatrow;
 
 import java.io.File;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.BaseAdapter;
@@ -23,9 +25,11 @@ import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.activity.ContextMenu;
 import com.easemob.chatuidemo.activity.ShowVideoActivity;
 import com.easemob.chatuidemo.task.LoadVideoImageTask;
+import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.chatuidemo.utils.ImageCache;
 import com.easemob.util.DateUtils;
 import com.easemob.util.EMLog;
+import com.easemob.util.ImageUtils;
 import com.easemob.util.TextFormater;
 
 public class EMChatRowVideo extends EMChatRowFile{
@@ -61,17 +65,6 @@ public class EMChatRowVideo extends EMChatRowFile{
         // videoBody.getFileName());
         String localThumb = videoBody.getLocalThumb();
 
-        bubbleLayout.setOnLongClickListener(new OnLongClickListener() {
-
-            @Override
-            public boolean onLongClick(View v) {
-                activity.startActivityForResult(
-                        new Intent(context, ContextMenu.class).putExtra("position", position).putExtra("type",
-                                EMMessage.Type.VIDEO.ordinal()), EMChatMessageList.REQUEST_CODE_MESSAGE_LIST);
-                return true;
-            }
-        });
-
         if (localThumb != null) {
 
             showVideoThumbView(localThumb, imageView, videoBody.getThumbnailUrl(), message);
@@ -80,7 +73,7 @@ public class EMChatRowVideo extends EMChatRowFile{
             String time = DateUtils.toTimeBySecond(videoBody.getLength());
             timeLengthView.setText(time);
         }
-        playView.setImageResource(R.drawable.video_download_btn_nor);
+//        playView.setImageResource(R.drawable.video_play_btn_small_nor);
 
         if (message.direct == EMMessage.Direct.RECEIVE) {
             if (videoBody.getVideoFileLength() > 0) {
@@ -115,6 +108,26 @@ public class EMChatRowVideo extends EMChatRowFile{
         handleSendMessage(videoBody);
 	}
 	
+	@Override
+	protected void onBuubleClick() {
+	    VideoMessageBody videoBody = (VideoMessageBody) message.getBody();
+        EMLog.d(TAG, "video view is on click");
+        Intent intent = new Intent(context, ShowVideoActivity.class);
+        intent.putExtra("localpath", videoBody.getLocalUrl());
+        intent.putExtra("secret", videoBody.getSecret());
+        intent.putExtra("remotepath", videoBody.getRemoteUrl());
+        if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked
+                && message.getChatType() != ChatType.GroupChat) {
+            message.isAcked = true;
+            try {
+                EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        activity.startActivity(intent);
+	}
+	
 	/**
      * 展示视频缩略图
      * 
@@ -125,39 +138,47 @@ public class EMChatRowVideo extends EMChatRowFile{
      *            远程缩略图路径
      * @param message
      */
-    private void showVideoThumbView(String localThumb, ImageView iv, String thumbnailUrl, final EMMessage message) {
+    private void showVideoThumbView(final String localThumb, final ImageView iv, String thumbnailUrl, final EMMessage message) {
         // first check if the thumbnail image already loaded into cache
         Bitmap bitmap = ImageCache.getInstance().get(localThumb);
         if (bitmap != null) {
             // thumbnail image is already loaded, reuse the drawable
             iv.setImageBitmap(bitmap);
-            iv.setClickable(true);
-            iv.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    VideoMessageBody videoBody = (VideoMessageBody) message.getBody();
-                    EMLog.d(TAG, "video view is on click");
-                    Intent intent = new Intent(context, ShowVideoActivity.class);
-                    intent.putExtra("localpath", videoBody.getLocalUrl());
-                    intent.putExtra("secret", videoBody.getSecret());
-                    intent.putExtra("remotepath", videoBody.getRemoteUrl());
-                    if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked
-                            && message.getChatType() != ChatType.GroupChat) {
-                        message.isAcked = true;
-                        try {
-                            EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    activity.startActivity(intent);
-                }
-            });
 
         } else {
-            new LoadVideoImageTask().execute(localThumb, thumbnailUrl, iv, activity, message, adapter);
+            new AsyncTask<Void, Void, Bitmap>() {
+
+                @Override
+                protected Bitmap doInBackground(Void... params) {
+                    if (new File(localThumb).exists()) {
+                        return ImageUtils.decodeScaleImage(localThumb, 120, 120);
+                    } else {
+                        return null;
+                    }
+                }
+                
+                @Override
+                protected void onPostExecute(Bitmap result) {
+                    super.onPostExecute(result);
+                    if (result != null) {
+                        ImageCache.getInstance().put(localThumb, result);
+                        iv.setImageBitmap(result);
+
+                    } else {
+                        if (message.status == EMMessage.Status.FAIL
+                                || message.direct == EMMessage.Direct.RECEIVE) {
+                            if (CommonUtils.isNetWorkConnected(activity)) {
+                                EMChatManager.getInstance().asyncFetchMessage(message);
+                            }
+                        }
+
+                    }
+                }
+            }.execute();
         }
+        
     }
+    
+    
 
 }
