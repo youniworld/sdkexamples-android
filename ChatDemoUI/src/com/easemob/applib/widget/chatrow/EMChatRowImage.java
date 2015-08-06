@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.easemob.applib.widget.EMChatMessageList;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.FileMessageBody;
@@ -45,6 +46,7 @@ public class EMChatRowImage extends EMChatRowFile{
         imageView = (ImageView) findViewById(R.id.image);
     }
 
+    
     @Override
     protected void onSetUpView() {
         bubbleLayout.setOnLongClickListener(new OnLongClickListener() {
@@ -52,7 +54,7 @@ public class EMChatRowImage extends EMChatRowFile{
             public boolean onLongClick(View v) {
                 ((Activity)context).startActivityForResult(
                         (new Intent(context, ContextMenu.class)).putExtra("position", position).putExtra("type",
-                                EMMessage.Type.IMAGE.ordinal()), REQUEST_CODE_CONTEXT_MENU);
+                                EMMessage.Type.IMAGE.ordinal()), EMChatMessageList.REQUEST_CODE_MESSAGE_LIST);
                 return true;
             }
         });

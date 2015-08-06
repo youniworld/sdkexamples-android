@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import com.easemob.applib.controller.HXSDKHelper;
@@ -104,6 +105,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 
 	private LinearLayout blacklistContainer;
 	
+	private LinearLayout userProfileContainer;
+	
 	/**
 	 * 退出按钮
 	 */
@@ -164,10 +167,12 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		textview2 = (TextView) getView().findViewById(R.id.textview2);
 		
 		blacklistContainer = (LinearLayout) getView().findViewById(R.id.ll_black_list);
+		userProfileContainer = (LinearLayout) getView().findViewById(R.id.ll_user_profile);
 		llDiagnose=(LinearLayout) getView().findViewById(R.id.ll_diagnose);
 		pushNick=(LinearLayout) getView().findViewById(R.id.ll_set_push_nick);
 		
 		blacklistContainer.setOnClickListener(this);
+		userProfileContainer.setOnClickListener(this);
 		rl_switch_notification.setOnClickListener(this);
 		rl_switch_sound.setOnClickListener(this);
 		rl_switch_vibrate.setOnClickListener(this);
@@ -332,6 +337,9 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		case R.id.ll_set_push_nick:
 			startActivity(new Intent(getActivity(), OfflinePushNickActivity.class));
 			break;
+		case R.id.ll_user_profile:
+			startActivity(new Intent(getActivity(), UserProfileActivity.class).putExtra("setting", true));
+			break;
 		default:
 			break;
 		}
@@ -344,7 +352,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		pd.setMessage(st);
 		pd.setCanceledOnTouchOutside(false);
 		pd.show();
-		DemoApplication.getInstance().logout(new EMCallBack() {
+		DemoHXSDKHelper.getInstance().logout(true,new EMCallBack() {
 			
 			@Override
 			public void onSuccess() {
@@ -366,7 +374,17 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			
 			@Override
 			public void onError(int code, String message) {
-				
+				getActivity().runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						pd.dismiss();
+						Toast.makeText(getActivity(), "unbind devicetokens failed", Toast.LENGTH_SHORT).show();
+						
+						
+					}
+				});
 			}
 		});
 	}

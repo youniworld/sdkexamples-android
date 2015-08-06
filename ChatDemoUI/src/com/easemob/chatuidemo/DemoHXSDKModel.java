@@ -30,9 +30,8 @@ public class DemoHXSDKModel extends DefaultHXSDKModel{
         super(ctx);
     }
 
-    // demo will not use HuanXin roster
     public boolean getUseHXRoster() {
-        return false;
+        return true;
     }
     
     // demo will switch on debug mode
@@ -49,6 +48,11 @@ public class DemoHXSDKModel extends DefaultHXSDKModel{
     public Map<String, User> getContactList() {
         UserDao dao = new UserDao(context);
         return dao.getContactList();
+    }
+    
+    public void saveContact(User user){
+    	UserDao dao = new UserDao(context);
+    	dao.saveContact(user);
     }
     
     public Map<String, RobotUser> getRobotList(){

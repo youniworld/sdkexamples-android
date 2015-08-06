@@ -37,11 +37,12 @@ public abstract class EMChatRow extends LinearLayout {
     protected ProgressBar progressBar;
     protected ImageView statusView;
     protected Activity activity;
+    
     protected TextView ackedView;
+    protected TextView deliveredView;
     
     protected EMCallBack sendMessageCallBack;
 
-    protected TextView deliveredView;
     
 
     public EMChatRow(Context context, EMMessage message, int position, BaseAdapter adapter) {
@@ -89,6 +90,42 @@ public abstract class EMChatRow extends LinearLayout {
                 }
             }
         }
+        
+        setClickListener();
+        
+    }
+    
+    private void setClickListener(){
+        bubbleLayout.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
+        
+        bubbleLayout.setOnLongClickListener(new OnLongClickListener() {
+            
+            @Override
+            public boolean onLongClick(View v) {
+                return false;
+            }
+        });
+        
+        statusView.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
+        
+        userAvatarView.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+            }
+        });
     }
 
     /**

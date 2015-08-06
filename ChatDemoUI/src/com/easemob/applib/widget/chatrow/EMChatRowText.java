@@ -14,6 +14,7 @@ import android.widget.TextView.BufferType;
 
 import com.easemob.EMCallBack;
 import com.easemob.EMError;
+import com.easemob.applib.widget.EMChatMessageList;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
@@ -52,7 +53,7 @@ public class EMChatRowText extends EMChatRow{
             public boolean onLongClick(View v) {
                 activity.startActivityForResult(
                         (new Intent(context, ContextMenu.class)).putExtra("position", position).putExtra("type",
-                                EMMessage.Type.TXT.ordinal()), REQUEST_CODE_CONTEXT_MENU);
+                                EMMessage.Type.TXT.ordinal()), EMChatMessageList.REQUEST_CODE_MESSAGE_LIST);
                 return true;
             }
         });

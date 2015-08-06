@@ -98,6 +98,7 @@ import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.chatuidemo.utils.ImageUtils;
 import com.easemob.chatuidemo.utils.SmileUtils;
+import com.easemob.chatuidemo.utils.UserUtils;
 import com.easemob.chatuidemo.widget.ExpandGridView;
 import com.easemob.chatuidemo.widget.PasteEditText;
 import com.easemob.exceptions.EaseMobException;
@@ -255,7 +256,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 				getResources().getDrawable(R.drawable.record_animate_11),
 				getResources().getDrawable(R.drawable.record_animate_12),
 				getResources().getDrawable(R.drawable.record_animate_13),
-				getResources().getDrawable(R.drawable.record_animate_14), };
+				getResources().getDrawable(R.drawable.record_animate_14) };
 
 		// 表情list
 		reslist = getExpressionRes(35);
@@ -390,7 +391,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 					((TextView) findViewById(R.id.name)).setText(toChatUsername);
 				}
 			}else{
-				((TextView) findViewById(R.id.name)).setText(toChatUsername);
+				UserUtils.setUserNick(toChatUsername, (TextView) findViewById(R.id.name));
 			}
 		} else {
 			// 群聊
@@ -1040,12 +1041,12 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	 * @param selectedImage
 	 */
 	private void sendPicByUri(Uri selectedImage) {
-		// String[] filePathColumn = { MediaStore.Images.Media.DATA };
-		Cursor cursor = getContentResolver().query(selectedImage, null, null, null, null);
+		String[] filePathColumn = { MediaStore.Images.Media.DATA };
+		Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
 		String st8 = getResources().getString(R.string.cant_find_pictures);
 		if (cursor != null) {
 			cursor.moveToFirst();
-			int columnIndex = cursor.getColumnIndex("_data");
+			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
 			String picturePath = cursor.getString(columnIndex);
 			cursor.close();
 			cursor = null;

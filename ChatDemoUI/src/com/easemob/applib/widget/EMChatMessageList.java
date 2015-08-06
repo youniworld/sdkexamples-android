@@ -103,6 +103,11 @@ public class EMChatMessageList extends RelativeLayout{
         messageAdapter.refreshSelectLast();
     }
     
+    public void resendMessage(EMMessage message){
+        message.status = EMMessage.Status.CREATE;
+        refresh();
+    }
+    
     /**
      * 刷新列表
      */
@@ -366,5 +371,11 @@ public class EMChatMessageList extends RelativeLayout{
 	    return showUserNick;
 	}
 	
+	interface MessageListItemClickListener{
+	    void onResendClick(EMMessage messgae);
+	    void onBubbleClick(EMMessage message);
+	    void onBubbleLongClick(EMMessage message);
+	    void onUserAvatarClick(String username);
+	}
 	
 }

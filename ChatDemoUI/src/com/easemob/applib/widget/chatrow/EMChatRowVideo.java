@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.easemob.applib.widget.EMChatMessageList;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.VideoMessageBody;
@@ -66,7 +67,7 @@ public class EMChatRowVideo extends EMChatRowFile{
             public boolean onLongClick(View v) {
                 activity.startActivityForResult(
                         new Intent(context, ContextMenu.class).putExtra("position", position).putExtra("type",
-                                EMMessage.Type.VIDEO.ordinal()), REQUEST_CODE_CONTEXT_MENU);
+                                EMMessage.Type.VIDEO.ordinal()), EMChatMessageList.REQUEST_CODE_MESSAGE_LIST);
                 return true;
             }
         });

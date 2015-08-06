@@ -90,17 +90,4 @@ public class ContextMenu extends BaseActivity {
 		finish();
 	}
 	
-	public void open(View v){
-	    setResult(ChatActivity.RESULT_CODE_OPEN, new Intent().putExtra("position", position));
-        finish();
-	}
-	public void download(View v){
-	    setResult(ChatActivity.RESULT_CODE_DWONLOAD, new Intent().putExtra("position", position));
-        finish();
-	}
-	public void toCloud(View v){
-	    setResult(ChatActivity.RESULT_CODE_TO_CLOUD, new Intent().putExtra("position", position));
-        finish();
-	}
-	
 }

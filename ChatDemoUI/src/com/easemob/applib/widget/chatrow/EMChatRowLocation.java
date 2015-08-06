@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.easemob.applib.widget.EMChatMessageList;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.LocationMessageBody;
 import com.easemob.chatuidemo.R;
@@ -44,7 +45,7 @@ public class EMChatRowLocation extends EMChatRow{
 			public boolean onLongClick(View v) {
 				activity.startActivityForResult(
 						(new Intent(context, ContextMenu.class)).putExtra("position", position).putExtra("type",
-								EMMessage.Type.LOCATION.ordinal()), REQUEST_CODE_CONTEXT_MENU);
+								EMMessage.Type.LOCATION.ordinal()), EMChatMessageList.REQUEST_CODE_MESSAGE_LIST);
 				return false;
 			}
 		});
