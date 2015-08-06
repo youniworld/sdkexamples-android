@@ -38,8 +38,8 @@ public class EMChatRowLocation extends EMChatRow{
 		LocationMessageBody locBody = (LocationMessageBody) message.getBody();
 		locationView.setText(locBody.getAddress());
 		LatLng loc = new LatLng(locBody.getLatitude(), locBody.getLongitude());
-		locationView.setOnClickListener(new MapClickListener(loc, locBody.getAddress()));
-		locationView.setOnLongClickListener(new OnLongClickListener() {
+		bubbleLayout.setOnClickListener(new MapClickListener(loc, locBody.getAddress()));
+		bubbleLayout.setOnLongClickListener(new OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
 				activity.startActivityForResult(
