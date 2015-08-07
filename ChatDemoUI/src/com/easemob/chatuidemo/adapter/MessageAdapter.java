@@ -420,7 +420,7 @@ public class MessageAdapter extends BaseAdapter{
 			UserUtils.setUserNick(message.getFrom(), holder.tv_usernick);
 		}
 		if(message.direct == EMMessage.Direct.SEND){
-			UserUtils.setCurrentUserNick(holder.tv_usernick);
+		    UserUtils.setUserNick(username, holder.tv_usernick);
 		}
 		// 如果是发送的消息并且不是群聊消息，显示已读textview
 		if (!(chatType == ChatType.GroupChat || chatType == ChatType.ChatRoom) && message.direct == EMMessage.Direct.SEND) {
@@ -571,7 +571,7 @@ public class MessageAdapter extends BaseAdapter{
 	private void setUserAvatar(final EMMessage message, ImageView imageView){
 	    if(message.direct == Direct.SEND){
 	        //显示自己头像
-	        UserUtils.setCurrentUserAvatar(context, imageView);
+	        UserUtils.setUserAvatar(context, EMChatManager.getInstance().getCurrentUser(), imageView);
 	    }else{
 	        UserUtils.setUserAvatar(context, message.getFrom(), imageView);
 	    }

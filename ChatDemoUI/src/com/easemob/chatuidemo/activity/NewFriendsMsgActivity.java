@@ -26,6 +26,7 @@ import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.adapter.NewFriendsMsgAdapter;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
+import com.easemob.chatuidemo.domain.SystemUser;
 
 /**
  * 申请与通知
@@ -45,7 +46,8 @@ public class NewFriendsMsgActivity extends BaseActivity {
 		//设置adapter
 		NewFriendsMsgAdapter adapter = new NewFriendsMsgAdapter(this, 1, msgs); 
 		listView.setAdapter(adapter);
-		((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().get(Constant.NEW_FRIENDS_USERNAME).setUnreadMsgCount(0);
+		((SystemUser)((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().
+		        get(Constant.NEW_FRIENDS_USERNAME)).setUnreadMsgCount(0);
 		
 	}
 

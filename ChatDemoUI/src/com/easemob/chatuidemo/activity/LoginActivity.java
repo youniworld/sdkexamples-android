@@ -40,6 +40,7 @@ import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.UserDao;
+import com.easemob.chatuidemo.domain.SystemUser;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.utils.CommonUtils;
 
@@ -204,27 +205,33 @@ public class LoginActivity extends BaseActivity {
 	private void initializeContacts() {
 		Map<String, User> userlist = new HashMap<String, User>();
 		// 添加user"申请与通知"
-		User newFriends = new User();
-		newFriends.setUsername(Constant.NEW_FRIENDS_USERNAME);
-		String strChat = getResources().getString(
-				R.string.Application_and_notify);
+		User newFriends = new SystemUser(Constant.NEW_FRIENDS_USERNAME);
+		String strChat = getResources().getString(R.string.Application_and_notify);
+		newFriends.setInitialLetter("");
 		newFriends.setNick(strChat);
-
+		newFriends.setAvatar(R.drawable.new_friends_icon + "");
 		userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
 		// 添加"群聊"
-		User groupUser = new User();
+		User groupUser = new SystemUser(Constant.GROUP_USERNAME);
 		String strGroup = getResources().getString(R.string.group_chat);
-		groupUser.setUsername(Constant.GROUP_USERNAME);
 		groupUser.setNick(strGroup);
 		groupUser.setInitialLetter("");
+		groupUser.setAvatar(R.drawable.group_icon + "");
 		userlist.put(Constant.GROUP_USERNAME, groupUser);
 		
+		//聊天室
+		User chatRoomUser = new User(Constant.CHAT_ROOM);
+		chatRoomUser.setNick(getResources().getString(R.string.chat_room));
+		chatRoomUser.setInitialLetter("");
+		chatRoomUser.setAvatar(R.drawable.group_icon + "");
+        userlist.put(Constant.CHAT_ROOM, chatRoomUser);
+		
 		// 添加"Robot"
-		User robotUser = new User();
+		User robotUser = new User(Constant.CHAT_ROBOT);
 		String strRobot = getResources().getString(R.string.robot_chat);
-		robotUser.setUsername(Constant.CHAT_ROBOT);
 		robotUser.setNick(strRobot);
 		robotUser.setInitialLetter("");
+		robotUser.setAvatar(R.drawable.group_icon + "");
 		userlist.put(Constant.CHAT_ROBOT, robotUser);
 		
 		// 存入内存

@@ -38,7 +38,7 @@
                 android:id="@+id/chatting_click_area"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@drawable/chatto_bg" >
+                android:background="@drawable/em_chatto_bg" >
 
                 <ImageView
                     android:id="@+id/chatting_content_iv"

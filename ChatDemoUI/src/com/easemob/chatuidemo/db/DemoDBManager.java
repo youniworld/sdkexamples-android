@@ -15,6 +15,7 @@ import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.domain.InviteMessage;
 import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
 import com.easemob.chatuidemo.domain.RobotUser;
+import com.easemob.chatuidemo.domain.SystemUser;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.util.HanziToPinyin;
 
@@ -65,8 +66,13 @@ public class DemoDBManager {
                 String username = cursor.getString(cursor.getColumnIndex(UserDao.COLUMN_NAME_ID));
                 String nick = cursor.getString(cursor.getColumnIndex(UserDao.COLUMN_NAME_NICK));
                 String avatar = cursor.getString(cursor.getColumnIndex(UserDao.COLUMN_NAME_AVATAR));
-                User user = new User();
-                user.setUsername(username);
+                User user = null;
+                if (username.equals(Constant.NEW_FRIENDS_USERNAME) || username.equals(Constant.GROUP_USERNAME)
+                        || username.equals(Constant.CHAT_ROOM)|| username.equals(Constant.CHAT_ROBOT)){
+                    user = new SystemUser(username);
+                }else{
+                    user = new User(username);
+                }
                 user.setNick(nick);
                 user.setAvatar(avatar);
                 String headerName = null;

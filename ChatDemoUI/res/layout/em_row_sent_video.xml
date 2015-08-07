@@ -33,7 +33,7 @@
             android:layout_height="145dp"
             android:layout_marginRight="@dimen/margin_chat_activity"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/chatto_bg"
+            android:background="@drawable/em_chatto_bg"
              >
 
             <ImageView

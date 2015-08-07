@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.domain.SystemUser;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.utils.UserUtils;
 import com.easemob.util.EMLog;
@@ -80,32 +81,18 @@ public class ContactListAdapter extends ArrayAdapter<User>  implements SectionIn
         } else {
             holder.tvHeader.setVisibility(View.GONE);
         }
+        //设置nick
+        holder.nameTextview.setText(user.getNick());
+        //设置头像
+        UserUtils.setUserAvatar(getContext(), username, holder.avatar);
         //显示申请与通知item
         if(username.equals(Constant.NEW_FRIENDS_USERNAME)){
-            holder.nameTextview.setText(user.getNick());
-            holder.avatar.setImageResource(R.drawable.new_friends_icon);
-            if(user.getUnreadMsgCount() > 0){
+            if(((SystemUser)user).getUnreadMsgCount() > 0){
                 holder.unreadMsgView.setVisibility(View.VISIBLE);
-//              holder.unreadMsgView.setText(user.getUnreadMsgCount()+"");
             }else{
                 holder.unreadMsgView.setVisibility(View.INVISIBLE);
             }
-        }else if(username.equals(Constant.GROUP_USERNAME)){
-            //群聊item
-            holder.nameTextview.setText(user.getNick());
-            holder.avatar.setImageResource(R.drawable.groups_icon);
-        }else if(username.equals(Constant.CHAT_ROOM)){
-            //群聊item
-            holder.nameTextview.setText(user.getNick());
-            holder.avatar.setImageResource(R.drawable.groups_icon);
-        }else if(username.equals(Constant.CHAT_ROBOT)){
-            //Robot item
-            holder.nameTextview.setText(user.getNick());
-            holder.avatar.setImageResource(R.drawable.groups_icon);
         }else{
-            holder.nameTextview.setText(username);
-            //设置用户头像
-            UserUtils.setUserAvatar(getContext(), username, holder.avatar);
             if(holder.unreadMsgView != null)
                 holder.unreadMsgView.setVisibility(View.INVISIBLE);
         }

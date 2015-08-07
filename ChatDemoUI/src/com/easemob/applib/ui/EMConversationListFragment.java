@@ -62,8 +62,9 @@ public class EMConversationListFragment extends Fragment{
         errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
         
         conversationListView = (EMConversationList) getView().findViewById(R.id.list);
+        conversationListView.init();
         
-//      // 注册上下文菜单
+        // 注册上下文菜单
         registerForContextMenu(conversationListView);
         conversationListView.setOnItemClickListener(new OnItemClickListener() {
 

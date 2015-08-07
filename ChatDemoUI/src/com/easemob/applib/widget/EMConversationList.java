@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.R.integer;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
@@ -29,6 +28,7 @@ import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
 import com.easemob.applib.controller.HXSDKHelper;
+import com.easemob.applib.controller.HXSDKHelper.UserProvider;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatRoom;
 import com.easemob.chat.EMConversation;
@@ -36,9 +36,6 @@ import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
-import com.easemob.chat.ImageMessageBody;
-import com.easemob.chat.TextMessageBody;
-import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.domain.RobotUser;
@@ -89,6 +86,9 @@ public class EMConversationList extends ListView {
         
         ta.recycle();
         
+    }
+    
+    public void init(){
         adapter = new ConverastionListAdapater(context, 0, allConversations);
         setAdapter(adapter);
 
@@ -111,7 +111,6 @@ public class EMConversationList extends ListView {
             }
         }
     };
-
     
 
     /**
@@ -180,8 +179,6 @@ public class EMConversationList extends ListView {
     public void refresh() {
         allConversations = loadConversationsWithRecentChat();
 
-//        EMConversationWidgetFactory.getInstance(context).onPreUpdateData(allConversations);
-        
         handler.sendEmptyMessage(MSG_REFRESH_ADAPTER_DATA);
     }
     

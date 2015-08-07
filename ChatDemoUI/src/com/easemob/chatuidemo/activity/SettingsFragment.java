@@ -338,7 +338,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			startActivity(new Intent(getActivity(), OfflinePushNickActivity.class));
 			break;
 		case R.id.ll_user_profile:
-			startActivity(new Intent(getActivity(), UserProfileActivity.class).putExtra("setting", true));
+			startActivity(new Intent(getActivity(), UserProfileActivity.class).putExtra("setting", true)
+			        .putExtra("username", EMChatManager.getInstance().getCurrentUser()));
 			break;
 		default:
 			break;

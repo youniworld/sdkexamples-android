@@ -7,11 +7,10 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.easemob.EMValueCallBack;
-import com.easemob.applib.utils.HXPreferenceUtils;
+import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chatuidemo.Constant;
+import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.domain.User;
-import com.easemob.chatuidemo.utils.UserUtils;
 import com.easemob.util.EMLog;
 import com.easemob.util.HanziToPinyin;
 import com.parse.FindCallback;
@@ -94,13 +93,12 @@ public class ParseManager {
 				if (arg0 != null) {
 					List<User> mList = new ArrayList<User>();
 					for (ParseObject pObject : arg0) {
-						User user = new User();
+						User user = new User(pObject.getString(CONFIG_USERNAME));
 						ParseFile parseFile = pObject.getParseFile(CONFIG_AVATAR);
 						if (parseFile != null) {
 							user.setAvatar(parseFile.getUrl());
 						}
 						user.setNick(pObject.getString(CONFIG_NICK));
-						user.setUsername(pObject.getString(CONFIG_USERNAME));
 						setUserHearder(user);
 						mList.add(user);
 					}
@@ -178,12 +176,17 @@ public class ParseManager {
 					String nick = pUser.getString(CONFIG_NICK);
 					ParseFile pFile = pUser.getParseFile(CONFIG_AVATAR);
 					if(callback!=null){
-						User user = UserUtils.getUserInfo(username);
+						User user = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().get(username);
 						if(user!=null){
 							user.setNick(nick);
 							if (pFile != null && pFile.getUrl() != null) {
 								user.setAvatar(pFile.getUrl());
 							}
+						}else{
+						    //好友列表里不包含自己
+						    if(EMChatManager.getInstance().getCurrentUser().equals(username)){
+						        user = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().getCurrentUserInfo();
+						    }
 						}
 						callback.onSuccess(user);
 					}

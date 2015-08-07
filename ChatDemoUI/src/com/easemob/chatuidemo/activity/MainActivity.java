@@ -64,6 +64,7 @@ import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
+import com.easemob.chatuidemo.domain.SystemUser;
 import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.utils.CommonUtils;
@@ -206,44 +207,12 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                 EMLog.d("roster", "contacts size: " + usernames.size());
                 Map<String, User> userlist = new HashMap<String, User>();
                 for (String username : usernames) {
-                    User user = new User();
-                    user.setUsername(username);
+                    User user = new User(username);
                     setUserHearder(username, user);
                     userlist.put(username, user);
                 }
-                // 添加user"申请与通知"
-                User newFriends = new User();
-                newFriends.setUsername(Constant.NEW_FRIENDS_USERNAME);
-                String strChat = context.getString(R.string.Application_and_notify);
-                newFriends.setNick(strChat);
-        
-                userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
-                // 添加"群聊"
-                User groupUser = new User();
-                String strGroup = context.getString(R.string.group_chat);
-                groupUser.setUsername(Constant.GROUP_USERNAME);
-                groupUser.setNick(strGroup);
-                groupUser.setInitialLetter("");
-                userlist.put(Constant.GROUP_USERNAME, groupUser);
-                
-                 // 添加"聊天室"
-                User chatRoomItem = new User();
-                String strChatRoom = context.getString(R.string.chat_room);
-                chatRoomItem.setUsername(Constant.CHAT_ROOM);
-                chatRoomItem.setNick(strChatRoom);
-                chatRoomItem.setInitialLetter("");
-                userlist.put(Constant.CHAT_ROOM, chatRoomItem);
-                
-                // 添加"Robot"
-        		User robotUser = new User();
-        		String strRobot = context.getString(R.string.robot_chat);
-        		robotUser.setUsername(Constant.CHAT_ROBOT);
-        		robotUser.setNick(strRobot);
-        		robotUser.setInitialLetter("");
-        		userlist.put(Constant.CHAT_ROBOT, robotUser);
-        		
-                 // 存入内存
-                ((DemoHXSDKHelper)HXSDKHelper.getInstance()).setContactList(userlist);
+                // 存入内存
+                ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().putAll(userlist);
                  // 存入db
                 UserDao dao = new UserDao(context);
                 List<User> users = new ArrayList<User>(userlist.values());
@@ -481,9 +450,9 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	 */
 	public int getUnreadAddressCountTotal() {
 		int unreadAddressCountTotal = 0;
-		if (((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().get(Constant.NEW_FRIENDS_USERNAME) != null)
-			unreadAddressCountTotal = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().get(Constant.NEW_FRIENDS_USERNAME)
-					.getUnreadMsgCount();
+		User user = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().get(Constant.NEW_FRIENDS_USERNAME);
+		if (user != null)
+			unreadAddressCountTotal = ((SystemUser)user).getUnreadMsgCount();
 		return unreadAddressCountTotal;
 	}
 
@@ -852,7 +821,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		// 保存msg
 		inviteMessgeDao.saveMessage(msg);
 		// 未读数加1
-		User user = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().get(Constant.NEW_FRIENDS_USERNAME);
+		SystemUser user = (SystemUser) ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().get(Constant.NEW_FRIENDS_USERNAME);
 		if (user.getUnreadMsgCount() == 0)
 			user.setUnreadMsgCount(user.getUnreadMsgCount() + 1);
 	}
@@ -864,8 +833,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	 * @return
 	 */
 	User setUserHead(String username) {
-		User user = new User();
-		user.setUsername(username);
+		User user = new User(username);
 		String headerName = null;
 		if (!TextUtils.isEmpty(user.getNick())) {
 			headerName = user.getNick();

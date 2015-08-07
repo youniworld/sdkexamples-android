@@ -75,19 +75,17 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			headPhotoUpdate.setVisibility(View.GONE);
 			iconRightArrow.setVisibility(View.INVISIBLE);
 		}
-		if (username == null) {
-			tvUsername.setText(EMChatManager.getInstance().getCurrentUser());
-			UserUtils.setCurrentUserNick(tvNickName);
-			UserUtils.setCurrentUserAvatar(this, headAvatar);
-		} else if (username.equals(EMChatManager.getInstance().getCurrentUser())) {
-			tvUsername.setText(EMChatManager.getInstance().getCurrentUser());
-			UserUtils.setCurrentUserNick(tvNickName);
-			UserUtils.setCurrentUserAvatar(this, headAvatar);
-		} else {
-			tvUsername.setText(username);
-			UserUtils.setUserNick(username, tvNickName);
-			UserUtils.setUserAvatar(this, username, headAvatar);
-			asyncFetchUserInfo(username);
+		if(username != null){
+    		if (username.equals(EMChatManager.getInstance().getCurrentUser())) {
+    			tvUsername.setText(EMChatManager.getInstance().getCurrentUser());
+    			UserUtils.setUserNick(username, tvNickName);
+                UserUtils.setUserAvatar(this, username, headAvatar);
+    		} else {
+    			tvUsername.setText(username);
+    			UserUtils.setUserNick(username, tvNickName);
+    			UserUtils.setUserAvatar(this, username, headAvatar);
+    			asyncFetchUserInfo(username);
+    		}
 		}
 	}
 
@@ -131,7 +129,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 					}else{
 						Picasso.with(UserProfileActivity.this).load(R.drawable.default_avatar).into(headAvatar);
 					}
-					UserUtils.saveUserInfo(user);
+					((DemoHXSDKHelper) HXSDKHelper.getInstance()).saveContact(newUser);
 				}
 			}
 			
@@ -177,7 +175,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 
 			@Override
 			public void run() {
-				boolean updatenick = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().updateParseNickName(nickName);
+				boolean updatenick = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().updateCurrentUserNickName(nickName);
 				if (UserProfileActivity.this.isFinishing()) {
 					return;
 				}

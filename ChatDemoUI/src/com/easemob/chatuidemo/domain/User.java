@@ -16,7 +16,6 @@ package com.easemob.chatuidemo.domain;
 import com.easemob.chat.EMContact;
 
 public class User extends EMContact {
-    protected int unreadMsgCount;
     
     /**
      * 昵称首字母
@@ -27,7 +26,7 @@ public class User extends EMContact {
 	 */
 	protected String avatar;
 	
-	public User(){}
+	private User(){}
 	
 	public User(String username){
 	    this.username = username;
@@ -41,15 +40,6 @@ public class User extends EMContact {
 		this.initialLetter = initialLetter;
 	}
 
-	public int getUnreadMsgCount() {
-		return unreadMsgCount;
-	}
-
-	public void setUnreadMsgCount(int unreadMsgCount) {
-		this.unreadMsgCount = unreadMsgCount;
-	}
-	
-	
 
 	public String getAvatar() {
         return avatar;

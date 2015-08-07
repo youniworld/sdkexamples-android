@@ -33,7 +33,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/iv_userhead"
-            android:background="@drawable/chatfrom_bg"
+            android:background="@drawable/em_chatfrom_bg"
             android:clickable="true"
             android:src="@drawable/chatfrom_voice_playing" />
 

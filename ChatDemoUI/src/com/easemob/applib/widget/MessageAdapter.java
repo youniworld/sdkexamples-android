@@ -261,48 +261,6 @@ public class MessageAdapter extends BaseAdapter{
 		return convertView;
 	}
 
-//	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-//		if (data == null) {
-//			return false;
-//		}
-//		int position = data.getIntExtra("position", -1);
-//		if (position == -1) {
-//			return false;
-//		}
-//		
-//		if (requestCode == EMChatMessageList.REQUEST_CODE_CONTEXT_MENU) {
-//			
-////			MessageAdapter adapter = messageList.getAdapter();
-////			int position = data.getIntExtra("position", -1);
-////			if (position == -1) {
-////				return;
-////			}
-//			EMMessage message = (EMMessage)getItem(position);
-//			
-//			switch (resultCode) {
-//			case EMChatMessageList.RESULT_CODE_COPY: // 复制消息
-//				@SuppressWarnings("deprecation")
-//				ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-//				clipboard.setText(((TextMessageBody) message.getBody()).getMessage());
-//				return true;
-//			case EMChatMessageList.RESULT_CODE_DELETE: // 删除消息
-//				conversation.removeMessage(message.getMsgId());
-//				refreshSeekTo(position > 0 ? position - 1 : 0);
-//				return true;
-//
-//			case EMChatMessageList.RESULT_CODE_FORWARD: // 转发消息
-//				// TODO, EMWidget
-//				EMMessage forwardMsg = (EMMessage) getItem(data.getIntExtra("position", 0));
-//				Intent intent = new Intent(context, ForwardMessageActivity.class);
-//				intent.putExtra("forward_msg_id", forwardMsg.getMsgId());
-//				((Activity)context).startActivity(intent);
-//				return true;
-//			default:
-//				break;
-//			}
-//		}		
-//		return false;
-//	}
 
 	public String getToChatUsername(){
 	    return toChatUsername;

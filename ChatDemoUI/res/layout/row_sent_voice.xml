@@ -33,7 +33,7 @@
             android:layout_height="48dp"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/chatto_bg"
+            android:background="@drawable/em_chatto_bg"
             android:src="@drawable/chatto_voice_playing" />
 
         <TextView

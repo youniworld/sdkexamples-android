@@ -100,6 +100,8 @@ public class DemoHXSDKHelper extends HXSDKHelper{
     public synchronized boolean onInit(Context context){
         if(super.onInit(context)){
             getUserProfileManager().onInit(context);
+            //设置用户信息提供者
+            setUserProvider();
             
             //if your app is supposed to user Google Push, please set project number
             String projectNumber = "562451699741";
@@ -109,7 +111,7 @@ public class DemoHXSDKHelper extends HXSDKHelper{
         
         return false;
     }
-    
+
     @Override
     protected void initHXOptions(){
         super.initHXOptions();
@@ -131,6 +133,21 @@ public class DemoHXSDKHelper extends HXSDKHelper{
         appContext.registerReceiver(callReceiver, callFilter);    
         //注册消息事件监听
         initEventListener();
+    }
+    
+    protected void setUserProvider() {
+        setUserProvider(new UserProvider() {
+            
+            @Override
+            public User getUser(String username) {
+                //获取user信息，demo是从内存的好友列表里获取，
+                //实际开发中，可能还需要从服务器获取用户信息,
+                //从服务器获取的数据，最好缓存起来，避免频繁的网络请求
+                if(username.equals(EMChatManager.getInstance().getCurrentUser()))
+                    return getUserProfileManager().getCurrentUserInfo();
+                return getContactList().get(username);
+            }
+        });
     }
     
     /**

@@ -137,7 +137,7 @@ public abstract class HXSDKHelper {
 	public boolean isVoiceCalling;
     public boolean isVideoCalling;
 
-    protected UserInfoProvider userInfoProvider;
+    protected UserProvider userProvider;
 
     protected HXSDKHelper(){
         me = this;
@@ -689,15 +689,15 @@ public abstract class HXSDKHelper {
      * 设置用户属性提供者
      * @param provider
      */
-    public void setUserInfoProvider(UserInfoProvider provider){
-        userInfoProvider = provider;
+    public void setUserProvider(UserProvider provider){
+        userProvider = provider;
     }
     
-    public UserInfoProvider getUserInfoProvider(){
-        return userInfoProvider;
+    public UserProvider getUserInfoProvider(){
+        return userProvider;
     }
     
-    public interface UserInfoProvider{
+    public interface UserProvider{
         /**
          * 返回此username对应的user
          * @param username 环信id

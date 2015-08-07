@@ -34,7 +34,7 @@
             android:layout_toRightOf="@id/iv_userhead"
             android:layout_marginLeft="10dp"
             android:layout_below="@+id/tv_userid"
-            android:background="@drawable/chatfrom_bg"
+            android:background="@drawable/em_chatfrom_bg"
             >
 
             <ImageView

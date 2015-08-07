@@ -68,6 +68,7 @@ import com.easemob.chatuidemo.activity.ContextMenu;
 import com.easemob.chatuidemo.activity.ForwardMessageActivity;
 import com.easemob.chatuidemo.activity.GroupDetailsActivity;
 import com.easemob.chatuidemo.activity.ImageGridActivity;
+import com.easemob.chatuidemo.activity.UserProfileActivity;
 import com.easemob.chatuidemo.activity.VideoCallActivity;
 import com.easemob.chatuidemo.activity.VoiceCallActivity;
 import com.easemob.chatuidemo.utils.CommonUtils;
@@ -301,7 +302,9 @@ public class EMChatFragment extends Fragment implements EMEventListener {
             
             @Override
             public void onUserAvatarClick(String username) {
-                
+                Intent intent = new Intent(getActivity(), UserProfileActivity.class);
+                intent.putExtra("username", username);
+                startActivity(intent);
             }
             
             @Override
