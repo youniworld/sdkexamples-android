@@ -1,7 +1,5 @@
 package com.easemob.chatuidemo.receiver;
 
-import com.easemob.applib.controller.HXSDKHelper;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,6 +11,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.easemob.chatuilib.controller.HXSDKHelper;
 
 public class GCMPushBroadCast extends BroadcastReceiver {
 

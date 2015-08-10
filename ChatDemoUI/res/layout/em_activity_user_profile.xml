@@ -12,7 +12,7 @@
         android:background="@color/top_bar_normal_bg"
         android:gravity="center_vertical" >
 
-        <include layout="@layout/commom_back_btn" />
+        <include layout="@layout/em_commom_back_btn" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_margin="8dip"
                 android:scaleType="centerCrop"
-                android:src="@drawable/default_avatar"
+                android:src="@drawable/em_default_avatar"
                 />
             <ImageView 
                 android:id="@+id/user_head_headphoto_update"
@@ -52,7 +52,7 @@
                 android:layout_alignBottom="@+id/user_head_avatar"
                 android:layout_alignRight="@+id/user_head_avatar"
                 android:layout_margin="3dip"
-                android:src="@drawable/profile_headphoto_update_icon"
+                android:src="@drawable/em_profile_headphoto_update_icon"
                 />
             
             <LinearLayout 
@@ -119,7 +119,7 @@
                 android:id="@+id/ic_right_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_right_arrow"
+                android:src="@drawable/em_ic_right_arrow"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="5dip"

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -16,9 +17,10 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.ImageMessageBody;
 import com.easemob.chatuilib.R;
+import com.easemob.chatuilib.ui.ShowBigImageActivity;
+import com.easemob.chatuilib.utils.CommonUtils;
 import com.easemob.chatuilib.utils.ImageCache;
 import com.easemob.chatuilib.utils.ImageUtils;
-import com.easemob.util.EMLog;
 
 public class EMChatRowImage extends EMChatRowFile{
 
@@ -59,7 +61,7 @@ public class EMChatRowImage extends EMChatRowFile{
                     String filePath = ImageUtils.getImagePath(remotePath);
                     String thumbRemoteUrl = imgBody.getThumbnailUrl();
                     String thumbnailPath = ImageUtils.getThumbnailImagePath(thumbRemoteUrl);
-                    showImageView(thumbnailPath, imageView, filePath, imgBody.getRemoteUrl(), message);
+                    showImageView(thumbnailPath, imageView, filePath, message);
                 }
             }
             return;
@@ -67,7 +69,7 @@ public class EMChatRowImage extends EMChatRowFile{
         
         String filePath = imgBody.getLocalUrl();
         if (filePath != null) {
-            showImageView(ImageUtils.getThumbnailImagePath(filePath), imageView, filePath, null, message);
+            showImageView(ImageUtils.getThumbnailImagePath(filePath), imageView, filePath, message);
         } 
         handleSendMessage((ImageMessageBody)message.getBody());
     }
@@ -79,7 +81,7 @@ public class EMChatRowImage extends EMChatRowFile{
     
     @Override
     protected void onBuubleClick() {
-        Intent intent = new Intent(context, ShowBigImage.class);
+        Intent intent = new Intent(context, ShowBigImageActivity.class);
         File file = new File(imgBody.getLocalUrl());
         if (file.exists()) {
             Uri uri = Uri.fromFile(file);
@@ -91,13 +93,10 @@ public class EMChatRowImage extends EMChatRowFile{
             intent.putExtra("secret", imgBody.getSecret());
             intent.putExtra("remotepath", imgBody.getRemoteUrl());
         }
-        if (message != null
-                && message.direct == EMMessage.Direct.RECEIVE
-                && !message.isAcked
+        if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked
                 && message.getChatType() != ChatType.GroupChat) {
             try {
-                EMChatManager.getInstance().ackMessageRead(
-                        message.getFrom(), message.getMsgId());
+                EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
                 message.isAcked = true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -114,10 +113,7 @@ public class EMChatRowImage extends EMChatRowFile{
      * @param position
      * @return the image exists or not
      */
-    private boolean showImageView(final String thumbernailPath, final ImageView iv, final String localFullSizePath, String remoteDir,
-            final EMMessage message) {
-        final String remote = remoteDir;
-        EMLog.d(TAG, "local = " + localFullSizePath + " remote: " + remote);
+    private boolean showImageView(final String thumbernailPath, final ImageView iv, final String localFullSizePath,final EMMessage message) {
         // first check if the thumbnail image already loaded into cache
         Bitmap bitmap = ImageCache.getInstance().get(thumbernailPath);
         if (bitmap != null) {
@@ -125,9 +121,43 @@ public class EMChatRowImage extends EMChatRowFile{
             iv.setImageBitmap(bitmap);
             return true;
         } else {
+            new AsyncTask<Object, Void, Bitmap>() {
 
-            new LoadImageTask().execute(thumbernailPath, localFullSizePath,
-                    remote, message.getChatType(), iv, context, message);
+                @Override
+                protected Bitmap doInBackground(Object... args) {
+                    File file = new File(thumbernailPath);
+                    if (file.exists()) {
+                        return ImageUtils.decodeScaleImage(thumbernailPath, 160, 160);
+                    } else {
+                        if (message.direct == EMMessage.Direct.SEND) {
+                            return ImageUtils.decodeScaleImage(localFullSizePath, 160, 160);
+                        } else {
+                            return null;
+                        }
+                    }
+                }
+
+                protected void onPostExecute(Bitmap image) {
+                    if (image != null) {
+                        iv.setImageBitmap(image);
+                        ImageCache.getInstance().put(thumbernailPath, image);
+                    } else {
+                        if (message.status == EMMessage.Status.FAIL) {
+                            if (CommonUtils.isNetWorkConnected(activity)) {
+                                new Thread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        EMChatManager.getInstance().asyncFetchMessage(message);
+                                    }
+                                }).start();
+                            }
+                        }
+
+                    }
+                }
+            };
+
             return true;
         }
     }

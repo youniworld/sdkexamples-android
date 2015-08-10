@@ -7,10 +7,10 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.easemob.EMValueCallBack;
-import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
-import com.easemob.chatuidemo.domain.User;
+import com.easemob.chatuilib.controller.HXSDKHelper;
+import com.easemob.chatuilib.domain.User;
 import com.easemob.util.EMLog;
 import com.easemob.util.HanziToPinyin;
 import com.parse.FindCallback;

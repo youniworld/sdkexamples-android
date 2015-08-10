@@ -15,6 +15,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.VideoMessageBody;
 import com.easemob.chatuilib.R;
+import com.easemob.chatuilib.ui.ShowVideoActivity;
 import com.easemob.chatuilib.utils.CommonUtils;
 import com.easemob.chatuilib.utils.ImageCache;
 import com.easemob.util.DateUtils;
@@ -141,7 +142,7 @@ public class EMChatRowVideo extends EMChatRowFile{
                 @Override
                 protected Bitmap doInBackground(Void... params) {
                     if (new File(localThumb).exists()) {
-                        return ImageUtils.decodeScaleImage(localThumb, 120, 120);
+                        return ImageUtils.decodeScaleImage(localThumb, 160, 160);
                     } else {
                         return null;
                     }
@@ -155,8 +156,7 @@ public class EMChatRowVideo extends EMChatRowFile{
                         iv.setImageBitmap(result);
 
                     } else {
-                        if (message.status == EMMessage.Status.FAIL
-                                || message.direct == EMMessage.Direct.RECEIVE) {
+                        if (message.status == EMMessage.Status.FAIL) {
                             if (CommonUtils.isNetWorkConnected(activity)) {
                                 EMChatManager.getInstance().asyncFetchMessage(message);
                             }

@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
-            android:src="@drawable/welcom_logo" />
+            android:src="@drawable/em_welcom_logo" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -38,7 +38,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dip"
-                android:src="@drawable/icon_account" />
+                android:src="@drawable/em_icon_account" />
 
             <EditText
                 android:id="@+id/username"
@@ -70,7 +70,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dip"
-                android:src="@drawable/icon_pwd" />
+                android:src="@drawable/em_icon_pwd" />
 
             <EditText
                 android:id="@+id/password"
@@ -100,7 +100,7 @@
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
                 android:layout_weight="1"
-                android:background="@drawable/button_register_bg"
+                android:background="@drawable/em_button_register_bg"
                 android:gravity="center"
                 android:onClick="register"
                 android:paddingBottom="7dp"
@@ -115,7 +115,7 @@
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
                 android:layout_weight="1"
-                android:background="@drawable/button_login_bg"
+                android:background="@drawable/em_button_login_bg"
                 android:gravity="center"
                 android:onClick="login"
                 android:paddingBottom="7dp"

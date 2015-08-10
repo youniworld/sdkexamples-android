@@ -12,7 +12,7 @@
         android:gravity="center_vertical" >
 		
         <include 
-            layout="@layout/commom_back_btn"
+            layout="@layout/em_commom_back_btn"
             />
 
         <TextView
@@ -46,7 +46,7 @@
             android:layout_height="55dp"
             android:layout_alignParentLeft="true"
             android:padding="5dp"
-            android:src="@drawable/groups_icon" />
+            android:src="@drawable/em_groups_icon" />
 
         <TextView
             android:id="@+id/name"
@@ -66,13 +66,13 @@
         android:layout_marginLeft="11dp"
         android:layout_marginRight="11dp"
         android:layout_marginTop="6dp"
-        android:background="@drawable/button_bg"
+        android:background="@drawable/em_button_bg"
         android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_myprofile_selector"
+            android:background="@drawable/em_button_myprofile_selector"
             android:gravity="center_vertical" >
 
             <TextView
@@ -96,7 +96,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_myprofile_selector"
+            android:background="@drawable/em_button_myprofile_selector"
             android:gravity="center_vertical" >
 
             <TextView
@@ -126,7 +126,7 @@
         android:layout_marginLeft="11dp"
         android:layout_marginRight="11dp"
         android:layout_marginTop="15dp"
-        android:background="@drawable/btn_green_selector"
+        android:background="@drawable/em_btn_green_selector"
         android:padding="7dp"
         android:text="@string/To_join_the_chat"
         android:onClick="addToGroup"

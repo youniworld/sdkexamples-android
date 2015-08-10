@@ -241,26 +241,27 @@ public class EMConversationList extends ListView {
             
             if (conversation.getType() == EMConversationType.GroupChat) {
                 // 群聊消息，显示群聊头像
-                holder.avatar.setImageResource(R.drawable.group_icon);
+                holder.avatar.setImageResource(R.drawable.em_group_icon);
                 EMGroup group = EMGroupManager.getInstance().getGroup(username);
                 holder.name.setText(group != null ? group.getGroupName() : username);
             } else if(conversation.getType() == EMConversationType.ChatRoom){
-                holder.avatar.setImageResource(R.drawable.group_icon);
+                holder.avatar.setImageResource(R.drawable.em_group_icon);
                 EMChatRoom room = EMChatManager.getInstance().getChatRoom(username);
                 holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
             }else {
                 UserUtils.setUserAvatar(getContext(), username, holder.avatar);
-                Map<String,RobotUser> robotMap=((DemoHXSDKHelper)HXSDKHelper.getInstance()).getRobotList();
-                if(robotMap!=null&&robotMap.containsKey(username)){
-                    String nick = robotMap.get(username).getNick();
-                    if(!TextUtils.isEmpty(nick)){
-                        holder.name.setText(nick);
-                    }else{
-                        holder.name.setText(username);
-                    }
-                }else{
-                    holder.name.setText(username);
-                }
+                UserUtils.setUserNick(username, holder.name);
+//                Map<String,RobotUser> robotMap=((DemoHXSDKHelper)HXSDKHelper.getInstance()).getRobotList();
+//                if(robotMap!=null&&robotMap.containsKey(username)){
+//                    String nick = robotMap.get(username).getNick();
+//                    if(!TextUtils.isEmpty(nick)){
+//                        holder.name.setText(nick);
+//                    }else{
+//                        holder.name.setText(username);
+//                    }
+//                }else{ 
+//                    holder.name.setText(username);
+//                }
             }
 
             if (conversation.getUnreadMsgCount() > 0) {

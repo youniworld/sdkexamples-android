@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:background="@drawable/chat_error_item_bg"
+    android:background="@drawable/em_chat_error_item_bg"
     android:clickable="true"
     android:orientation="vertical" >
     
@@ -11,7 +11,7 @@
         android:id="@+id/iv_neterror"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/login_error_icon"
+        android:src="@drawable/em_login_error_icon"
         android:layout_centerVertical="true"
         />
     <TextView
@@ -31,7 +31,7 @@
         android:text="查看详情"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/ic_preference_single_normal"
+        android:background="@drawable/em_ic_preference_single_normal"
         android:textColor="#000"
         /> -->
     

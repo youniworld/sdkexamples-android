@@ -13,7 +13,7 @@
         android:background="@color/top_bar_normal_bg"
         android:gravity="center_vertical">
 
-        <include layout="@layout/commom_back_btn" />
+        <include layout="@layout/em_commom_back_btn" />
 
         <TextView
             android:id="@+id/add_list_friends"
@@ -42,7 +42,7 @@
         android:layout_height="39dp"
         android:layout_margin="10dp"
         android:paddingLeft="5dp"
-        android:background="@drawable/button_normal_shape"
+        android:background="@drawable/em_button_normal_shape"
         android:hint="用户名"
         android:singleLine="true"
         android:textColorHint="#b3b3b3"
@@ -52,13 +52,12 @@
         android:id="@+id/ll_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/mm_listitem"
+        android:background="@drawable/em_mm_listitem"
         android:visibility="gone" >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@drawable/mm_listitem"
             android:duplicateParentState="true" >
 
             <ImageView
@@ -68,7 +67,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="11dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/default_avatar" />
+                android:src="@drawable/em_default_avatar" />
 
             <TextView
                 android:id="@+id/name"
@@ -88,7 +87,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="11dp"
-                android:background="@drawable/button_bg"
+                android:background="@drawable/em_button_bg"
                 android:onClick="addContact"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"

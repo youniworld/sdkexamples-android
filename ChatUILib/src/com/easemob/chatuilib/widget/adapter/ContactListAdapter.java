@@ -81,8 +81,8 @@ public class ContactListAdapter extends ArrayAdapter<User>  implements SectionIn
         } else {
             holder.tvHeader.setVisibility(View.GONE);
         }
-        //设置nick
-        holder.nameTextview.setText(user.getNick());
+        //设置头像
+        UserUtils.setUserNick(username, holder.nameTextview);
         //设置头像
         UserUtils.setUserAvatar(getContext(), username, holder.avatar);
         //显示申请与通知item

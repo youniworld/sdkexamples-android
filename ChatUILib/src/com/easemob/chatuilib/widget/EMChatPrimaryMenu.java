@@ -12,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
-import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -194,7 +192,7 @@ public class EMChatPrimaryMenu extends RelativeLayout implements OnClickListener
     public void onEmojiconInputEvent(String name){
         try {
             // 这里用的反射，所以混淆的时候不要混淆SmileUtils这个类
-            Class clz = Class.forName("com.easemob.chatuidemo.utils.SmileUtils");
+            Class clz = Class.forName("com.easemob.chatuilib.utils.SmileUtils");
             Field field = clz.getField(name);
             editText.append(SmileUtils.getSmiledText(context,(String) field.get(null)));
         } catch (Exception e) {
@@ -233,46 +231,39 @@ public class EMChatPrimaryMenu extends RelativeLayout implements OnClickListener
      */
     @Override
     public void onClick(View view){
-        switch (view.getId()) {
-        case R.id.btn_send: //发送
+        int id = view.getId();
+        if (id == R.id.btn_send) {
             if(listener != null){
                 String s = editText.getText().toString();
                 editText.setText("");
                 listener.onSendBtnClicked(s);
             }
-            break;
-        case R.id.btn_set_mode_voice:
+        } else if (id == R.id.btn_set_mode_voice) {
             setModeVoice();
             showNormalFaceImage();
             if(listener != null)
                 listener.onToggleVoiceBtnClicked();
-            break;
-        case R.id.btn_set_mode_keyboard:
+        } else if (id == R.id.btn_set_mode_keyboard) {
             setModeKeyboard();
             showNormalFaceImage();
             if(listener != null)
                 listener.onToggleVoiceBtnClicked();
-            break;
-        case R.id.btn_more:
+        } else if (id == R.id.btn_more) {
             showNormalFaceImage();
             if(listener != null)
                 listener.onToggleExtendClicked();
-            break;
-        case R.id.et_sendmessage: //编辑框被点击
+        } else if (id == R.id.et_sendmessage) {
             edittext_layout.setBackgroundResource(R.drawable.em_input_bar_bg_active);
             faceNormal.setVisibility(View.VISIBLE);
             faceChecked.setVisibility(View.INVISIBLE);
             if(listener != null)
                 listener.onEditTextClicked();
-            break;
-        case R.id.rl_face:
+        } else if (id == R.id.rl_face) {
             toggleFaceImage();
             if(listener != null){
                 listener.onToggleEmojiconClicked();
             }
-            break;
-        default:
-            break;
+        } else {
         }
     }
     

@@ -11,7 +11,7 @@
         android:background="@color/top_bar_normal_bg"
         android:gravity="center_vertical" >
 
-        <include layout="@layout/commom_back_btn" />
+        <include layout="@layout/em_commom_back_btn" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -37,7 +37,7 @@
             android:layout_height="45dip"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/camera_switch_selector"
+            android:background="@drawable/em_camera_switch_selector"
             android:visibility="invisible" />
 
         <Chronometer
@@ -57,7 +57,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:src="@drawable/video_recorder_start_btn"
+            android:src="@drawable/em_video_recorder_start_btn"
             android:visibility="visible" />
 
         <ImageView
@@ -67,7 +67,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:src="@drawable/video_recorder_stop_btn"
+            android:src="@drawable/em_video_recorder_stop_btn"
             android:visibility="invisible" />
     </RelativeLayout>
 

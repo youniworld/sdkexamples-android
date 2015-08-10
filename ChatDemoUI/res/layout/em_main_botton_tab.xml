@@ -16,7 +16,7 @@
             android:focusable="false"
             android:layout_centerHorizontal="true"
             android:padding="2dp"
-            android:src="@drawable/conversation_normal" >
+            android:src="@drawable/em_conversation_normal" >
         </ImageView>
 
         <TextView
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
-            android:background="@drawable/unread_count_bg"
+            android:background="@drawable/em_unread_count_bg"
             android:gravity="center"
             android:text="7"
             android:textColor="@android:color/white"
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:text="@string/session"
         android:paddingBottom="2dp"
-        android:textColor="@color/main_botton_text_color"
+        android:textColor="@color/em_main_botton_text_color"
         android:textSize="12sp" >
     </TextView>
 

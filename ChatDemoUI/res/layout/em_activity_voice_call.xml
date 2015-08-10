@@ -28,20 +28,13 @@
             android:paddingRight="12dp"
             android:visibility="visible" />
 
-        <com.easemob.chatuidemo.widget.MyChronometer
+        <Chronometer
             android:visibility="invisible"
             android:id="@+id/chronometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#fff"
             android:text="Chronometer" />
-        
-        <TextView 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_is_p2p"
-            android:textColor="#fff"
-            />
 
         <TextView
             android:id="@+id/tv_calling_duration"
@@ -65,7 +58,7 @@
             android:layout_height="60dp"
             android:scaleType="fitXY"
             android:layout_marginTop="10dp"
-            android:src="@drawable/default_avatar" />
+            android:src="@drawable/em_default_avatar" />
         
         <TextView
             android:id="@+id/tv_nick"
@@ -101,7 +94,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/icon_mute_normal" />
+                    android:src="@drawable/em_icon_mute_normal" />
 
                 <TextView
                     android:layout_width="fill_parent"
@@ -124,7 +117,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/icon_speaker_normal" />
+                    android:src="@drawable/em_icon_speaker_normal" />
 
                 <TextView
                     android:layout_width="fill_parent"
@@ -145,7 +138,7 @@
                 android:id="@+id/btn_hangup_call"
                 android:layout_width="fill_parent"
                 android:layout_height="60dp"
-                android:background="@drawable/call_hangup_bg"
+                android:background="@drawable/em_voice_call_hangup_bg"
                 android:gravity="center"
                 android:text="@string/hang_up"
                 android:textColor="@android:color/white"
@@ -162,7 +155,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
                     android:layout_weight="1"
-                    android:background="@drawable/call_hangup_bg"
+                    android:background="@drawable/em_voice_call_hangup_bg"
                     android:gravity="center"
                     android:text="@string/hang_up"
                     android:textColor="@android:color/white"
@@ -174,7 +167,7 @@
                     android:layout_height="60dp"
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1"
-                    android:background="@drawable/call_answer_bg"
+                    android:background="@drawable/em_voice_call_hangup_bg"
                     android:gravity="center"
                     android:text="@string/answer"
                     android:textColor="@android:color/white"

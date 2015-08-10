@@ -37,19 +37,13 @@
                 android:textSize="22sp"
                 android:visibility="visible" />
 
-            <com.easemob.chatuidemo.widget.MyChronometer
+            <Chronometer
                 android:id="@+id/chronometer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Chronometer"
                 android:textColor="#fff"
                 android:visibility="invisible" />
-
-            <TextView
-                android:id="@+id/tv_is_p2p"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#fff" />
 
             <TextView
                 android:id="@+id/tv_nick"
@@ -61,16 +55,6 @@
                 android:textSize="20sp" />
         </LinearLayout>
 
-        <TextView 
-            android:id="@+id/tv_call_monitor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/local_surface"
-            android:layout_alignParentRight="true"
-            android:textColor="#afff"
-            android:textSize="12sp"
-            android:layout_marginBottom="6dp"
-            />
         <SurfaceView
             android:id="@+id/local_surface"
             android:layout_width="100dp"
@@ -114,14 +98,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/icon_mute_normal" />
+                            android:src="@drawable/em_icon_mute_normal" />
 
                         <TextView
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:gravity="center"
-                            android:text="@string/mute"
+                            android:text="静音"
                             android:textColor="#666167" />
                     </LinearLayout>
 
@@ -137,14 +121,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/icon_speaker_normal" />
+                            android:src="@drawable/em_icon_speaker_normal" />
 
                         <TextView
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:gravity="center"
-                            android:text="@string/Hands_free"
+                            android:text="免提"
                             android:textColor="#666167" />
                     </LinearLayout>
                 </LinearLayout>
@@ -158,9 +142,9 @@
                         android:id="@+id/btn_hangup_call"
                         android:layout_width="fill_parent"
                         android:layout_height="55dp"
-                        android:background="@drawable/call_hangup_bg"
+                        android:background="@drawable/em_voice_call_hangup_bg"
                         android:gravity="center"
-                        android:text="@string/hang_up"
+                        android:text="挂断"
                         android:textColor="@android:color/white"
                         android:textSize="20sp"
                         android:visibility="invisible" />
@@ -175,9 +159,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="55dp"
                             android:layout_weight="1"
-                            android:background="@drawable/call_hangup_bg"
+                            android:background="@drawable/em_voice_call_hangup_bg"
                             android:gravity="center"
-                            android:text="@string/hang_up"
+                            android:text="挂断"
                             android:textColor="@android:color/white"
                             android:textSize="20sp" />
 
@@ -187,9 +171,9 @@
                             android:layout_height="55dp"
                             android:layout_marginLeft="30dp"
                             android:layout_weight="1"
-                            android:background="@drawable/call_answer_bg"
+                            android:background="@drawable/em_button_register_bg"
                             android:gravity="center"
-                            android:text="@string/answer"
+                            android:text="接听"
                             android:textColor="@android:color/white"
                             android:textSize="20sp" />
                     </LinearLayout>

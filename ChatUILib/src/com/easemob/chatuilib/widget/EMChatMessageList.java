@@ -25,16 +25,13 @@ import com.easemob.chat.NormalFileMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VideoMessageBody;
 import com.easemob.chat.VoiceMessageBody;
+import com.easemob.chatuilib.Constant;
 import com.easemob.chatuilib.R;
 import com.easemob.chatuilib.widget.adapter.MessageAdapter;
 import com.easemob.chatuilib.widget.chatrow.EMChatRow;
 
 public class EMChatMessageList extends RelativeLayout{
-	public static final int CHATTYPE_SINGLE = 1;
-    public static final int CHATTYPE_GROUP = 2;
-    public static final int CHATTYPE_CHATROOM = 3;
-	
-	
+    
     protected ListView messageListView;
     protected SwipeRefreshLayout swipeRefreshLayout;
 	private Context context;
@@ -154,9 +151,9 @@ public class EMChatMessageList extends RelativeLayout{
         if (content.length() > 0) {
             EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
             // 如果是群聊，设置chattype,默认是单聊
-            if (chatType == CHATTYPE_GROUP) {
+            if (chatType == Constant.CHATTYPE_GROUP) {
                 message.setChatType(ChatType.GroupChat);
-            } else if (chatType == CHATTYPE_CHATROOM) {
+            } else if (chatType == Constant.CHATTYPE_CHATROOM) {
                 message.setChatType(ChatType.ChatRoom);
             }
             setAttributes(attrs, message);
@@ -187,9 +184,9 @@ public class EMChatMessageList extends RelativeLayout{
         try {
             final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.VOICE);
             // 如果是群聊，设置chattype,默认是单聊
-            if (chatType == CHATTYPE_GROUP){
+            if (chatType == Constant.CHATTYPE_GROUP){
                 message.setChatType(ChatType.GroupChat);
-            }else if(chatType == CHATTYPE_CHATROOM){
+            }else if(chatType == Constant.CHATTYPE_CHATROOM){
                 message.setChatType(ChatType.ChatRoom);
             }
             VoiceMessageBody body = new VoiceMessageBody(new File(filePath), length);
@@ -215,9 +212,9 @@ public class EMChatMessageList extends RelativeLayout{
         // create and add image message in view
         final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
         // 如果是群聊，设置chattype,默认是单聊
-        if (chatType == CHATTYPE_GROUP){
+        if (chatType == Constant.CHATTYPE_GROUP){
             message.setChatType(ChatType.GroupChat);
-        }else if(chatType == CHATTYPE_CHATROOM){
+        }else if(chatType == Constant.CHATTYPE_CHATROOM){
             message.setChatType(ChatType.ChatRoom);
         }
         
@@ -242,9 +239,9 @@ public class EMChatMessageList extends RelativeLayout{
         try {
             EMMessage message = EMMessage.createSendMessage(EMMessage.Type.VIDEO);
             // 如果是群聊，设置chattype,默认是单聊
-            if (chatType == CHATTYPE_GROUP){
+            if (chatType == Constant.CHATTYPE_GROUP){
                 message.setChatType(ChatType.GroupChat);
-            }else if(chatType == CHATTYPE_CHATROOM){
+            }else if(chatType == Constant.CHATTYPE_CHATROOM){
                 message.setChatType(ChatType.ChatRoom);
             }
             String to = toChatUsername;
@@ -271,9 +268,9 @@ public class EMChatMessageList extends RelativeLayout{
     public void sendLocationMessage(double latitude, double longitude, String locationAddress, HashMap<String, Object> attrs) {
         EMMessage message = EMMessage.createSendMessage(EMMessage.Type.LOCATION);
         // 如果是群聊，设置chattype,默认是单聊
-        if (chatType == CHATTYPE_GROUP){
+        if (chatType == Constant.CHATTYPE_GROUP){
             message.setChatType(ChatType.GroupChat);
-        }else if(chatType == CHATTYPE_CHATROOM){
+        }else if(chatType == Constant.CHATTYPE_CHATROOM){
             message.setChatType(ChatType.ChatRoom);
         }
         LocationMessageBody locBody = new LocationMessageBody(locationAddress, latitude, longitude);
@@ -322,9 +319,9 @@ public class EMChatMessageList extends RelativeLayout{
         // 创建一个文件消息
         EMMessage message = EMMessage.createSendMessage(EMMessage.Type.FILE);
         // 如果是群聊，设置chattype,默认是单聊
-        if (chatType == CHATTYPE_GROUP){
+        if (chatType == Constant.CHATTYPE_GROUP){
             message.setChatType(ChatType.GroupChat);
-        }else if(chatType == CHATTYPE_CHATROOM){
+        }else if(chatType == Constant.CHATTYPE_CHATROOM){
             message.setChatType(ChatType.ChatRoom);
         }
 

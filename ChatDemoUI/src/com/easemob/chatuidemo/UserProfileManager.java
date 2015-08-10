@@ -6,12 +6,12 @@ import java.util.List;
 import android.content.Context;
 
 import com.easemob.EMValueCallBack;
-import com.easemob.applib.controller.HXSDKHelper.HXSyncListener;
-import com.easemob.applib.utils.HXPreferenceUtils;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.parse.ParseManager;
+import com.easemob.chatuidemo.utils.PreferenceUtils;
+import com.easemob.chatuilib.controller.HXSDKHelper.HXSyncListener;
+import com.easemob.chatuilib.domain.User;
 
 public class UserProfileManager {
 
@@ -111,7 +111,7 @@ public class UserProfileManager {
 	synchronized void reset() {
 		isSyncingContactInfosWithServer = false;
 		currentUser = null;
-		HXPreferenceUtils.getInstance().removeCurrentUserInfo();
+		PreferenceUtils.getInstance().removeCurrentUserInfo();
 	}
 
 	public synchronized User getCurrentUserInfo() {
@@ -164,20 +164,20 @@ public class UserProfileManager {
 	}
 	private void setCurrentUserNick(String nickname) {
 		getCurrentUserInfo().setNick(nickname);
-		HXPreferenceUtils.getInstance().setCurrentUserNick(nickname);
+		PreferenceUtils.getInstance().setCurrentUserNick(nickname);
 	}
 
 	private void setCurrentUserAvatar(String avatar) {
 		getCurrentUserInfo().setAvatar(avatar);
-		HXPreferenceUtils.getInstance().setCurrentUserAvatar(avatar);
+		PreferenceUtils.getInstance().setCurrentUserAvatar(avatar);
 	}
 
 	private String getCurrentUserNick() {
-		return HXPreferenceUtils.getInstance().getCurrentUserNick();
+		return PreferenceUtils.getInstance().getCurrentUserNick();
 	}
 
 	private String getCurrentUserAvatar() {
-		return HXPreferenceUtils.getInstance().getCurrentUserAvatar();
+		return PreferenceUtils.getInstance().getCurrentUserAvatar();
 	}
 
 }

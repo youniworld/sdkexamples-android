@@ -8,15 +8,16 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import com.easemob.applib.controller.HXSDKHelper;
+import android.content.Context;
+
 import com.easemob.util.TimeInfo;
 
 public class DateUtils {
 
     private static final long INTERVAL_IN_MILLISECONDS = 30 * 1000;
 
-    public static String getTimestampString(Date messageDate) {
-        Locale curLocale = HXSDKHelper.getInstance().getAppContext().getResources().getConfiguration().locale;
+    public static String getTimestampString(Date messageDate, Context context) {
+        Locale curLocale = context.getResources().getConfiguration().locale;
         
         String languageCode = curLocale.getLanguage();
         

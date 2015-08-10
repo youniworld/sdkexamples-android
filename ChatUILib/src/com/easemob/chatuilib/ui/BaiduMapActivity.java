@@ -49,7 +49,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.CoordinateConverter;
 import com.easemob.chatuilib.R;
 
-public class BaiduMapActivity extends BaseActivity {
+public class BaiduMapActivity extends EMBaseActivity {
 
 	private final static String TAG = "map";
 	static MapView mMapView = null;
@@ -98,7 +98,7 @@ public class BaiduMapActivity extends BaseActivity {
 		//在使用SDK各组件之前初始化context信息，传入ApplicationContext  
         //注意该方法要再setContentView方法之前实现  
         SDKInitializer.initialize(getApplicationContext());  
-		setContentView(R.layout.activity_baidumap);
+		setContentView(R.layout.em_activity_baidumap);
 		mMapView = (MapView) findViewById(R.id.bmapView);
 		sendButton = (Button) findViewById(R.id.btn_location_send);
 		Intent intent = getIntent();
@@ -138,7 +138,7 @@ public class BaiduMapActivity extends BaseActivity {
 		converter.from(CoordinateConverter.CoordType.COMMON);
 		LatLng convertLatLng = converter.convert();
 		OverlayOptions ooA = new MarkerOptions().position(convertLatLng).icon(BitmapDescriptorFactory
-				.fromResource(R.drawable.icon_marka))
+				.fromResource(R.drawable.em_icon_marka))
 				.zIndex(4).draggable(true);
 		mBaiduMap.addOverlay(ooA);
 		MapStatusUpdate u = MapStatusUpdateFactory.newLatLngZoom(convertLatLng, 17.0f);
@@ -241,7 +241,7 @@ public class BaiduMapActivity extends BaseActivity {
 			converter.from(CoordinateConverter.CoordType.COMMON);
 			LatLng convertLatLng = converter.convert();
 			OverlayOptions ooA = new MarkerOptions().position(convertLatLng).icon(BitmapDescriptorFactory
-					.fromResource(R.drawable.icon_marka))
+					.fromResource(R.drawable.em_icon_marka))
 					.zIndex(4).draggable(true);
 			mBaiduMap.addOverlay(ooA);
 			MapStatusUpdate u = MapStatusUpdateFactory.newLatLngZoom(convertLatLng, 17.0f);

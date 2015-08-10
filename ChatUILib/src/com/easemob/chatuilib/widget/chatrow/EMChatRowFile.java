@@ -15,6 +15,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.FileMessageBody;
 import com.easemob.chat.NormalFileMessageBody;
 import com.easemob.chatuilib.R;
+import com.easemob.chatuilib.ui.ShowNormalFileActivity;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.FileUtils;
 import com.easemob.util.TextFormater;

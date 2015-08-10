@@ -93,9 +93,9 @@ public class CommonUtils {
             digest = getString(context, R.string.video);
             break;
         case TXT: // 文本消息
-            if(((DemoHXSDKHelper)HXSDKHelper.getInstance()).isRobotMenuMessage(message)){
+            /*if(((DemoHXSDKHelper)HXSDKHelper.getInstance()).isRobotMenuMessage(message)){
                 digest = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getRobotMenuMessageDigest(message);
-            }else if(!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL,false)){
+            }else */if(!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL,false)){
                 TextMessageBody txtBody = (TextMessageBody) message.getBody();
                 digest = txtBody.getMessage();
             }else{

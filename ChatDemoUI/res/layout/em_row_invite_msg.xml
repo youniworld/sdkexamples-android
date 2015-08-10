@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/mm_listitem_grey"
+    android:background="@drawable/em_mm_listitem_grey"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -22,7 +22,7 @@
                 android:layout_height="@dimen/height_row_weixin"
                 android:layout_marginLeft="10dp"
                 android:padding="5dp"
-                android:src="@drawable/default_avatar" />
+                android:src="@drawable/em_default_avatar" />
         </RelativeLayout>
 
         <TextView
@@ -55,7 +55,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="7dp"
             android:layout_toRightOf="@id/avatar_container"
-            android:src="@drawable/msg_state_fail_resend"
+            android:src="@drawable/em_msg_state_fail_resend"
             android:visibility="gone" />
 
         <TextView

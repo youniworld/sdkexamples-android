@@ -16,7 +16,7 @@ package com.easemob.chatuilib.utils;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 
-public class ImageUtils {
+public class ImageUtils extends com.easemob.util.ImageUtils{
 //	public static String getThumbnailImagePath(String imagePath) {
 //		String path = imagePath.substring(0, imagePath.lastIndexOf("/") + 1);
 //		path += "th" + imagePath.substring(imagePath.lastIndexOf("/") + 1, imagePath.length());

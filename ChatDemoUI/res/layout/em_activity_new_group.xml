@@ -23,7 +23,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="9dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/mm_title_back" />
+                android:src="@drawable/em_mm_title_back" />
         </LinearLayout>
 
         <TextView
@@ -51,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="39dp"
         android:layout_margin="10dp"
-        android:background="@drawable/button_normal_shape"
+        android:background="@drawable/em_button_normal_shape"
         android:hint="@string/group_name"
         android:paddingLeft="5dp"
         android:singleLine="true"
@@ -64,7 +64,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/button_normal_shape"
+        android:background="@drawable/em_button_normal_shape"
         android:gravity="top"
         android:hint="@string/Group_chat_profile"
         android:lines="5"
@@ -79,7 +79,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/button_normal_shape"
+        android:background="@drawable/em_button_normal_shape"
         >
         <TextView 
             android:layout_marginLeft="5dp"
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:layout_gravity="center_vertical"
-            android:button="@drawable/checkbox_bg_selector"
+            android:button="@drawable/em_checkbox_bg_selector"
             />
         
     </LinearLayout>
@@ -110,7 +110,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/button_normal_shape"
+        android:background="@drawable/em_button_normal_shape"
         >
         <TextView 
             android:layout_marginLeft="5dp"
@@ -129,7 +129,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:layout_gravity="center_vertical"
-            android:button="@drawable/checkbox_bg_selector"
+            android:button="@drawable/em_checkbox_bg_selector"
             />
         
     </LinearLayout>

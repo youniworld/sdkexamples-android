@@ -11,7 +11,7 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.StrictMode;
 
-import com.easemob.chatuidemo.activity.ImageGridActivity;
+import com.easemob.chatuidemo.ui.ImageGridActivity;
 
 public class Utils {
 

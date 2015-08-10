@@ -12,7 +12,7 @@
         android:background="@color/top_bar_normal_bg"
         android:gravity="center_vertical" >
 
-        <include layout="@layout/commom_back_btn" />
+        <include layout="@layout/em_commom_back_btn" />
 
         <TextView
             android:id="@+id/name"
@@ -56,7 +56,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:scaleType="centerInside"
-                android:src="@drawable/to_group_details_normal" />
+                android:src="@drawable/em_to_group_details_normal" />
         </RelativeLayout>
     </RelativeLayout>
 

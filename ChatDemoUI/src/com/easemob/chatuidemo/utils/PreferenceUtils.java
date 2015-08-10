@@ -13,24 +13,40 @@
  */
 package com.easemob.chatuidemo.utils;
 
-import com.easemob.applib.utils.HXPreferenceUtils;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * 
- * @deprecated this class is deprecated, please use {@link HXPreferenceUtils}
- *
- */
 public class PreferenceUtils {
-
 	/**
 	 * 保存Preference的name
 	 */
 	public static final String PREFERENCE_NAME = "saveInfo";
+	private static SharedPreferences mSharedPreferences;
 	private static PreferenceUtils mPreferenceUtils;
-	private PreferenceUtils() {
+	private static SharedPreferences.Editor editor;
+
+	private String SHARED_KEY_SETTING_NOTIFICATION = "shared_key_setting_notification";
+	private String SHARED_KEY_SETTING_SOUND = "shared_key_setting_sound";
+	private String SHARED_KEY_SETTING_VIBRATE = "shared_key_setting_vibrate";
+	private String SHARED_KEY_SETTING_SPEAKER = "shared_key_setting_speaker";
+
+	private static String SHARED_KEY_SETTING_CHATROOM_OWNER_LEAVE = "shared_key_setting_chatroom_owner_leave";
+	private static String SHARED_KEY_SETTING_GROUPS_SYNCED = "SHARED_KEY_SETTING_GROUPS_SYNCED";
+	private static String SHARED_KEY_SETTING_CONTACT_SYNCED = "SHARED_KEY_SETTING_CONTACT_SYNCED";
+	private static String SHARED_KEY_SETTING_BALCKLIST_SYNCED = "SHARED_KEY_SETTING_BALCKLIST_SYNCED";
+	
+	private static String SHARED_KEY_CURRENTUSER_NICK = "SHARED_KEY_CURRENTUSER_NICK";
+	private static String SHARED_KEY_CURRENTUSER_AVATAR = "SHARED_KEY_CURRENTUSER_AVATAR";
+	
+	private PreferenceUtils(Context cxt) {
+		mSharedPreferences = cxt.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+		editor = mSharedPreferences.edit();
+	}
+
+	public static synchronized void init(Context cxt){
+	    if(mPreferenceUtils == null){
+	        mPreferenceUtils = new PreferenceUtils(cxt);
+	    }
 	}
 
 	/**
@@ -39,44 +55,108 @@ public class PreferenceUtils {
 	 * @param cxt
 	 * @return
 	 */
-	public synchronized static PreferenceUtils getInstance(Context cxt) {
+	public static PreferenceUtils getInstance() {
 		if (mPreferenceUtils == null) {
-			mPreferenceUtils = new PreferenceUtils();
-			HXPreferenceUtils.init(cxt);
+			throw new RuntimeException("please init first!");
 		}
 		
 		return mPreferenceUtils;
 	}
-
+	
 	public void setSettingMsgNotification(boolean paramBoolean) {
-		HXPreferenceUtils.getInstance().setSettingMsgNotification(paramBoolean);
+		editor.putBoolean(SHARED_KEY_SETTING_NOTIFICATION, paramBoolean);
+		editor.commit();
 	}
 
 	public boolean getSettingMsgNotification() {
-		return HXPreferenceUtils.getInstance().getSettingMsgNotification();
+		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_NOTIFICATION, true);
 	}
 
 	public void setSettingMsgSound(boolean paramBoolean) {
-	    HXPreferenceUtils.getInstance().setSettingMsgSound(paramBoolean);
+		editor.putBoolean(SHARED_KEY_SETTING_SOUND, paramBoolean);
+		editor.commit();
 	}
 
 	public boolean getSettingMsgSound() {
-	    return HXPreferenceUtils.getInstance().getSettingMsgSound();
+
+		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_SOUND, true);
 	}
 
 	public void setSettingMsgVibrate(boolean paramBoolean) {
-	    HXPreferenceUtils.getInstance().setSettingMsgVibrate(paramBoolean);
+		editor.putBoolean(SHARED_KEY_SETTING_VIBRATE, paramBoolean);
+		editor.commit();
 	}
 
 	public boolean getSettingMsgVibrate() {
-		return HXPreferenceUtils.getInstance().getSettingMsgVibrate();
+		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_VIBRATE, true);
 	}
 
 	public void setSettingMsgSpeaker(boolean paramBoolean) {
-	    HXPreferenceUtils.getInstance().setSettingMsgSpeaker(paramBoolean);
+		editor.putBoolean(SHARED_KEY_SETTING_SPEAKER, paramBoolean);
+		editor.commit();
 	}
 
 	public boolean getSettingMsgSpeaker() {
-		return HXPreferenceUtils.getInstance().getSettingMsgSpeaker();
+		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_SPEAKER, true);
+	}
+	
+	public void setSettingAllowChatroomOwnerLeave(boolean value) {
+        editor.putBoolean(SHARED_KEY_SETTING_CHATROOM_OWNER_LEAVE, value);
+        editor.commit();
+    }
+	
+	public boolean getSettingAllowChatroomOwnerLeave() {
+        return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_CHATROOM_OWNER_LEAVE, true);
+    }
+	
+	public void setGroupsSynced(boolean synced){
+	    editor.putBoolean(SHARED_KEY_SETTING_GROUPS_SYNCED, synced);
+        editor.commit();
+	}
+	
+	public boolean isGroupsSynced(){
+	    return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_GROUPS_SYNCED, false);
+	}
+	
+	public void setContactSynced(boolean synced){
+        editor.putBoolean(SHARED_KEY_SETTING_CONTACT_SYNCED, synced);
+        editor.commit();
+    }
+    
+    public boolean isContactSynced(){
+        return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_CONTACT_SYNCED, false);
+    }
+    
+    public void setBlacklistSynced(boolean synced){
+        editor.putBoolean(SHARED_KEY_SETTING_BALCKLIST_SYNCED, synced);
+        editor.commit();
+    }
+    
+    public boolean isBacklistSynced(){
+        return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_BALCKLIST_SYNCED, false);
+    }
+    
+	public void setCurrentUserNick(String nick) {
+		editor.putString(SHARED_KEY_CURRENTUSER_NICK, nick);
+		editor.commit();
+	}
+
+	public void setCurrentUserAvatar(String avatar) {
+		editor.putString(SHARED_KEY_CURRENTUSER_AVATAR, avatar);
+		editor.commit();
+	}
+
+	public String getCurrentUserNick() {
+		return mSharedPreferences.getString(SHARED_KEY_CURRENTUSER_NICK, null);
+	}
+
+	public String getCurrentUserAvatar() {
+		return mSharedPreferences.getString(SHARED_KEY_CURRENTUSER_AVATAR, null);
+	}
+
+	public void removeCurrentUserInfo() {
+		editor.remove(SHARED_KEY_CURRENTUSER_NICK);
+		editor.remove(SHARED_KEY_CURRENTUSER_AVATAR);
+		editor.commit();
 	}
 }

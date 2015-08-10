@@ -19,8 +19,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.easemob.chatuidemo.DemoHXSDKHelper;
-import com.easemob.chatuidemo.activity.VideoCallActivity;
-import com.easemob.chatuidemo.activity.VoiceCallActivity;
+import com.easemob.chatuidemo.ui.VideoCallActivity;
+import com.easemob.chatuidemo.ui.VoiceCallActivity;
 import com.easemob.util.EMLog;
 
 public class CallReceiver extends BroadcastReceiver{

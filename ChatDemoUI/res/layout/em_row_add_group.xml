@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:background="@drawable/mm_listitem"
+    android:background="@drawable/em_mm_listitem"
     android:gravity="center_vertical" >
 
     <RelativeLayout
@@ -17,7 +17,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="4dp"
             android:padding="5dp"
-            android:src="@drawable/roominfo_add_btn" />
+            android:src="@drawable/em_roominfo_add_btn" />
 
         <TextView
             android:id="@+id/name"

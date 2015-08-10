@@ -33,11 +33,11 @@ import com.easemob.chat.EMChatOptions;
 import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuilib.domain.User;
-import com.easemob.chatuilib.model.DefaultHXSDKModel;
 import com.easemob.chatuilib.model.HXNotifier;
 import com.easemob.chatuilib.model.HXNotifier.HXNotificationInfoProvider;
 import com.easemob.chatuilib.model.HXSDKModel;
 import com.easemob.exceptions.EaseMobException;
+import com.easemob.util.EMLog;
 
 /**
  * The developer can derive from this class to talk with HuanXin SDK
@@ -171,7 +171,9 @@ public abstract class HXSDKHelper {
         
         // create a defalut HX SDK model in case subclass did not provide the model
         if(hxModel == null){
-            hxModel = new DefaultHXSDKModel(appContext);
+//            hxModel = new DefaultHXSDKModel(appContext);
+            EMLog.e(TAG, "please return HXSDKModel instance in createModel()");
+            return false;
         }
         
         int pid = android.os.Process.myPid();

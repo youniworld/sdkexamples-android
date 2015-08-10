@@ -12,11 +12,11 @@
 	    easemob:titleBarTitle="@string/session"
 	    />
     
-    <include layout="@layout/search_bar" />
+    <include layout="@layout/em_search_bar" />
 
     <include
         android:id="@+id/rl_error_item"
-        layout="@layout/chat_neterror_item"
+        layout="@layout/em_chat_neterror_item"
         android:visibility="gone" />
 
     <com.easemob.applib.widget.EMConversationList

@@ -22,7 +22,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="9dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/mm_title_back" />
+                android:src="@drawable/em_mm_title_back" />
         </LinearLayout>
 
         <TextView
@@ -62,7 +62,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="13dp"
-                android:background="@drawable/app_pref_bg"
+                android:background="@drawable/em_app_pref_bg"
                 android:gravity="start"
                 android:horizontalSpacing="6dp"
                 android:listSelector="@android:color/transparent"
@@ -81,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
                 android:layout_marginTop="6dp"
-                android:background="@drawable/btn_bottom_selector"
+                android:background="@drawable/em_btn_bottom_selector"
                 android:visibility="gone" >
 
                 <TextView
@@ -118,7 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
                 android:layout_marginTop="6dp"
-                android:background="@drawable/btn_bottom_selector" >
+                android:background="@drawable/em_btn_bottom_selector" >
 
                 <TextView
                     android:layout_width="match_parent"
@@ -145,7 +145,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
                 android:layout_marginTop="6dp"
-                android:background="@drawable/btn_bottom_selector" >
+                android:background="@drawable/em_btn_bottom_selector" >
 
                 <TextView
                     android:layout_width="match_parent"
@@ -172,7 +172,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
                 android:layout_marginTop="6dp"
-                android:background="@drawable/btn_bottom_selector" >
+                android:background="@drawable/em_btn_bottom_selector" >
 
                 <TextView
                     android:layout_width="match_parent"
@@ -198,7 +198,7 @@
                 android:id="@+id/rl_switch_block_groupmsg"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
-                android:background="@drawable/btn_bottom_selector"
+                android:background="@drawable/em_btn_bottom_selector"
                 android:padding="10dip" >
 
                 <TextView
@@ -217,7 +217,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/open_icon"
+                    android:background="@drawable/em_open_icon"
                     android:visibility="invisible" />
 
                 <ImageView
@@ -226,7 +226,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/close_icon"
+                    android:background="@drawable/em_close_icon"
                     android:visibility="visible" />
             </RelativeLayout>
 
@@ -242,7 +242,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="11dp"
-                android:background="@drawable/btn_style_alert_dialog_special"
+                android:background="@drawable/em_btn_style_alert_dialog_special"
                 android:onClick="exitGroup"
                 android:paddingBottom="7dp"
                 android:paddingTop="7dp"
@@ -257,7 +257,7 @@
                 android:layout_marginLeft="11dp"
                 android:layout_marginRight="11dp"
                 android:layout_marginTop="6dp"
-                android:background="@drawable/btn_style_alert_dialog_special"
+                android:background="@drawable/em_btn_style_alert_dialog_special"
                 android:onClick="exitDeleteGroup"
                 android:paddingBottom="7dp"
                 android:paddingTop="7dp"

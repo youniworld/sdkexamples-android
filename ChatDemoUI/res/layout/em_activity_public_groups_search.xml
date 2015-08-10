@@ -12,7 +12,7 @@
         android:background="@color/top_bar_normal_bg"
         android:gravity="center_vertical" >
 
-        <include layout="@layout/commom_back_btn" />
+        <include layout="@layout/em_commom_back_btn" />
 
         <TextView
             android:id="@+id/add_list_friends"
@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="39dp"
         android:layout_margin="10dp"
-        android:background="@drawable/button_normal_shape"
+        android:background="@drawable/em_button_normal_shape"
         android:hint="@string/group_id"
         android:paddingLeft="5dp"
         android:singleLine="true"
@@ -53,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:onClick="enterToDetails"
-        android:background="@drawable/mm_listitem"
+        android:background="@drawable/em_mm_listitem"
         android:visibility="gone" >
 
         <ImageView
@@ -63,7 +63,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="11dp"
             android:scaleType="fitXY"
-            android:src="@drawable/group_icon" />
+            android:src="@drawable/em_group_icon" />
 
         <TextView
             android:id="@+id/name"

@@ -11,10 +11,9 @@
         android:background="@color/top_bar_normal_bg"
         android:gravity="center_vertical" >
 
-        <include layout="@layout/commom_back_btn" />
+        <include layout="@layout/em_commom_back_btn" />
 
         <TextView
-            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -29,22 +28,9 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="7dp" />
-        
-        <Button 
-            android:id="@+id/btn_search"
-            android:layout_width="55dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/em_common_tab_bg"
-            android:textColor="#fff"
-            android:text="@string/search"
-            android:onClick="search"
-            android:layout_alignParentRight="true"
-            android:textSize="16sp"
-            android:visibility="invisible"
-            />
-        
     </RelativeLayout>
 	
+    <include layout="@layout/em_search_bar" />
     
     <ListView
         android:id="@+id/list"
