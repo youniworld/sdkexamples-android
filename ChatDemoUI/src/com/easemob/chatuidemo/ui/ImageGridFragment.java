@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build.VERSION_CODES;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -76,7 +75,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 		// The ImageFetcher takes care of loading images into our ImageView
 		// children asynchronously
 		mImageResizer = new ImageResizer(getActivity(), mImageThumbSize);
-		mImageResizer.setLoadingImage(R.drawable.empty_photo);
+		mImageResizer.setLoadingImage(R.drawable.em_empty_photo);
 		mImageResizer.addImageCache(getActivity().getSupportFragmentManager(),
 				cacheParams);
 		
@@ -86,7 +85,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			 ViewGroup container,  Bundle savedInstanceState) {
-		final View v = inflater.inflate(R.layout.image_grid_fragment,
+		final View v = inflater.inflate(R.layout.em_image_grid_fragment,
 				container, false);
 		final GridView mGridView = (GridView) v.findViewById(R.id.gridView);
 		mGridView.setAdapter(mAdapter);
@@ -225,7 +224,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 			 if(convertView==null)
 			 {
 				 holder=new ViewHolder();
-				 convertView=LayoutInflater.from(mContext).inflate(R.layout.choose_griditem, container,false);
+				 convertView=LayoutInflater.from(mContext).inflate(R.layout.em_choose_griditem, container,false);
 				 holder.imageView=(RecyclingImageView) convertView.findViewById(R.id.imageView);
 				 holder.icon=(ImageView) convertView.findViewById(R.id.video_icon);
 				 holder.tvDur=(TextView)convertView.findViewById(R.id.chatting_length_iv);
@@ -251,7 +250,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 				holder.icon.setVisibility(View.GONE);
 				holder.tvDur.setVisibility(View.GONE);
 				holder.tvSize.setText(st1);
-				holder.imageView.setImageResource(R.drawable.actionbar_camera_icon);
+				holder.imageView.setImageResource(R.drawable.em_actionbar_camera_icon);
 			}else{
 				holder.icon.setVisibility(View.VISIBLE);
 				VideoEntity entty=mList.get(position-1);
@@ -259,7 +258,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 				
 				holder.tvDur.setText(DateUtils.toTime(entty.duration));
 				holder.tvSize.setText(TextFormater.getDataSize(entty.size));
-				holder.imageView.setImageResource(R.drawable.empty_photo);
+				holder.imageView.setImageResource(R.drawable.em_empty_photo);
 				mImageResizer.loadImage(entty.filePath, holder.imageView);
 			}
 			return convertView;

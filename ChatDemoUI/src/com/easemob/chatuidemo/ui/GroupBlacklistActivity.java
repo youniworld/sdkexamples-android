@@ -31,7 +31,7 @@ public class GroupBlacklistActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
-		setContentView(R.layout.activity_group_blacklist);
+		setContentView(R.layout.em_activity_group_blacklist);
 
 		progressBar = (ProgressBar) findViewById(R.id.progressBar);
 		listView = (ListView) findViewById(R.id.list);
@@ -71,7 +71,7 @@ public class GroupBlacklistActivity extends BaseActivity {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		getMenuInflater().inflate(R.menu.remove_from_blacklist, menu);
+		getMenuInflater().inflate(R.menu.em_remove_from_blacklist, menu);
 	}
 
 	@Override
@@ -119,7 +119,7 @@ public class GroupBlacklistActivity extends BaseActivity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				convertView = View.inflate(getContext(), R.layout.row_contact, null);
+				convertView = View.inflate(getContext(), R.layout.em_row_contact, null);
 			}
 
 			TextView name = (TextView) convertView.findViewById(R.id.name);

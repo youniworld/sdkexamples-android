@@ -26,7 +26,7 @@ public class PublicGroupsSeachActivity extends BaseActivity{
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
-        setContentView(R.layout.activity_public_groups_search);
+        setContentView(R.layout.em_activity_public_groups_search);
         
         containerLayout = (RelativeLayout) findViewById(R.id.rl_searched_group);
         idET = (EditText) findViewById(R.id.et_search_id);

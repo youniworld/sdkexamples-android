@@ -16,18 +16,14 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.easemob.EMCallBack;
-import com.easemob.chat.EMChatConfig;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.R;
-import com.easemob.cloud.CloudOperationCallback;
-import com.easemob.cloud.HttpFileManager;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 
 /**
  * 展示视频内容
  * 
- * @author Administrator
  * 
  */
 public class ShowVideoActivity extends BaseActivity{
@@ -43,7 +39,7 @@ public class ShowVideoActivity extends BaseActivity{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setContentView(R.layout.showvideo_activity);
+		setContentView(R.layout.em_showvideo_activity);
 		loadingLayout = (RelativeLayout) findViewById(R.id.loading_layout);
 		progressBar = (ProgressBar) findViewById(R.id.progressBar);
 		localFilePath = getIntent().getStringExtra("localpath");

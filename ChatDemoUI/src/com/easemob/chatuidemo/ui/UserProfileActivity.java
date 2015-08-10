@@ -23,12 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.EMValueCallBack;
-import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuidemo.domain.User;
-import com.easemob.chatuidemo.utils.UserUtils;
+import com.easemob.chatuilib.controller.HXSDKHelper;
+import com.easemob.chatuilib.domain.User;
+import com.easemob.chatuilib.utils.UserUtils;
 import com.squareup.picasso.Picasso;
 
 public class UserProfileActivity extends BaseActivity implements OnClickListener{
@@ -48,7 +48,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
-		setContentView(R.layout.activity_user_profile);
+		setContentView(R.layout.em_activity_user_profile);
 		initView();
 		initListener();
 	}
@@ -125,9 +125,9 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 				if (user != null) {
 					tvNickName.setText(user.getNick());
 					if(!TextUtils.isEmpty(user.getAvatar())){
-						 Picasso.with(UserProfileActivity.this).load(user.getAvatar()).placeholder(R.drawable.default_avatar).into(headAvatar);
+						 Picasso.with(UserProfileActivity.this).load(user.getAvatar()).placeholder(R.drawable.em_default_avatar).into(headAvatar);
 					}else{
-						Picasso.with(UserProfileActivity.this).load(R.drawable.default_avatar).into(headAvatar);
+						Picasso.with(UserProfileActivity.this).load(R.drawable.em_default_avatar).into(headAvatar);
 					}
 					((DemoHXSDKHelper) HXSDKHelper.getInstance()).saveContact(newUser);
 				}

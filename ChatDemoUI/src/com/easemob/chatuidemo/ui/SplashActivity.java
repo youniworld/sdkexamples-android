@@ -26,7 +26,7 @@ public class SplashActivity extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle arg0) {
-		setContentView(R.layout.activity_splash);
+		setContentView(R.layout.em_activity_splash);
 		super.onCreate(arg0);
 
 		rootLayout = (RelativeLayout) findViewById(R.id.splash_root);

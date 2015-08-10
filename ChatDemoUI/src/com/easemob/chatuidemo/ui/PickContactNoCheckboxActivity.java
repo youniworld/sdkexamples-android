@@ -28,33 +28,33 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.easemob.applib.controller.HXSDKHelper;
-import com.easemob.applib.widget.Sidebar;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuidemo.adapter.ContactAdapter;
-import com.easemob.chatuidemo.domain.User;
+import com.easemob.chatuilib.controller.HXSDKHelper;
+import com.easemob.chatuilib.domain.User;
+import com.easemob.chatuilib.widget.EMSidebar;
+import com.easemob.chatuilib.widget.adapter.ContactAdapter;
 
 public class PickContactNoCheckboxActivity extends BaseActivity {
 
 	private ListView listView;
-	private Sidebar sidebar;
+	private EMSidebar sidebar;
 	protected ContactAdapter contactAdapter;
 	private List<User> contactList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_pick_contact_no_checkbox);
+		setContentView(R.layout.em_activity_pick_contact_no_checkbox);
 		listView = (ListView) findViewById(R.id.list);
-		sidebar = (Sidebar) findViewById(R.id.sidebar);
+		sidebar = (EMSidebar) findViewById(R.id.sidebar);
 		sidebar.setListView(listView);
 		contactList = new ArrayList<User>();
 		// 获取设置contactlist
 		getContactList();
 		// 设置adapter
-		contactAdapter = new ContactAdapter(this, R.layout.row_contact, contactList);
+		contactAdapter = new ContactAdapter(this, R.layout.em_row_contact, contactList);
 		listView.setAdapter(contactAdapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 

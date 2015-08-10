@@ -18,9 +18,8 @@ import java.util.Map;
 
 import android.content.Context;
 
-
 import com.easemob.chatuidemo.domain.RobotUser;
-import com.easemob.chatuidemo.domain.User;
+import com.easemob.chatuilib.domain.User;
 
 public class UserDao {
 	public static final String TABLE_NAME = "uers";

@@ -16,14 +16,14 @@ import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.easemob.chatuilib.Constant;
+import com.easemob.chatuilib.EMConstant;
 import com.easemob.chatuilib.R;
 import com.easemob.chatuilib.domain.SystemUser;
 import com.easemob.chatuilib.domain.User;
 import com.easemob.chatuilib.utils.UserUtils;
 import com.easemob.util.EMLog;
 
-public class ContactListAdapter extends ArrayAdapter<User>  implements SectionIndexer{
+public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexer{
     private static final String TAG = "ContactAdapter";
     List<String> list;
     List<User> userList;
@@ -35,7 +35,7 @@ public class ContactListAdapter extends ArrayAdapter<User>  implements SectionIn
     private MyFilter myFilter;
     private boolean notiyfyByFilter;
 
-    public ContactListAdapter(Context context, int resource, List<User> objects) {
+    public ContactAdapter(Context context, int resource, List<User> objects) {
         super(context, resource, objects);
         this.res = resource;
         this.userList = objects;
@@ -85,16 +85,14 @@ public class ContactListAdapter extends ArrayAdapter<User>  implements SectionIn
         UserUtils.setUserNick(username, holder.nameTextview);
         //设置头像
         UserUtils.setUserAvatar(getContext(), username, holder.avatar);
-        //显示申请与通知item
-        if(username.equals(Constant.NEW_FRIENDS_USERNAME)){
-            if(((SystemUser)user).getUnreadMsgCount() > 0){
-                holder.unreadMsgView.setVisibility(View.VISIBLE);
-            }else{
-                holder.unreadMsgView.setVisibility(View.INVISIBLE);
-            }
-        }else{
-            if(holder.unreadMsgView != null)
-                holder.unreadMsgView.setVisibility(View.INVISIBLE);
+        
+       
+        if(holder.unreadMsgView != null){
+        	 if(user instanceof SystemUser && ((SystemUser) user).getUnreadMsgCount() > 0){
+        		 holder.unreadMsgView.setVisibility(View.VISIBLE);
+             }else{
+            	 holder.unreadMsgView.setVisibility(View.INVISIBLE);
+             }
         }
         
         return convertView;

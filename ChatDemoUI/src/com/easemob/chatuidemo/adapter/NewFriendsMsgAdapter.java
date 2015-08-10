@@ -53,7 +53,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 		final ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
-			convertView = View.inflate(context, R.layout.row_invite_msg, null);
+			convertView = View.inflate(context, R.layout.em_row_invite_msg, null);
 			holder.avator = (ImageView) convertView.findViewById(R.id.avatar);
 			holder.reason = (TextView) convertView.findViewById(R.id.message);
 			holder.name = (TextView) convertView.findViewById(R.id.name);

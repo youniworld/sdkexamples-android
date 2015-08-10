@@ -30,15 +30,15 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 
-import com.easemob.applib.controller.HXSDKHelper;
-import com.easemob.applib.widget.Sidebar;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuidemo.adapter.ContactAdapter;
-import com.easemob.chatuidemo.domain.User;
+import com.easemob.chatuilib.controller.HXSDKHelper;
+import com.easemob.chatuilib.domain.User;
+import com.easemob.chatuilib.widget.EMSidebar;
+import com.easemob.chatuilib.widget.adapter.ContactAdapter;
 
 public class GroupPickContactsActivity extends BaseActivity {
 	private ListView listView;
@@ -53,7 +53,7 @@ public class GroupPickContactsActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_group_pick_contacts);
+		setContentView(R.layout.em_activity_group_pick_contacts);
 
 		// String groupName = getIntent().getStringExtra("groupName");
 		String groupId = getIntent().getStringExtra("groupId");
@@ -82,9 +82,9 @@ public class GroupPickContactsActivity extends BaseActivity {
 		});
 
 		listView = (ListView) findViewById(R.id.list);
-		contactAdapter = new PickContactAdapter(this, R.layout.row_contact_with_checkbox, alluserList);
+		contactAdapter = new PickContactAdapter(this, R.layout.em_row_contact_with_checkbox, alluserList);
 		listView.setAdapter(contactAdapter);
-		((Sidebar) findViewById(R.id.sidebar)).setListView(listView);
+		((EMSidebar) findViewById(R.id.sidebar)).setListView(listView);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -144,9 +144,9 @@ public class GroupPickContactsActivity extends BaseActivity {
 				// 选择框checkbox
 				final CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);
 				if(exitingMembers != null && exitingMembers.contains(username)){
-					checkBox.setButtonDrawable(R.drawable.checkbox_bg_gray_selector);
+					checkBox.setButtonDrawable(R.drawable.em_checkbox_bg_gray_selector);
 				}else{
-					checkBox.setButtonDrawable(R.drawable.checkbox_bg_selector);
+					checkBox.setButtonDrawable(R.drawable.em_checkbox_bg_selector);
 				}
 				if (checkBox != null) {
 					// checkBox.setOnCheckedChangeListener(null);

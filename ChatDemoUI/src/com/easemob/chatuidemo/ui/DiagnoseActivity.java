@@ -40,7 +40,7 @@ public class DiagnoseActivity extends BaseActivity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_diagnose);
+		setContentView(R.layout.em_activity_diagnose);
 
 		currentVersion = (TextView) findViewById(R.id.tv_version);
 		uploadLog = (Button) findViewById(R.id.button_uploadlog);

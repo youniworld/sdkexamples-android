@@ -44,9 +44,6 @@ import com.easemob.EMEventListener;
 import com.easemob.EMGroupChangeListener;
 import com.easemob.EMNotifierEvent;
 import com.easemob.EMValueCallBack;
-import com.easemob.applib.controller.HXSDKHelper;
-import com.easemob.applib.ui.ContactListFragment;
-import com.easemob.applib.ui.ConversationListFragment;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMContactListener;
 import com.easemob.chat.EMContactManager;
@@ -64,10 +61,11 @@ import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
-import com.easemob.chatuidemo.domain.SystemUser;
 import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
-import com.easemob.chatuidemo.domain.User;
-import com.easemob.chatuidemo.utils.CommonUtils;
+import com.easemob.chatuilib.controller.HXSDKHelper;
+import com.easemob.chatuilib.domain.SystemUser;
+import com.easemob.chatuilib.domain.User;
+import com.easemob.chatuilib.utils.CommonUtils;
 import com.easemob.util.EMLog;
 import com.easemob.util.HanziToPinyin;
 import com.easemob.util.NetUtils;
@@ -123,7 +121,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			startActivity(new Intent(this, LoginActivity.class));
 			return;
 		}
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.em_activity_main);
 		initView();
 
 		// MobclickAgent.setDebugMode( true );

@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
-import com.easemob.chatuilib.Constant;
+import com.easemob.chatuilib.EMConstant;
 import com.easemob.chatuilib.R;
 
 public class EMChatRowCall extends EMChatRow{
@@ -21,11 +21,11 @@ public class EMChatRowCall extends EMChatRow{
 
     @Override
     protected void onInflatView() {
-        if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false))
+        if (message.getBooleanAttribute(EMConstant.MESSAGE_ATTR_IS_VOICE_CALL, false))
             inflater.inflate(message.direct == EMMessage.Direct.RECEIVE ?
                     R.layout.em_row_received_voice_call : R.layout.em_row_sent_voice_call, this);
         // 视频通话
-        else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false))
+        else if (message.getBooleanAttribute(EMConstant.MESSAGE_ATTR_IS_VIDEO_CALL, false))
             inflater.inflate(message.direct == EMMessage.Direct.RECEIVE ?
                     R.layout.em_row_received_video_call : R.layout.em_row_sent_video_call, this);
     }

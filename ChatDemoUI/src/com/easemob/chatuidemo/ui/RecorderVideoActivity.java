@@ -52,8 +52,8 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.chatuidemo.video.util.Utils;
+import com.easemob.chatuilib.utils.CommonUtils;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 
@@ -87,7 +87,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);// 设置全屏
 		// 选择支持半透明模式，在有surfaceview的activity中使用
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
-		setContentView(R.layout.recorder_activity);
+		setContentView(R.layout.em_recorder_activity);
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
 				CLASS_LABEL);

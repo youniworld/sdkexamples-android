@@ -33,15 +33,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
-import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.db.UserDao;
-import com.easemob.chatuidemo.domain.SystemUser;
-import com.easemob.chatuidemo.domain.User;
+import com.easemob.chatuilib.controller.HXSDKHelper;
+import com.easemob.chatuilib.domain.SystemUser;
+import com.easemob.chatuilib.domain.User;
+import com.easemob.chatuilib.utils.CommonUtils;
 
 /**
  * 登陆页面

@@ -15,8 +15,8 @@ import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.domain.InviteMessage;
 import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
 import com.easemob.chatuidemo.domain.RobotUser;
-import com.easemob.chatuidemo.domain.SystemUser;
-import com.easemob.chatuidemo.domain.User;
+import com.easemob.chatuilib.domain.SystemUser;
+import com.easemob.chatuilib.domain.User;
 import com.easemob.util.HanziToPinyin;
 
 public class DemoDBManager {

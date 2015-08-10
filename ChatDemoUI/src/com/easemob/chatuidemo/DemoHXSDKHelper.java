@@ -351,14 +351,14 @@ public class DemoHXSDKHelper extends HXSDKHelper{
                     ChatType chatType = message.getChatType();
                     if (chatType == ChatType.Chat) { // 单聊信息
                         intent.putExtra("userId", message.getFrom());
-                        intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
+                        intent.putExtra("chatType", Constant.CHATTYPE_SINGLE);
                     } else { // 群聊信息
                         // message.getTo()为群聊id
                         intent.putExtra("groupId", message.getTo());
                         if(chatType == ChatType.GroupChat){
-                            intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
+                            intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
                         }else{
-                            intent.putExtra("chatType", ChatActivity.CHATTYPE_CHATROOM);
+                            intent.putExtra("chatType", Constant.CHATTYPE_CHATROOM);
                         }
                         
                     }

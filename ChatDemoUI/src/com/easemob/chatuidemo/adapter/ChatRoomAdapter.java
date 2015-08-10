@@ -16,7 +16,6 @@ package com.easemob.chatuidemo.adapter;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -30,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.easemob.chat.EMChatRoom;
-import com.easemob.chat.EMGroup;
 import com.easemob.chatuidemo.R;
 
 public class ChatRoomAdapter extends ArrayAdapter<EMChatRoom> {
@@ -92,15 +90,15 @@ public class ChatRoomAdapter extends ArrayAdapter<EMChatRoom> {
 			});
 		}else if (getItemViewType(position) == 1) {
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.row_add_group, null);
+				convertView = inflater.inflate(R.layout.em_row_add_group, null);
 			}
-			((ImageView) convertView.findViewById(R.id.avatar)).setImageResource(R.drawable.add_public_group);
+			((ImageView) convertView.findViewById(R.id.avatar)).setImageResource(R.drawable.em_add_public_group);
 			((TextView) convertView.findViewById(R.id.name)).setText(addChatRoomString);
 			((TextView) convertView.findViewById(R.id.header)).setVisibility(View.VISIBLE);
 
 		} else {
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.row_group, null);
+				convertView = inflater.inflate(R.layout.em_row_group, null);
 			}
 			((TextView) convertView.findViewById(R.id.name)).setText(getItem(position - 2).getName());
 

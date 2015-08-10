@@ -27,15 +27,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.applib.Constant;
-import com.easemob.applib.widget.EMConversationList;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
+import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
-import com.easemob.chatuidemo.ui.ChatActivity;
-import com.easemob.chatuidemo.ui.MainActivity;
+import com.easemob.chatuilib.widget.EMConversationList;
 
 public class ConversationListFragment extends Fragment{
     private InputMethodManager inputMethodManager;
@@ -80,9 +78,9 @@ public class ConversationListFragment extends Fragment{
                     if(conversation.isGroup()){
                         if(conversation.getType() == EMConversationType.ChatRoom){
                             // it's group chat
-                            intent.putExtra("chatType", ChatActivity.CHATTYPE_CHATROOM);
+                            intent.putExtra("chatType", Constant.CHATTYPE_CHATROOM);
                         }else{
-                            intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
+                            intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
                         }
                         
                     }

@@ -35,10 +35,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMCallStateChangeListener;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuilib.controller.HXSDKHelper;
 import com.easemob.exceptions.EMServiceNotReadyException;
 
 /**
@@ -73,7 +73,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
         	finish();
         	return;
         }
-		setContentView(R.layout.activity_voice_call);
+		setContentView(R.layout.em_activity_voice_call);
 		
 		HXSDKHelper.getInstance().isVoiceCalling = true;
 
@@ -111,7 +111,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 		nickTextView.setText(username);
 		if (!isInComingCall) {// 拨打电话
 			soundPool = new SoundPool(1, AudioManager.STREAM_RING, 0);
-			outgoing = soundPool.load(this, R.raw.outgoing, 1);
+			outgoing = soundPool.load(this, R.raw.em_outgoing, 1);
 
 			comingBtnContainer.setVisibility(View.INVISIBLE);
 			hangupBtn.setVisibility(View.VISIBLE);
@@ -351,12 +351,12 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 		case R.id.iv_mute: // 静音开关
 			if (isMuteState) {
 				// 关闭静音
-				muteImage.setImageResource(R.drawable.icon_mute_normal);
+				muteImage.setImageResource(R.drawable.em_icon_mute_normal);
 				audioManager.setMicrophoneMute(false);
 				isMuteState = false;
 			} else {
 				// 打开静音
-				muteImage.setImageResource(R.drawable.icon_mute_on);
+				muteImage.setImageResource(R.drawable.em_icon_mute_on);
 				audioManager.setMicrophoneMute(true);
 				isMuteState = true;
 			}
@@ -364,11 +364,11 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 		case R.id.iv_handsfree: // 免提开关
 			if (isHandsfreeState) {
 				// 关闭免提
-				handsFreeImage.setImageResource(R.drawable.icon_speaker_normal);
+				handsFreeImage.setImageResource(R.drawable.em_icon_speaker_normal);
 				closeSpeakerOn();
 				isHandsfreeState = false;
 			} else {
-				handsFreeImage.setImageResource(R.drawable.icon_speaker_on);
+				handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
 				openSpeakerOn();
 				isHandsfreeState = true;
 			}

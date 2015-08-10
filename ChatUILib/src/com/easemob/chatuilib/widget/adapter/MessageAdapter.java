@@ -25,7 +25,7 @@ import android.widget.ListView;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
-import com.easemob.chatuilib.Constant;
+import com.easemob.chatuilib.EMConstant;
 import com.easemob.chatuilib.widget.EMChatMessageList.MessageListItemClickListener;
 import com.easemob.chatuilib.widget.chatrow.EMChatRow;
 import com.easemob.chatuilib.widget.chatrow.EMChatRowCall;
@@ -189,9 +189,9 @@ public class MessageAdapter extends BaseAdapter{
 			return -1;
 		}
 		if (message.getType() == EMMessage.Type.TXT) {
-			if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false))
+			if (message.getBooleanAttribute(EMConstant.MESSAGE_ATTR_IS_VOICE_CALL, false))
 			    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VOICE_CALL : MESSAGE_TYPE_SENT_VOICE_CALL;
-			else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false))
+			else if (message.getBooleanAttribute(EMConstant.MESSAGE_ATTR_IS_VIDEO_CALL, false))
 			    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VIDEO_CALL : MESSAGE_TYPE_SENT_VIDEO_CALL;
 			return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_TXT : MESSAGE_TYPE_SENT_TXT;
 		}
@@ -220,8 +220,8 @@ public class MessageAdapter extends BaseAdapter{
         switch (message.getType()) {
         case TXT:
             // 语音通话,  视频通话
-            if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
-                message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false))
+            if (message.getBooleanAttribute(EMConstant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
+                message.getBooleanAttribute(EMConstant.MESSAGE_ATTR_IS_VIDEO_CALL, false))
                 chatRow = new EMChatRowCall(context, message, position, this);
             else
                 chatRow = new EMChatRowText(context, message, position, this);

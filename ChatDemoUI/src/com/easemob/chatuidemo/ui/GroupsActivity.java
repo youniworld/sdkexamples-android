@@ -31,14 +31,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.easemob.applib.controller.HXSDKHelper;
-import com.easemob.applib.utils.HXPreferenceUtils;
-import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
+import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.adapter.GroupAdapter;
-import com.easemob.exceptions.EaseMobException;
+import com.easemob.chatuilib.controller.HXSDKHelper;
 import com.easemob.util.EMLog;
 
 public class GroupsActivity extends BaseActivity {
@@ -85,7 +83,7 @@ public class GroupsActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fragment_groups);
+		setContentView(R.layout.em_fragment_groups);
 
 		instance = this;
 		inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -119,7 +117,7 @@ public class GroupsActivity extends BaseActivity {
 					// 进入群聊
 					Intent intent = new Intent(GroupsActivity.this, ChatActivity.class);
 					// it is group chat
-					intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
+					intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
 					intent.putExtra("groupId", groupAdapter.getItem(position - 3).getGroupId());
 					startActivityForResult(intent, 0);
 				}

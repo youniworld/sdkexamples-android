@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 
 import com.easemob.chatuilib.R;
 import com.easemob.chatuilib.domain.User;
-import com.easemob.chatuilib.widget.adapter.ContactListAdapter;
+import com.easemob.chatuilib.widget.adapter.ContactAdapter;
 import com.easemob.util.EMLog;
 
 public class EMContactList extends RelativeLayout {
@@ -20,7 +20,7 @@ public class EMContactList extends RelativeLayout {
     
     Context context;
     ListView listView;
-    ContactListAdapter adapter;
+    ContactAdapter adapter;
     List<User> contactList;
     private EMSidebar sidebar;
     
@@ -73,7 +73,7 @@ public class EMContactList extends RelativeLayout {
             EMLog.e(TAG, "plese set contact list before invoke init method");
             return;
         }
-        adapter = new ContactListAdapter(context, 0, contactList);
+        adapter = new ContactAdapter(context, 0, contactList);
         listView.setAdapter(adapter);
         sidebar = (EMSidebar) findViewById(R.id.sidebar);
         sidebar.setListView(listView);

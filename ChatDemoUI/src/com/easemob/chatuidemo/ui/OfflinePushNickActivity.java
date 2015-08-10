@@ -26,7 +26,7 @@ public class OfflinePushNickActivity extends BaseActivity {
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
 		super.onCreate(arg0);
-		setContentView(R.layout.activity_offline_push);
+		setContentView(R.layout.em_activity_offline_push);
 
 		inputNickName = (EditText) findViewById(R.id.et_input_nickname);
 		saveNickName = (Button) findViewById(R.id.btn_save);

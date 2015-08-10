@@ -37,12 +37,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMCallStateChangeListener;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMVideoCallHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.utils.CameraHelper;
+import com.easemob.chatuilib.controller.HXSDKHelper;
 import com.easemob.exceptions.EMServiceNotReadyException;
 
 public class VideoCallActivity extends CallActivity implements OnClickListener {
@@ -86,7 +86,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         	finish();
         	return;
         }
-        setContentView(R.layout.activity_video_call);
+        setContentView(R.layout.em_activity_video_call);
         
         HXSDKHelper.getInstance().isVideoCalling = true;
         getWindow().addFlags(
@@ -150,7 +150,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         addCallStateListener();
         if (!isInComingCall) {// 拨打电话
             soundPool = new SoundPool(1, AudioManager.STREAM_RING, 0);
-            outgoing = soundPool.load(this, R.raw.outgoing, 1);
+            outgoing = soundPool.load(this, R.raw.em_outgoing, 1);
 
             comingBtnContainer.setVisibility(View.INVISIBLE);
             hangupBtn.setVisibility(View.VISIBLE);
@@ -273,7 +273,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                             openSpeakerOn();
                             ((TextView)findViewById(R.id.tv_is_p2p)).setText(EMChatManager.getInstance().isDirectCall()
                                     ? R.string.direct_call : R.string.relay_call);
-                            handsFreeImage.setImageResource(R.drawable.icon_speaker_on);
+                            handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
                             isHandsfreeState = true;
                             chronometer.setVisibility(View.VISIBLE);
                             chronometer.setBase(SystemClock.elapsedRealtime());
@@ -400,7 +400,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     cameraHelper.setStartFlag(true);
 
                     openSpeakerOn();
-                    handsFreeImage.setImageResource(R.drawable.icon_speaker_on);
+                    handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
                     isAnswered = true;
                     isHandsfreeState = true;
                 } catch (Exception e) {
@@ -436,12 +436,12 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         case R.id.iv_mute: // 静音开关
             if (isMuteState) {
                 // 关闭静音
-                muteImage.setImageResource(R.drawable.icon_mute_normal);
+                muteImage.setImageResource(R.drawable.em_icon_mute_normal);
                 audioManager.setMicrophoneMute(false);
                 isMuteState = false;
             } else {
                 // 打开静音
-                muteImage.setImageResource(R.drawable.icon_mute_on);
+                muteImage.setImageResource(R.drawable.em_icon_mute_on);
                 audioManager.setMicrophoneMute(true);
                 isMuteState = true;
             }
@@ -449,11 +449,11 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         case R.id.iv_handsfree: // 免提开关
             if (isHandsfreeState) {
                 // 关闭免提
-                handsFreeImage.setImageResource(R.drawable.icon_speaker_normal);
+                handsFreeImage.setImageResource(R.drawable.em_icon_speaker_normal);
                 closeSpeakerOn();
                 isHandsfreeState = false;
             } else {
-                handsFreeImage.setImageResource(R.drawable.icon_speaker_on);
+                handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
                 openSpeakerOn();
                 isHandsfreeState = true;
             }

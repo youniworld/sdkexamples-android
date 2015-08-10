@@ -16,6 +16,7 @@ package com.easemob.chatuidemo.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -42,8 +43,8 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuidemo.utils.UserUtils;
-import com.easemob.chatuidemo.widget.ExpandGridView;
+import com.easemob.chatuilib.utils.UserUtils;
+import com.easemob.chatuilib.widget.ExpandGridView;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.easemob.util.NetUtils;
@@ -104,7 +105,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
             return;
         }
         
-		setContentView(R.layout.activity_group_details);
+		setContentView(R.layout.em_activity_group_details);
 		instance = this;
 		st = getResources().getString(R.string.people);
 		clearAllHistory = (RelativeLayout) findViewById(R.id.clear_all_history);
@@ -125,7 +126,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 		rl_switch_block_groupmsg.setOnClickListener(this);
 
-		Drawable referenceDrawable = getResources().getDrawable(R.drawable.smiley_add_btn);
+		Drawable referenceDrawable = getResources().getDrawable(R.drawable.em_smiley_add_btn);
 		referenceWidth = referenceDrawable.getIntrinsicWidth();
 		referenceHeight = referenceDrawable.getIntrinsicHeight();
 
@@ -149,7 +150,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		List<String> members = new ArrayList<String>();
 		members.addAll(group.getMembers());
 		
-		adapter = new GridAdapter(this, R.layout.grid, members);
+		adapter = new GridAdapter(this, R.layout.em_grid, members);
 		userGridview.setAdapter(adapter);
 
 		// 保证每次进详情看到的都是最新的group
@@ -567,7 +568,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			if (position == getCount() - 1) {
 			    holder.textView.setText("");
 				// 设置成删除按钮
-			    holder.imageView.setImageResource(R.drawable.smiley_minus_btn);
+			    holder.imageView.setImageResource(R.drawable.em_smiley_minus_btn);
 //				button.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.smiley_minus_btn, 0, 0);
 				// 如果不是创建者或者没有相应权限，不提供加减人按钮
 				if (!group.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {
@@ -594,7 +595,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				}
 			} else if (position == getCount() - 2) { // 添加群组成员按钮
 			    holder.textView.setText("");
-			    holder.imageView.setImageResource(R.drawable.smiley_add_btn);
+			    holder.imageView.setImageResource(R.drawable.em_smiley_add_btn);
 //				button.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.smiley_add_btn, 0, 0);
 				// 如果不是创建者或者没有相应权限
 				if (!group.isAllowInvites() && !group.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {

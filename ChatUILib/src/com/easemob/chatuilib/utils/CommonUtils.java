@@ -23,7 +23,7 @@ import android.net.NetworkInfo;
 
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
-import com.easemob.chatuilib.Constant;
+import com.easemob.chatuilib.EMConstant;
 import com.easemob.chatuilib.R;
 import com.easemob.chatuilib.controller.HXSDKHelper;
 import com.easemob.util.EMLog;
@@ -95,7 +95,7 @@ public class CommonUtils {
         case TXT: // 文本消息
             /*if(((DemoHXSDKHelper)HXSDKHelper.getInstance()).isRobotMenuMessage(message)){
                 digest = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getRobotMenuMessageDigest(message);
-            }else */if(!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL,false)){
+            }else */if(!message.getBooleanAttribute(EMConstant.MESSAGE_ATTR_IS_VOICE_CALL,false)){
                 TextMessageBody txtBody = (TextMessageBody) message.getBody();
                 digest = txtBody.getMessage();
             }else{

@@ -17,24 +17,17 @@ package com.easemob.chatuidemo.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
+import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -45,11 +38,8 @@ import com.easemob.EMChatRoomChangeListener;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatRoom;
 import com.easemob.chat.EMCursorResult;
-import com.easemob.chat.EMGroupInfo;
-import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.R;
 import com.easemob.exceptions.EaseMobException;
-import com.easemob.util.NetUtils;
 
 public class PublicChatRoomsActivity extends BaseActivity {
 	private ProgressBar pb;
@@ -70,7 +60,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_public_groups);
+		setContentView(R.layout.em_activity_public_groups);
 
 		// 搜索框
 		pb = (ProgressBar) findViewById(R.id.progressBar);
@@ -79,7 +69,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
 		title.setText(getResources().getString(R.string.chat_room));
 		chatRoomList = new ArrayList<EMChatRoom>();
 		
-		View footView = getLayoutInflater().inflate(R.layout.listview_footer_view, null);
+		View footView = getLayoutInflater().inflate(R.layout.em_listview_footer_view, null);
         footLoadingLayout = (LinearLayout) footView.findViewById(R.id.loading_layout);
         footLoadingPB = (ProgressBar)footView.findViewById(R.id.loading_bar);
         footLoadingText = (TextView) footView.findViewById(R.id.loading_text);
@@ -226,7 +216,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.row_group, null);
+				convertView = inflater.inflate(R.layout.em_row_group, null);
 			}
 
 			((TextView) convertView.findViewById(R.id.name)).setText(getItem(position).getName());

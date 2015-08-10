@@ -17,8 +17,8 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.easemob.applib.Constant;
 import com.easemob.chat.EMMessage;
+import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
 
 public class ContextMenu extends BaseActivity {
@@ -32,7 +32,7 @@ public class ContextMenu extends BaseActivity {
 		if (type == EMMessage.Type.TXT.ordinal()) {
 		    if(message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false) ||
 		            message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)){
-		        setContentView(R.layout.context_menu_for_location);
+		        setContentView(R.layout.em_context_menu_for_location);
 		    }else{
 		        setContentView(R.layout.context_menu_for_text);
 		    }

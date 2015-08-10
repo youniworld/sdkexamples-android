@@ -21,7 +21,7 @@ import android.content.Context;
 import com.easemob.chatuidemo.db.DemoDBManager;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.RobotUser;
-import com.easemob.chatuidemo.domain.User;
+import com.easemob.chatuilib.domain.User;
 
 public class DemoHXSDKModel extends DefaultHXSDKModel{
 
