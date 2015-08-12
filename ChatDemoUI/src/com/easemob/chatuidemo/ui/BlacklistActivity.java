@@ -14,12 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.chat.EMContactManager;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuilib.utils.UserUtils;
 import com.easemob.exceptions.EaseMobException;
 
 /**
@@ -118,10 +120,13 @@ public class BlacklistActivity extends Activity {
 			if (convertView == null) {
 				convertView = View.inflate(getContext(), R.layout.em_row_contact, null);
 			}
-
+			String username = getItem(position);
 			TextView name = (TextView) convertView.findViewById(R.id.name);
-			name.setText(getItem(position));
-
+			ImageView avatar = (ImageView) convertView.findViewById(R.id.avatar);
+			
+			UserUtils.setUserAvatar(getContext(), username, avatar);
+			UserUtils.setUserNick(username, name);
+			
 			return convertView;
 		}
 
