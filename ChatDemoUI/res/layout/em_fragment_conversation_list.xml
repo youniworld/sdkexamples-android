@@ -6,7 +6,7 @@
     android:background="@color/common_bg"
     android:orientation="vertical">
 
-	<com.easemob.applib.widget.EMTitleBar 
+	<com.easemob.chatuilib.widget.EMTitleBar 
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    easemob:titleBarTitle="@string/session"
@@ -19,7 +19,7 @@
         layout="@layout/em_chat_neterror_item"
         android:visibility="gone" />
 
-    <com.easemob.applib.widget.EMConversationList
+    <com.easemob.chatuilib.widget.EMConversationList
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

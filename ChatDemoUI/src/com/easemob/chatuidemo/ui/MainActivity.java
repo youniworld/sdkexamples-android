@@ -146,8 +146,6 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 				.commit();
 		
 		init();
-		//异步获取当前用户的昵称和头像
-		((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().asyncGetCurrentUserInfo();
 	}
 
 	private void init() {     
@@ -206,7 +204,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                 Map<String, User> userlist = new HashMap<String, User>();
                 for (String username : usernames) {
                     User user = new User(username);
-                    setUserHearder(username, user);
+                    setUserHearder(user);
                     userlist.put(username, user);
                 }
                 // 存入内存
@@ -267,16 +265,14 @@ public class MainActivity extends BaseActivity implements EMEventListener {
      * @param username
      * @param user
      */
-    private static void setUserHearder(String username, User user) {
+    private static void setUserHearder(User user) {
         String headerName = null;
         if (!TextUtils.isEmpty(user.getNick())) {
             headerName = user.getNick();
         } else {
             headerName = user.getUsername();
         }
-        if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
-            user.setInitialLetter("");
-        } else if (Character.isDigit(headerName.charAt(0))) {
+        if (Character.isDigit(headerName.charAt(0))) {
             user.setInitialLetter("#");
         } else {
             user.setInitialLetter(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(0, 1)
@@ -514,8 +510,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 					String st10 = getResources().getString(R.string.have_you_removed);
 					if (ChatActivity.activityInstance != null
 							&& usernameList.contains(ChatActivity.activityInstance.getToChatUsername())) {
-						Toast.makeText(MainActivity.this, ChatActivity.activityInstance.getToChatUsername() + st10, 1)
-								.show();
+						Toast.makeText(MainActivity.this, ChatActivity.activityInstance.getToChatUsername() + st10, 1).show();
 						ChatActivity.activityInstance.finish();
 					}
 					updateUnreadLabel();

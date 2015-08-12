@@ -183,10 +183,11 @@ public class ParseManager {
 								user.setAvatar(pFile.getUrl());
 							}
 						}else{
-						    //好友列表里不包含自己
-						    if(EMChatManager.getInstance().getCurrentUser().equals(username)){
-						        user = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().getCurrentUserInfo();
-						    }
+						    user = new User(username);
+						    user.setNick(nick);
+						    if (pFile != null && pFile.getUrl() != null) {
+                                user.setAvatar(pFile.getUrl());
+                            }
 						}
 						callback.onSuccess(user);
 					}

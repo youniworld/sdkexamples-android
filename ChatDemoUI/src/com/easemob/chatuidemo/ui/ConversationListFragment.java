@@ -59,6 +59,7 @@ public class ConversationListFragment extends Fragment{
         errorItem = (RelativeLayout) getView().findViewById(R.id.rl_error_item);
         errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
         
+        //会话列表控件
         conversationListView = (EMConversationList) getView().findViewById(R.id.list);
         conversationListView.init();
         
@@ -137,7 +138,7 @@ public class ConversationListFragment extends Fragment{
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        getActivity().getMenuInflater().inflate(R.menu.delete_message, menu); 
+        getActivity().getMenuInflater().inflate(R.menu.em_delete_message, menu); 
     }
 
     @Override

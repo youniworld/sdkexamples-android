@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.R;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -38,6 +37,7 @@ import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
+import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuilib.controller.HXSDKHelper;
 import com.easemob.chatuilib.domain.SystemUser;
@@ -71,7 +71,7 @@ public class LoginActivity extends BaseActivity {
 
 			return;
 		}
-		setContentView(R.layout.activity_login);
+		setContentView(R.layout.em_activity_login);
 
 		usernameEditText = (EditText) findViewById(R.id.username);
 		passwordEditText = (EditText) findViewById(R.id.password);
@@ -146,31 +146,22 @@ public class LoginActivity extends BaseActivity {
 				DemoApplication.getInstance().setUserName(currentUsername);
 				DemoApplication.getInstance().setPassword(currentPassword);
 
-				try {
-					// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
-					// ** manually load all local groups and
-				    EMGroupManager.getInstance().loadAllGroups();
-					EMChatManager.getInstance().loadAllConversations();
-					// 处理好友和群组
-					initializeContacts();
-				} catch (Exception e) {
-					e.printStackTrace();
-					// 取好友或者群聊失败，不让进入主页面
-					runOnUiThread(new Runnable() {
-						public void run() {
-							pd.dismiss();
-							DemoHXSDKHelper.getInstance().logout(true,null);
-							Toast.makeText(getApplicationContext(), R.string.login_failure_failed, 1).show();
-						}
-					});
-					return;
-				}
+				// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
+				// ** manually load all local groups and
+			    EMGroupManager.getInstance().loadAllGroups();
+				EMChatManager.getInstance().loadAllConversations();
+				// 处理好友和群组
+				initializeContacts();
+				
 				// 更新当前用户的nickname 此方法的作用是在ios离线推送时能够显示用户nick
 				boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(
 						DemoApplication.currentUserNick.trim());
 				if (!updatenick) {
 					Log.e("LoginActivity", "update current user nick fail");
 				}
+				//异步获取当前用户的昵称和头像(从自己服务器获取，demo使用的一个第三方服务)
+		        ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().asyncGetCurrentUserInfo();
+				
 				if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
 					pd.dismiss();
 				}
@@ -209,21 +200,22 @@ public class LoginActivity extends BaseActivity {
 		String strChat = getResources().getString(R.string.Application_and_notify);
 		newFriends.setInitialLetter("");
 		newFriends.setNick(strChat);
-		newFriends.setAvatar(R.drawable.new_friends_icon + "");
+		newFriends.setAvatar(R.drawable.em_new_friends_icon + "");
+		
 		userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
 		// 添加"群聊"
 		User groupUser = new SystemUser(Constant.GROUP_USERNAME);
 		String strGroup = getResources().getString(R.string.group_chat);
 		groupUser.setNick(strGroup);
 		groupUser.setInitialLetter("");
-		groupUser.setAvatar(R.drawable.group_icon + "");
+		groupUser.setAvatar(R.drawable.em_groups_icon + "");
 		userlist.put(Constant.GROUP_USERNAME, groupUser);
 		
 		//聊天室
 		User chatRoomUser = new User(Constant.CHAT_ROOM);
 		chatRoomUser.setNick(getResources().getString(R.string.chat_room));
 		chatRoomUser.setInitialLetter("");
-		chatRoomUser.setAvatar(R.drawable.group_icon + "");
+		chatRoomUser.setAvatar(R.drawable.em_groups_icon + "");
         userlist.put(Constant.CHAT_ROOM, chatRoomUser);
 		
 		// 添加"Robot"
@@ -231,7 +223,7 @@ public class LoginActivity extends BaseActivity {
 		String strRobot = getResources().getString(R.string.robot_chat);
 		robotUser.setNick(strRobot);
 		robotUser.setInitialLetter("");
-		robotUser.setAvatar(R.drawable.group_icon + "");
+		robotUser.setAvatar(R.drawable.em_groups_icon + "");
 		userlist.put(Constant.CHAT_ROBOT, robotUser);
 		
 		// 存入内存

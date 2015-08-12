@@ -53,6 +53,7 @@ import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuilib.controller.HXSDKHelper;
+import com.easemob.chatuilib.controller.HXSDKHelper.UserProvider;
 import com.easemob.chatuilib.model.GroupRemoveListener;
 import com.easemob.chatuilib.ui.BaiduMapActivity;
 import com.easemob.chatuilib.utils.CommonUtils;
@@ -70,23 +71,16 @@ import com.easemob.util.PathUtil;
 
 public class ChatFragment extends Fragment implements EMEventListener {
     private static final String TAG = "ChatActivity";
-    private static final int REQUEST_CODE_EMPTY_HISTORY = 2;
-    public static final int REQUEST_CODE_CONTEXT_MENU = 3;
-    private static final int REQUEST_CODE_MAP = 4;
-    public static final int REQUEST_CODE_COPY_AND_PASTE = 11;
-    public static final int REQUEST_CODE_PICK_VIDEO = 12;
-    public static final int REQUEST_CODE_DOWNLOAD_VIDEO = 13;
-    public static final int REQUEST_CODE_VIDEO = 14;
-    public static final int REQUEST_CODE_DOWNLOAD_VOICE = 15;
-    public static final int REQUEST_CODE_SELECT_USER_CARD = 16;
-    public static final int REQUEST_CODE_SEND_USER_CARD = 17;
-    public static final int REQUEST_CODE_CAMERA = 18;
-    public static final int REQUEST_CODE_LOCAL = 19;
-    public static final int REQUEST_CODE_CLICK_DESTORY_IMG = 20;
-    public static final int REQUEST_CODE_GROUP_DETAIL = 21;
-    public static final int REQUEST_CODE_SELECT_VIDEO = 23;
-    public static final int REQUEST_CODE_SELECT_FILE = 24;
-    public static final int REQUEST_CODE_ADD_TO_BLACKLIST = 25;
+    public static final int REQUEST_CODE_CONTEXT_MENU = 1;
+    private static final int REQUEST_CODE_MAP = 2;
+    public static final int REQUEST_CODE_COPY_AND_PASTE = 3;
+    public static final int REQUEST_CODE_DOWNLOAD_VOICE = 4;
+    public static final int REQUEST_CODE_CAMERA = 5;
+    public static final int REQUEST_CODE_LOCAL = 6;
+    public static final int REQUEST_CODE_GROUP_DETAIL = 7;
+    public static final int REQUEST_CODE_SELECT_VIDEO = 8;
+    public static final int REQUEST_CODE_SELECT_FILE = 9;
+    public static final int REQUEST_CODE_ADD_TO_BLACKLIST = 10;
 
     public static final int RESULT_CODE_COPY = 1;
     public static final int RESULT_CODE_DELETE = 2;
@@ -217,10 +211,15 @@ public class ChatFragment extends Fragment implements EMEventListener {
         conversation = EMChatManager.getInstance().getConversation(toChatUsername);
         // 把此会话的未读数置为0
         conversation.markAllMessagesAsRead();
+        
+        UserProvider userProvider = HXSDKHelper.getInstance().getUserProvider();
 
         titleBar.setTitle(toChatUsername);
         if (chatType == Constant.CHATTYPE_SINGLE) { // 单聊
             // 设置标题
+            if(userProvider != null && userProvider.getUser(toChatUsername) != null){
+                titleBar.setTitle(userProvider.getUser(toChatUsername).getNick());
+            }
             titleBar.setRightImageResource(R.drawable.em_mm_title_remove);
         } else {
             if (chatType == Constant.CHATTYPE_GROUP) {
@@ -403,11 +402,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
         }
         
         if (resultCode == Activity.RESULT_OK) { // 清空消息
-            if (requestCode == REQUEST_CODE_EMPTY_HISTORY) {
-                // 清空会话
-                EMChatManager.getInstance().clearConversation(toChatUsername);
-                messageList.refresh();
-            } else if (requestCode == REQUEST_CODE_CAMERA) { // 发送照片
+            if (requestCode == REQUEST_CODE_CAMERA) { // 发送照片
                 if (cameraFile != null && cameraFile.exists())
                     sendImageMessage(cameraFile.getAbsolutePath());
             } else if (requestCode == REQUEST_CODE_SELECT_VIDEO) { // 发送本地选择的视频
@@ -830,9 +825,17 @@ public class ChatFragment extends Fragment implements EMEventListener {
      */
     public void emptyHistory() {
         String msg = getResources().getString(R.string.Whether_to_empty_all_chats);
-        startActivityForResult(
-                new Intent(getActivity(), AlertDialog.class).putExtra("titleIsCancel", true).putExtra("msg", msg)
-                        .putExtra("cancel", true), REQUEST_CODE_EMPTY_HISTORY);
+        new EMAlertDialog(getActivity(),null, msg, null,new AlertDialogUser() {
+            
+            @Override
+            public void onResult(boolean confirmed, Bundle bundle) {
+                if(confirmed){
+                    // 清空会话
+                    EMChatManager.getInstance().clearConversation(toChatUsername);
+                    messageList.refresh();
+                }
+            }
+        }, true).show();;
     }
 
     /**

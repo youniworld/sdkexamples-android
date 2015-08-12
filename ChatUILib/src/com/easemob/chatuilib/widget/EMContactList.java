@@ -3,6 +3,8 @@ package com.easemob.chatuilib.widget;
 import java.util.List;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -18,13 +20,18 @@ import com.easemob.util.EMLog;
 public class EMContactList extends RelativeLayout {
     protected static final String TAG = EMContactList.class.getSimpleName();
     
-    Context context;
-    ListView listView;
-    ContactAdapter adapter;
-    List<User> contactList;
-    private EMSidebar sidebar;
+    protected Context context;
+    protected ListView listView;
+    protected ContactAdapter adapter;
+    protected List<User> contactList;
+    protected EMSidebar sidebar;
     
-    public static final int MSG_UPDATE_LIST = 0;
+    protected int primaryColor;
+    protected int primarySize;
+    protected boolean showSiderBar;
+    protected Drawable initialLetterBg;
+    
+    static final int MSG_UPDATE_LIST = 0;
     
     Handler handler = new Handler() {
         
@@ -41,6 +48,9 @@ public class EMContactList extends RelativeLayout {
             super.handleMessage(msg);
         }
     };
+
+    protected int initialLetterColor;
+
     
     public EMContactList(Context context) {
         super(context);
@@ -59,6 +69,15 @@ public class EMContactList extends RelativeLayout {
     
     private void init(Context context, AttributeSet attrs) {
         this.context = context;
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EMContactList);
+        primaryColor = ta.getColor(R.styleable.EMContactList_ctsListPrimaryTextColor, 0);
+        primarySize = ta.getDimensionPixelSize(R.styleable.EMContactList_ctsListPrimaryTextSize, 0);
+        showSiderBar = ta.getBoolean(R.styleable.EMContactList_ctsListShowSiderBar, false);
+        initialLetterBg = ta.getDrawable(R.styleable.EMContactList_ctsListInitialLetterBg);
+        initialLetterColor = ta.getColor(R.styleable.EMContactList_ctsListInitialLetterColor, 0);
+        ta.recycle();
+        
+        
         LayoutInflater.from(context).inflate(R.layout.em_widget_contact_list, this);
         listView = (ListView)findViewById(R.id.list);
         
@@ -74,9 +93,13 @@ public class EMContactList extends RelativeLayout {
             return;
         }
         adapter = new ContactAdapter(context, 0, contactList);
+        adapter.setPrimaryColor(primaryColor).setPrimarySize(primarySize).setInitialLetterBg(initialLetterBg)
+            .setInitialLetterColor(initialLetterColor);
         listView.setAdapter(adapter);
-        sidebar = (EMSidebar) findViewById(R.id.sidebar);
-        sidebar.setListView(listView);
+        if(showSiderBar){
+            sidebar = (EMSidebar) findViewById(R.id.sidebar);
+            sidebar.setListView(listView);
+        }
     }
     
     /**

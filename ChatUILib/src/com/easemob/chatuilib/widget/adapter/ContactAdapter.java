@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseIntArray;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.easemob.chatuilib.EMConstant;
 import com.easemob.chatuilib.R;
 import com.easemob.chatuilib.domain.SystemUser;
 import com.easemob.chatuilib.domain.User;
@@ -47,8 +48,8 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
     private static class ViewHolder {
         ImageView avatar;
         TextView unreadMsgView;
-        TextView nameTextview;
-        TextView tvHeader;
+        TextView nameView;
+        TextView headerView;
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -58,8 +59,8 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
             convertView = layoutInflater.inflate(R.layout.em_row_contact, null);
             holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
             holder.unreadMsgView = (TextView) convertView.findViewById(R.id.unread_msg_number);
-            holder.nameTextview = (TextView) convertView.findViewById(R.id.name);
-            holder.tvHeader = (TextView) convertView.findViewById(R.id.header);
+            holder.nameView = (TextView) convertView.findViewById(R.id.name);
+            holder.headerView = (TextView) convertView.findViewById(R.id.header);
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();
@@ -68,21 +69,21 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
         User user = getItem(position);
         if(user == null)
             Log.d("ContactAdapter", position + "");
-        //设置nick，demo里不涉及到完整user，用username代替nick显示
         String username = user.getUsername();
         String header = user.getInitialLetter();
+        
         if (position == 0 || header != null && !header.equals(getItem(position - 1).getInitialLetter())) {
             if (TextUtils.isEmpty(header)) {
-                holder.tvHeader.setVisibility(View.GONE);
+                holder.headerView.setVisibility(View.GONE);
             } else {
-                holder.tvHeader.setVisibility(View.VISIBLE);
-                holder.tvHeader.setText(header);
+                holder.headerView.setVisibility(View.VISIBLE);
+                holder.headerView.setText(header);
             }
         } else {
-            holder.tvHeader.setVisibility(View.GONE);
+            holder.headerView.setVisibility(View.GONE);
         }
         //设置头像
-        UserUtils.setUserNick(username, holder.nameTextview);
+        UserUtils.setUserNick(username, holder.nameView);
         //设置头像
         UserUtils.setUserAvatar(getContext(), username, holder.avatar);
         
@@ -94,6 +95,15 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
             	 holder.unreadMsgView.setVisibility(View.INVISIBLE);
              }
         }
+        
+        if(primaryColor != 0)
+            holder.nameView.setTextColor(primaryColor);
+        if(primarySize != 0)
+            holder.nameView.setTextSize(TypedValue.COMPLEX_UNIT_PX, primarySize);
+        if(initialLetterBg != null)
+            holder.headerView.setBackgroundDrawable(initialLetterBg);
+        if(initialLetterColor != 0)
+            holder.headerView.setTextColor(initialLetterColor);
         
         return convertView;
     }
@@ -223,4 +233,31 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
             copyUserList.addAll(userList);
         }
     }
+    
+    protected int primaryColor;
+    protected int primarySize;
+    protected Drawable initialLetterBg;
+    protected int initialLetterColor;
+
+    public ContactAdapter setPrimaryColor(int primaryColor) {
+        this.primaryColor = primaryColor;
+        return this;
+    }
+
+
+    public ContactAdapter setPrimarySize(int primarySize) {
+        this.primarySize = primarySize;
+        return this;
+    }
+
+    public ContactAdapter setInitialLetterBg(Drawable initialLetterBg) {
+        this.initialLetterBg = initialLetterBg;
+        return this;
+    }
+
+    public ContactAdapter setInitialLetterColor(int initialLetterColor) {
+        this.initialLetterColor = initialLetterColor;
+        return this;
+    }
+    
 }

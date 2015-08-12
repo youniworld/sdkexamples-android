@@ -151,8 +151,10 @@ public class ContactListFragment extends Fragment {
 		contactList = new ArrayList<User>();
 		// 获取设置contactlist
 		getContactList();
+		//设置数据
 		contactListLayout.setContactList(contactList);
 		contactListLayout.init();
+		
 		listView = contactListLayout.getListView();
 		
 		//搜索框
@@ -251,7 +253,7 @@ public class ContactListFragment extends Fragment {
 		if (((AdapterContextMenuInfo) menuInfo).position > 3) {
 		    toBeProcessUser = (User) listView.getItemAtPosition(((AdapterContextMenuInfo) menuInfo).position);
 		    toBeProcessUsername = toBeProcessUser.getUsername();
-			getActivity().getMenuInflater().inflate(R.menu.context_contact_list, menu);
+			getActivity().getMenuInflater().inflate(R.menu.em_context_contact_list, menu);
 		}
 	}
 
@@ -374,17 +376,8 @@ public class ContactListFragment extends Fragment {
 	
 	// 刷新ui
 	public void refresh() {
-		try {
-			// 可能会在子线程中调到这方法
-			getActivity().runOnUiThread(new Runnable() {
-				public void run() {
-					getContactList();
-					contactListLayout.refresh();
-				}
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		getContactList();
+		contactListLayout.refresh();
 	}
 
 	@Override

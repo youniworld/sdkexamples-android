@@ -34,18 +34,18 @@ public class ContextMenu extends BaseActivity {
 		            message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)){
 		        setContentView(R.layout.em_context_menu_for_location);
 		    }else{
-		        setContentView(R.layout.context_menu_for_text);
+		        setContentView(R.layout.em_context_menu_for_text);
 		    }
 		} else if (type == EMMessage.Type.LOCATION.ordinal()) {
-		    setContentView(R.layout.context_menu_for_location);
+		    setContentView(R.layout.em_context_menu_for_location);
 		} else if (type == EMMessage.Type.IMAGE.ordinal()) {
-		    setContentView(R.layout.context_menu_for_image);
+		    setContentView(R.layout.em_context_menu_for_image);
 		} else if (type == EMMessage.Type.VOICE.ordinal()) {
-		    setContentView(R.layout.context_menu_for_voice);
+		    setContentView(R.layout.em_context_menu_for_voice);
 		} else if (type == EMMessage.Type.VIDEO.ordinal()) {
-			setContentView(R.layout.context_menu_for_video);
+			setContentView(R.layout.em_context_menu_for_video);
 		} else if (type == EMMessage.Type.FILE.ordinal()) {
-		    setContentView(R.layout.context_menu_for_location);
+		    setContentView(R.layout.em_context_menu_for_location);
 		}
 		    
 	}
@@ -57,15 +57,15 @@ public class ContextMenu extends BaseActivity {
 	}
 
 	public void copy(View view){
-		setResult(ChatActivity.RESULT_CODE_COPY);
+		setResult(ChatFragment.RESULT_CODE_COPY);
 		finish();
 	}
 	public void delete(View view){
-		setResult(ChatActivity.RESULT_CODE_DELETE);
+		setResult(ChatFragment.RESULT_CODE_DELETE);
 		finish();
 	}
 	public void forward(View view){
-		setResult(ChatActivity.RESULT_CODE_FORWARD);
+		setResult(ChatFragment.RESULT_CODE_FORWARD);
 		finish();
 	}
 	

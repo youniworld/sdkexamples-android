@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/common_bg"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
-    <com.easemob.applib.widget.EMTitleBar
+    <com.easemob.chatuilib.widget.EMTitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,10 +21,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <com.easemob.applib.widget.EMContactList
+        <com.easemob.chatuilib.widget.EMContactList
             android:id="@+id/contact_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+            <!-- easemob:ctsListInitialLetterBg="#abc" -->
 
         <LinearLayout
             android:id="@+id/progress_bar"

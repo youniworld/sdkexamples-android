@@ -144,6 +144,7 @@ public class DemoHXSDKHelper extends HXSDKHelper{
                 //从服务器获取的数据，最好缓存起来，避免频繁的网络请求
                 if(username.equals(EMChatManager.getInstance().getCurrentUser()))
                     return getUserProfileManager().getCurrentUserInfo();
+                //TODO 获取群人员用户信息，demo未实现
                 return getContactList().get(username);
             }
         });
@@ -354,7 +355,7 @@ public class DemoHXSDKHelper extends HXSDKHelper{
                         intent.putExtra("chatType", Constant.CHATTYPE_SINGLE);
                     } else { // 群聊信息
                         // message.getTo()为群聊id
-                        intent.putExtra("groupId", message.getTo());
+                        intent.putExtra("userId", message.getTo());
                         if(chatType == ChatType.GroupChat){
                             intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
                         }else{

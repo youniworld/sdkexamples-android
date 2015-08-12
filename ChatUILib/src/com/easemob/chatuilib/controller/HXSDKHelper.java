@@ -693,7 +693,11 @@ public abstract class HXSDKHelper {
         userProvider = provider;
     }
     
-    public UserProvider getUserInfoProvider(){
+    /**
+     * 获取用户属性提供者
+     * @return
+     */
+    public UserProvider getUserProvider(){
         return userProvider;
     }
     

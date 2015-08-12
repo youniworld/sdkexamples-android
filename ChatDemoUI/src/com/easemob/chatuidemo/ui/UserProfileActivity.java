@@ -129,7 +129,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 					}else{
 						Picasso.with(UserProfileActivity.this).load(R.drawable.em_default_avatar).into(headAvatar);
 					}
-					((DemoHXSDKHelper) HXSDKHelper.getInstance()).saveContact(newUser);
+					((DemoHXSDKHelper) HXSDKHelper.getInstance()).saveContact(user);
 				}
 			}
 			

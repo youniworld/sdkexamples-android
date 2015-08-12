@@ -18,7 +18,11 @@
     </declare-styleable>
     
     <declare-styleable name="EMContactList">
-        
+        <attr name="ctsListPrimaryTextColor" format="color"/>
+        <attr name="ctsListPrimaryTextSize" format="dimension"/>
+        <attr name="ctsListShowSiderBar" format="boolean"/>
+        <attr name="ctsListInitialLetterBg" format="reference|color"/>
+        <attr name="ctsListInitialLetterColor" format="color"/>
     </declare-styleable>
     
     <declare-styleable name="EMEmojicon">

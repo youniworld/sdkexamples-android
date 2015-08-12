@@ -91,8 +91,8 @@ public class GroupsActivity extends BaseActivity {
 		groupListView = (ListView) findViewById(R.id.list);
 		
 		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
-		swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
-		                android.R.color.holo_orange_light, android.R.color.holo_red_light);
+		swipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright, R.color.holo_green_light,
+		                R.color.holo_orange_light, R.color.holo_red_light);
 		swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
@@ -118,7 +118,7 @@ public class GroupsActivity extends BaseActivity {
 					Intent intent = new Intent(GroupsActivity.this, ChatActivity.class);
 					// it is group chat
 					intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
-					intent.putExtra("groupId", groupAdapter.getItem(position - 3).getGroupId());
+					intent.putExtra("userId", groupAdapter.getItem(position - 3).getGroupId());
 					startActivityForResult(intent, 0);
 				}
 			}

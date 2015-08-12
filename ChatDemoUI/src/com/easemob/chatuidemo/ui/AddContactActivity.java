@@ -33,6 +33,7 @@ import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuilib.controller.HXSDKHelper;
+import com.easemob.chatuilib.widget.EMAlertDialog;
 
 public class AddContactActivity extends BaseActivity{
 	private EditText editText;
@@ -74,8 +75,7 @@ public class AddContactActivity extends BaseActivity{
 		if (getString(R.string.button_search).equals(saveText)) {
 			toAddUsername = name;
 			if(TextUtils.isEmpty(name)) {
-				String st = getResources().getString(R.string.Please_enter_a_username);
-				startActivity(new Intent(this, AlertDialog.class).putExtra("msg", st));
+				new EMAlertDialog(this, R.string.Please_enter_a_username).show();
 				return;
 			}
 			
@@ -94,19 +94,17 @@ public class AddContactActivity extends BaseActivity{
 	 */
 	public void addContact(View view){
 		if(DemoApplication.getInstance().getUserName().equals(nameText.getText().toString())){
-			String str = getString(R.string.not_add_myself);
-			startActivity(new Intent(this, AlertDialog.class).putExtra("msg", str));
+			new EMAlertDialog(this, R.string.not_add_myself).show();
 			return;
 		}
 		
 		if(((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().containsKey(nameText.getText().toString())){
-		    //提示已在好友列表中，无需添加
+		    //提示已在好友列表中(在黑名单列表里)，无需添加
 		    if(EMContactManager.getInstance().getBlackListUsernames().contains(nameText.getText().toString())){
-		        startActivity(new Intent(this, AlertDialog.class).putExtra("msg", "此用户已是你好友(被拉黑状态)，从黑名单列表中移出即可"));
+		        new EMAlertDialog(this, R.string.user_already_in_contactlist).show();
 		        return;
 		    }
-			String strin = getString(R.string.This_user_is_already_your_friend);
-			startActivity(new Intent(this, AlertDialog.class).putExtra("msg", strin));
+			new EMAlertDialog(this, R.string.This_user_is_already_your_friend).show();
 			return;
 		}
 		

@@ -26,8 +26,6 @@ public class User extends EMContact {
 	 */
 	protected String avatar;
 	
-	private User(){}
-	
 	public User(String username){
 	    this.username = username;
 	}

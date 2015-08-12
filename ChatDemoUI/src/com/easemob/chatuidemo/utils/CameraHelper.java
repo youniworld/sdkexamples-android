@@ -129,20 +129,20 @@ public class CameraHelper implements PreviewCallback {
             // 根据屏幕方向写入及传输数据
             if (isScreenOriatationPortrait()) {
                 if(cameraInfo.orientation == 90 || cameraInfo.orientation == 0)
-                    YUV420spRotate90(yuv_Rotate90,yuv_frame,  mwidth,mheight);
+                    YUV420spRotate90(yuv_Rotate90, yuv_frame, mwidth, mheight);
                 else if(cameraInfo.orientation == 270)
-                    YUV420spRotate270(yuv_Rotate90,yuv_frame,  mwidth,mheight);
+                    YUV420spRotate270(yuv_Rotate90,yuv_frame, mwidth, mheight);
                 callHelper.processPreviewData(mheight, mwidth, yuv_Rotate90);
             } else {
                 if(cameraInfo.orientation == 90 || cameraInfo.orientation == 0)
                 {
-                    YUV420spRotate180(yuv_Rotate90,yuv_frame,mwidth,mheight);
-                    YUV42left2right(yuv_frame,yuv_Rotate90,mwidth,mheight);
+                    YUV420spRotate180(yuv_Rotate90,yuv_frame, mwidth, mheight);
+                    YUV42left2right(yuv_frame,yuv_Rotate90, mwidth, mheight);
                     callHelper.processPreviewData(mheight, mwidth, yuv_frame);
                 }
                 else
                 {
-                    YUV42left2right(yuv_Rotate90,yuv_frame,mwidth,mheight);
+                    YUV42left2right(yuv_Rotate90,yuv_frame, mwidth, mheight);
                     callHelper.processPreviewData(mheight, mwidth, yuv_Rotate90);
                 }
 

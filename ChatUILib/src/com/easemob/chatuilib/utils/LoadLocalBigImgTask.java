@@ -72,7 +72,7 @@ public class LoadLocalBigImgTask extends AsyncTask<Void, Void, Bitmap> {
 			ImageCache.getInstance().put(path, result);
 		else
 			result = BitmapFactory.decodeResource(context.getResources(),
-					R.drawable.em_signin_local_gallry);
+					R.drawable.em_default_image);
 		photoView.setImageBitmap(result);
 	}
 }

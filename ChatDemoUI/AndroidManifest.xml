@@ -150,7 +150,7 @@
         </activity>
         <!-- 地图 -->
         <activity
-            android:name="com.easemob.chatuidemo.ui.BaiduMapActivity"
+            android:name="com.easemob.chatuilib.ui.BaiduMapActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" >
         </activity>
@@ -174,21 +174,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyle" >
         </activity>
-        <!-- 自定义的alertdialog -->
-        <activity
-            android:name="com.easemob.chatuidemo.ui.AlertDialog"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyDialogStyle" >
-        </activity>
         <!-- 显示下载大图页面 -->
         <activity
-            android:name="com.easemob.chatuidemo.ui.ShowBigImage"
+            android:name="com.easemob.chatuilib.ui.ShowBigImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" >
         </activity>
         <!-- 下载文件 -->
         <activity
-            android:name="com.easemob.chatuidemo.ui.ShowNormalFileActivity"
+            android:name="com.easemob.chatuilib.ui.ShowNormalFileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" >
         </activity>

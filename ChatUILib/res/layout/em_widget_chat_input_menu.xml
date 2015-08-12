@@ -7,7 +7,7 @@
     android:layout_alignParentBottom="true"
     android:orientation="vertical" >
 
-    <com.easemob.applib.widget.EMChatPrimaryMenu
+    <com.easemob.chatuilib.widget.EMChatPrimaryMenu
         android:id="@+id/primary_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -19,7 +19,7 @@
         android:background="#fff"
         android:visibility="gone" >
 
-        <com.easemob.applib.widget.EMChatExtendMenu
+        <com.easemob.chatuilib.widget.EMChatExtendMenu
             android:id="@+id/extend_menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_marginTop="6dp"
             easemob:numColumns="4" />
 
-        <com.easemob.applib.widget.EMEmojicon
+        <com.easemob.chatuilib.widget.EMEmojicon
             android:id="@+id/emojicon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

@@ -64,7 +64,7 @@ public class ChatRoomActivity extends BaseActivity {
 					Intent intent = new Intent(ChatRoomActivity.this, ChatActivity.class);
 					// it is group chat
 					intent.putExtra("chatType", Constant.CHATTYPE_CHATROOM);
-					intent.putExtra("groupId", chatRoomAdapter.getItem(position - 2).getId());
+					intent.putExtra("userId", chatRoomAdapter.getItem(position - 2).getId());
 					startActivityForResult(intent, 0);
 				}
 			}

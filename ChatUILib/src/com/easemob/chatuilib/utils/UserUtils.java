@@ -15,7 +15,7 @@ public class UserUtils {
     static UserProvider userProvider;
     
     static {
-        userProvider = HXSDKHelper.getInstance().getUserInfoProvider();
+        userProvider = HXSDKHelper.getInstance().getUserProvider();
     }
     
     /**
@@ -41,8 +41,9 @@ public class UserUtils {
                 int avatarResId = Integer.parseInt(user.getAvatar());
                 Picasso.with(context).load(avatarResId).into(imageView);
             } catch (Exception e) {
+                //正常的string路径
+                Picasso.with(context).load(user.getAvatar()).placeholder(R.drawable.em_default_avatar).into(imageView);
             }
-            Picasso.with(context).load(user.getAvatar()).placeholder(R.drawable.em_default_avatar).into(imageView);
         }else{
             Picasso.with(context).load(R.drawable.em_default_avatar).into(imageView);
         }
@@ -52,12 +53,14 @@ public class UserUtils {
      * 设置用户昵称
      */
     public static void setUserNick(String username,TextView textView){
-    	User user = getUserInfo(username);
-    	if(user != null){
-    		textView.setText(user.getNick());
-    	}else{
-    		textView.setText(username);
-    	}
+        if(textView != null){
+        	User user = getUserInfo(username);
+        	if(user != null && user.getNick() != null){
+        		textView.setText(user.getNick());
+        	}else{
+        		textView.setText(username);
+        	}
+        }
     }
     
 }

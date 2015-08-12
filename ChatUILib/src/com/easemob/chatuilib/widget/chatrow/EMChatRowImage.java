@@ -156,7 +156,7 @@ public class EMChatRowImage extends EMChatRowFile{
 
                     }
                 }
-            };
+            }.execute();
 
             return true;
         }

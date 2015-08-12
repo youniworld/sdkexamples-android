@@ -6,7 +6,7 @@
     android:animateLayoutChanges="true"
     android:background="#f2f0eb" >
 
-    <com.easemob.applib.widget.EMTitleBar
+    <com.easemob.chatuilib.widget.EMTitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,12 +18,12 @@
         android:layout_above="@+id/input_menu"
         android:layout_below="@id/title_bar" >
 
-        <com.easemob.applib.widget.EMChatMessageList
+        <com.easemob.chatuilib.widget.EMChatMessageList
             android:id="@+id/message_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.easemob.applib.widget.EMVoiceRecorderView
+        <com.easemob.chatuilib.widget.EMVoiceRecorderView
             android:id="@+id/voice_recorder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:visibility="invisible" />
     </RelativeLayout>
 
-    <com.easemob.applib.widget.EMChatInputMenu
+    <com.easemob.chatuilib.widget.EMChatInputMenu
         android:id="@+id/input_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -123,7 +123,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
                 
                 final EMChatRoom room = adapter.getItem(position);
                 startActivity(new Intent(PublicChatRoomsActivity.this, ChatActivity.class).putExtra("chatType", 3).
-                		putExtra("groupId", room.getId()));
+                		putExtra("userId", room.getId()));
                 
             }
         });

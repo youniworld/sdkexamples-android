@@ -115,7 +115,8 @@ public abstract class EMChatRow extends LinearLayout {
         //设置头像和nick
         if(message.direct == Direct.SEND){
             UserUtils.setUserAvatar(context, EMChatManager.getInstance().getCurrentUser(), userAvatarView);
-            UserUtils.setUserNick(EMChatManager.getInstance().getCurrentUser(), usernickView);
+            //发送方不显示nick
+//            UserUtils.setUserNick(EMChatManager.getInstance().getCurrentUser(), usernickView);
         }else{
             UserUtils.setUserAvatar(context, message.getFrom(), userAvatarView);
             UserUtils.setUserNick(message.getFrom(), usernickView);
