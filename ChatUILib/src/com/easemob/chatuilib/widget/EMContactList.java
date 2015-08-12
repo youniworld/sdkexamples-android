@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -72,7 +73,7 @@ public class EMContactList extends RelativeLayout {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EMContactList);
         primaryColor = ta.getColor(R.styleable.EMContactList_ctsListPrimaryTextColor, 0);
         primarySize = ta.getDimensionPixelSize(R.styleable.EMContactList_ctsListPrimaryTextSize, 0);
-        showSiderBar = ta.getBoolean(R.styleable.EMContactList_ctsListShowSiderBar, false);
+        showSiderBar = ta.getBoolean(R.styleable.EMContactList_ctsListShowSiderBar, true);
         initialLetterBg = ta.getDrawable(R.styleable.EMContactList_ctsListInitialLetterBg);
         initialLetterColor = ta.getColor(R.styleable.EMContactList_ctsListInitialLetterColor, 0);
         ta.recycle();
@@ -80,8 +81,9 @@ public class EMContactList extends RelativeLayout {
         
         LayoutInflater.from(context).inflate(R.layout.em_widget_contact_list, this);
         listView = (ListView)findViewById(R.id.list);
-        
-        
+        sidebar = (EMSidebar) findViewById(R.id.sidebar);
+        if(!showSiderBar)
+            sidebar.setVisibility(View.GONE);
     }
     
     /*
@@ -96,8 +98,8 @@ public class EMContactList extends RelativeLayout {
         adapter.setPrimaryColor(primaryColor).setPrimarySize(primarySize).setInitialLetterBg(initialLetterBg)
             .setInitialLetterColor(initialLetterColor);
         listView.setAdapter(adapter);
+        
         if(showSiderBar){
-            sidebar = (EMSidebar) findViewById(R.id.sidebar);
             sidebar.setListView(listView);
         }
     }

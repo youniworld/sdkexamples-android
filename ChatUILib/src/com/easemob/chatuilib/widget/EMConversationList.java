@@ -36,6 +36,7 @@ import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chatuilib.R;
 import com.easemob.chatuilib.controller.HXSDKHelper;
+import com.easemob.chatuilib.domain.User;
 import com.easemob.chatuilib.utils.CommonUtils;
 import com.easemob.chatuilib.utils.SmileUtils;
 import com.easemob.chatuilib.utils.UserUtils;
@@ -43,22 +44,20 @@ import com.easemob.util.DateUtils;
 
 public class EMConversationList extends ListView {
     
-    private int primaryColor;
-    private int secondaryColor;
-    private int timeColor;
-    private int primarySize;
-    private int secondarySize;
-    private float timeSize;
+    protected int primaryColor;
+    protected int secondaryColor;
+    protected int timeColor;
+    protected int primarySize;
+    protected int secondarySize;
+    protected float timeSize;
     
-    public interface EMConversationListWidgetUser {
-        public void onClick(EMConversation conversation);
-    }
 
-    private final int MSG_REFRESH_ADAPTER_DATA = 0;
+    protected final int MSG_REFRESH_ADAPTER_DATA = 0;
     
-    private Context context;
-    private ConverastionListAdapater adapter;
-    private List<EMConversation> allConversations = new ArrayList<EMConversation>();
+    protected Context context;
+    protected ConverastionAdapater adapter;
+    protected List<EMConversation> allConversations = new ArrayList<EMConversation>();
+    
     
     public EMConversationList(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -86,7 +85,7 @@ public class EMConversationList extends ListView {
     }
     
     public void init(){
-        adapter = new ConverastionListAdapater(context, 0, allConversations);
+        adapter = new ConverastionAdapater(context, 0, allConversations);
         setAdapter(adapter);
 
         refresh();
@@ -187,11 +186,11 @@ public class EMConversationList extends ListView {
      * adapter
      *
      */
-    class ConverastionListAdapater extends ArrayAdapter<EMConversation> {
+    class ConverastionAdapater extends ArrayAdapter<EMConversation> {
         List<EMConversation> conversationList;
         private ConversationFilter conversationFilter;
 
-        public ConverastionListAdapater(Context context, int resource,
+        public ConverastionAdapater(Context context, int resource,
                 List<EMConversation> objects) {
             super(context, resource, objects);
             conversationList = objects;
@@ -251,17 +250,6 @@ public class EMConversationList extends ListView {
             }else {
                 UserUtils.setUserAvatar(getContext(), username, holder.avatar);
                 UserUtils.setUserNick(username, holder.name);
-//                Map<String,RobotUser> robotMap=((DemoHXSDKHelper)HXSDKHelper.getInstance()).getRobotList();
-//                if(robotMap!=null&&robotMap.containsKey(username)){
-//                    String nick = robotMap.get(username).getNick();
-//                    if(!TextUtils.isEmpty(nick)){
-//                        holder.name.setText(nick);
-//                    }else{
-//                        holder.name.setText(username);
-//                    }
-//                }else{ 
-//                    holder.name.setText(username);
-//                }
             }
 
             if (conversation.getUnreadMsgCount() > 0) {
@@ -333,6 +321,10 @@ public class EMConversationList extends ListView {
                                 username);
                         if (group != null) {
                             username = group.getGroupName();
+                        } else {
+                            User user = UserUtils.getUserInfo(username);
+                            if(user != null && user.getNick() != null)
+                                username = user.getNick();
                         }
                         container.put(username, conversation);
                     }

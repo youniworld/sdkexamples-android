@@ -3,10 +3,11 @@ package com.easemob.chatuidemo.ui;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -47,16 +48,19 @@ import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
+import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuilib.controller.HXSDKHelper;
 import com.easemob.chatuilib.controller.HXSDKHelper.UserProvider;
 import com.easemob.chatuilib.model.GroupRemoveListener;
 import com.easemob.chatuilib.ui.BaiduMapActivity;
 import com.easemob.chatuilib.utils.CommonUtils;
+import com.easemob.chatuilib.utils.ImageUtils;
 import com.easemob.chatuilib.widget.EMAlertDialog;
 import com.easemob.chatuilib.widget.EMAlertDialog.AlertDialogUser;
 import com.easemob.chatuilib.widget.EMChatExtendMenu.ChatExtendMenuItemClickListener;
@@ -129,6 +133,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
             R.drawable.em_chat_voice_call_selector, R.drawable.em_chat_video_call_selector };
     protected int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION, ITEM_VIDEO, ITEM_FILE, ITEM_VOICE_CALL,
             ITEM_VIDEO_CALL };
+    private boolean isRobot;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -216,6 +221,10 @@ public class ChatFragment extends Fragment implements EMEventListener {
 
         titleBar.setTitle(toChatUsername);
         if (chatType == Constant.CHATTYPE_SINGLE) { // 单聊
+            Map<String,RobotUser> robotMap=((DemoHXSDKHelper)HXSDKHelper.getInstance()).getRobotList();
+            if(robotMap!=null&&robotMap.containsKey(toChatUsername)){
+                isRobot = true;
+            }
             // 设置标题
             if(userProvider != null && userProvider.getUser(toChatUsername) != null){
                 titleBar.setTitle(userProvider.getUser(toChatUsername).getNick());
@@ -287,6 +296,13 @@ public class ChatFragment extends Fragment implements EMEventListener {
         });
 
         setRefreshLayoutListener();
+        
+        // show forward message if the message is not null
+        String forward_msg_id = getArguments().getString("forward_msg_id");
+        if (forward_msg_id != null) {
+            // 发送要转发的消息
+            forwardMessage(forward_msg_id);
+        }
     }
 
     protected void setListItemClickListener() {
@@ -651,28 +667,39 @@ public class ChatFragment extends Fragment implements EMEventListener {
 
     }
 
+    //发送消息方法
+    //==========================================================================
     protected void sendTextMessage(String content) {
-        messageList.sendTextMessage(content, null);
+        messageList.sendTextMessage(content, getAttributesMap());
     }
 
     protected void sendVoiceMessage(String filePath, String fileName, int length) {
-        messageList.sendVoiceMessage(filePath, fileName, length, null);
+        messageList.sendVoiceMessage(filePath, fileName, length, getAttributesMap());
     }
 
     protected void sendImageMessage(String imagePath) {
-        messageList.sendImageMessage(imagePath, false, null);
+        messageList.sendImageMessage(imagePath, false, getAttributesMap());
     }
 
     protected void sendLocationMessage(double latitude, double longitude, String locationAddress) {
-        messageList.sendLocationMessage(latitude, longitude, locationAddress, null);
+        messageList.sendLocationMessage(latitude, longitude, locationAddress, getAttributesMap());
     }
 
     protected void sendVideoMessage(String filePath, String thumbPath, int length) {
-        messageList.sendVideoMessage(filePath, thumbPath, length, null);
+        messageList.sendVideoMessage(filePath, thumbPath, length, getAttributesMap());
     }
 
     protected void sendFileMessage(Uri uri) {
-        messageList.sendFileMessage(uri, null);
+        messageList.sendFileMessage(uri, getAttributesMap());
+    }
+    
+    //===================================================================================
+    
+    private Map<String, Object> getAttributesMap(){
+        Map<String, Object> map = new HashMap<String, Object>();
+        if(isRobot)
+            map.put("em_robot_message", true);
+        return map;
     }
 
     protected void startVoiceCall() {
@@ -865,6 +892,41 @@ public class ChatFragment extends Fragment implements EMEventListener {
                         InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
+    
+    /**
+     * 转发消息
+     * 
+     * @param forward_msg_id
+     */
+    protected void forwardMessage(String forward_msg_id) {
+        final EMMessage forward_msg = EMChatManager.getInstance().getMessage(forward_msg_id);
+        EMMessage.Type type = forward_msg.getType();
+        switch (type) {
+        case TXT:
+            // 获取消息内容，发送消息
+            String content = ((TextMessageBody) forward_msg.getBody()).getMessage();
+            sendTextMessage(content);
+            break;
+        case IMAGE:
+            // 发送图片
+            String filePath = ((ImageMessageBody) forward_msg.getBody()).getLocalUrl();
+            if (filePath != null) {
+                File file = new File(filePath);
+                if (!file.exists()) {
+                    // 不存在大图发送缩略图
+                    filePath = ImageUtils.getThumbnailImagePath(filePath);
+                }
+                sendImageMessage(filePath);
+            }
+            break;
+        default:
+            break;
+        }
+        
+        if(forward_msg.getChatType() == EMMessage.ChatType.ChatRoom){
+            EMChatManager.getInstance().leaveChatRoom(forward_msg.getTo());
+        }
+    }
 
     /**
      * 监测群组解散或者被T事件
@@ -903,4 +965,5 @@ public class ChatFragment extends Fragment implements EMEventListener {
         }
 
     }
+    
 }

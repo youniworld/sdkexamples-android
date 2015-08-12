@@ -56,7 +56,10 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
         ViewHolder holder;
         if(convertView == null){
             holder = new ViewHolder();
-            convertView = layoutInflater.inflate(R.layout.em_row_contact, null);
+            if(res == 0)
+                convertView = layoutInflater.inflate(R.layout.em_row_contact, null);
+            else
+                convertView = layoutInflater.inflate(res, null);
             holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
             holder.unreadMsgView = (TextView) convertView.findViewById(R.id.unread_msg_number);
             holder.nameView = (TextView) convertView.findViewById(R.id.name);
@@ -183,7 +186,9 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
                 final ArrayList<User> newValues = new ArrayList<User>();
                 for(int i=0;i<count;i++){
                     final User user = mOriginalList.get(i);
-                    String username = user.getUsername();
+                    String username = user.getNick();
+                    if(username == null)
+                        username = user.getNick();
                     
                     if(username.startsWith(prefixString)){
                         newValues.add(user);

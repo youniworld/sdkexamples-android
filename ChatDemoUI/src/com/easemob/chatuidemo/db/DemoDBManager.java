@@ -324,8 +324,7 @@ public class DemoDBManager {
 				String username = cursor.getString(cursor.getColumnIndex(UserDao.ROBOT_COLUMN_NAME_ID));
 				String nick = cursor.getString(cursor.getColumnIndex(UserDao.ROBOT_COLUMN_NAME_NICK));
 				String avatar = cursor.getString(cursor.getColumnIndex(UserDao.ROBOT_COLUMN_NAME_AVATAR));
-				RobotUser user = new RobotUser();
-				user.setUsername(username);
+				RobotUser user = new RobotUser(username);
 				user.setNick(nick);
 				user.setAvatar(avatar);
 				String headerName = null;
@@ -335,13 +334,13 @@ public class DemoDBManager {
 					headerName = user.getUsername();
 				}
 				if(Character.isDigit(headerName.charAt(0))){
-					user.setHeader("#");
+					user.setInitialLetter("#");
 				}else{
-					user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target
+					user.setInitialLetter(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target
 							.substring(0, 1).toUpperCase());
-					char header = user.getHeader().toLowerCase().charAt(0);
+					char header = user.getInitialLetter().toLowerCase().charAt(0);
 					if (header < 'a' || header > 'z') {
-						user.setHeader("#");
+						user.setInitialLetter("#");
 					}
 				}
 				

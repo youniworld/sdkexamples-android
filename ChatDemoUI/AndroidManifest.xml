@@ -247,7 +247,7 @@
             android:windowSoftInputMode="stateVisible" >
         </activity>
         <activity
-            android:name="com.easemob.chatuidemo.ui.ShowVideoActivity"
+            android:name="com.easemob.chatuilib.ui.ShowVideoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden" >

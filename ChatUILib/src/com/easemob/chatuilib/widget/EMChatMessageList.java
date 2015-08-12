@@ -1,7 +1,7 @@
 package com.easemob.chatuilib.widget;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.Map;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -146,7 +146,7 @@ public class EMChatMessageList extends RelativeLayout{
      * @param 
      *            扩展属性
      */
-    public void sendTextMessage(String content, HashMap<String, Object> attrs) {
+    public void sendTextMessage(String content, Map<String, Object> attrs) {
 
         if (content.length() > 0) {
             EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
@@ -177,7 +177,7 @@ public class EMChatMessageList extends RelativeLayout{
      * @param fileName
      * @param length
      */
-    public void sendVoiceMessage(String filePath, String fileName, int length, HashMap<String, Object> attrs) {
+    public void sendVoiceMessage(String filePath, String fileName, int length, Map<String, Object> attrs) {
         if (!(new File(filePath).exists())) {
             return;
         }
@@ -207,7 +207,7 @@ public class EMChatMessageList extends RelativeLayout{
      * 
      * @param filePath
      */
-    public void sendImageMessage(String filePath, boolean sendOriginalImage, HashMap<String, Object> attrs) {
+    public void sendImageMessage(String filePath, boolean sendOriginalImage, Map<String, Object> attrs) {
         String to = toChatUsername;
         // create and add image message in view
         final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
@@ -231,7 +231,7 @@ public class EMChatMessageList extends RelativeLayout{
     /**
      * 发送视频消息
      */
-    public void sendVideoMessage(String filePath, String thumbPath, int length, HashMap<String, Object> attrs) {
+    public void sendVideoMessage(String filePath, String thumbPath, int length, Map<String, Object> attrs) {
         final File videoFile = new File(filePath);
         if (!videoFile.exists()) {
             return;
@@ -265,7 +265,7 @@ public class EMChatMessageList extends RelativeLayout{
      * @param imagePath
      * @param locationAddress
      */
-    public void sendLocationMessage(double latitude, double longitude, String locationAddress, HashMap<String, Object> attrs) {
+    public void sendLocationMessage(double latitude, double longitude, String locationAddress, Map<String, Object> attrs) {
         EMMessage message = EMMessage.createSendMessage(EMMessage.Type.LOCATION);
         // 如果是群聊，设置chattype,默认是单聊
         if (chatType == EMConstant.CHATTYPE_GROUP){
@@ -287,7 +287,7 @@ public class EMChatMessageList extends RelativeLayout{
      * 
      * @param uri
      */
-    public void sendFileMessage(Uri uri, HashMap<String, Object> attrs) {
+    public void sendFileMessage(Uri uri, Map<String, Object> attrs) {
         String filePath = null;
         if ("content".equalsIgnoreCase(uri.getScheme())) {
             String[] projection = { "_data" };
@@ -340,7 +340,7 @@ public class EMChatMessageList extends RelativeLayout{
      * @param attrs
      * @param message
      */
-    protected void setAttributes(HashMap<String, Object> attrs, EMMessage message) {
+    protected void setAttributes(Map<String, Object> attrs, EMMessage message) {
         
         if(attrs != null && attrs.size() != 0){
             String[] keys = attrs.keySet().toArray(new String[]{});

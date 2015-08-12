@@ -1,5 +1,6 @@
 package com.easemob.chatuidemo.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.easemob.chatuidemo.R;
@@ -32,6 +33,18 @@ public class ChatActivity extends BaseActivity{
         activityInstance = null;
     }
     
+    @Override
+    protected void onNewIntent(Intent intent) {
+        // 点击notification bar进入聊天页面，保证只有一个聊天页面
+        String username = intent.getStringExtra("userId");
+        if (toChatUsername.equals(username))
+            super.onNewIntent(intent);
+        else {
+            finish();
+            startActivity(intent);
+        }
+
+    }
     @Override
     public void onBackPressed() {
         chatFragment.onBackPressed();

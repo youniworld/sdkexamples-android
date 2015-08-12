@@ -121,10 +121,9 @@ public class RobotsActivity extends BaseActivity {
 						swipeRefreshLayout.setRefreshing(false);
 						Map<String, RobotUser> mMap = new HashMap<String, RobotUser>();
 						for (EMContact item : value) {
-							RobotUser user = new RobotUser();
-							user.setUsername(item.getUsername());
+							RobotUser user = new RobotUser(item.getUsername());
 							user.setNick(item.getNick());
-							user.setHeader("#");
+							user.setInitialLetter("#");
 							mMap.put(item.getUsername(), user);
 						}
 						robotList.clear();

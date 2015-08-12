@@ -27,6 +27,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 
@@ -37,6 +39,7 @@ import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuilib.controller.HXSDKHelper;
 import com.easemob.chatuilib.domain.User;
+import com.easemob.chatuilib.utils.UserUtils;
 import com.easemob.chatuilib.widget.EMSidebar;
 import com.easemob.chatuilib.widget.adapter.ContactAdapter;
 
@@ -143,12 +146,15 @@ public class GroupPickContactsActivity extends BaseActivity {
 				final String username = getItem(position).getUsername();
 				// 选择框checkbox
 				final CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);
-				if(exitingMembers != null && exitingMembers.contains(username)){
-					checkBox.setButtonDrawable(R.drawable.em_checkbox_bg_gray_selector);
-				}else{
-					checkBox.setButtonDrawable(R.drawable.em_checkbox_bg_selector);
-				}
+				ImageView avatarView = (ImageView) view.findViewById(R.id.avatar);
+				TextView nameView = (TextView) view.findViewById(R.id.name);
+				
 				if (checkBox != null) {
+				    if(exitingMembers != null && exitingMembers.contains(username)){
+	                    checkBox.setButtonDrawable(R.drawable.em_checkbox_bg_gray_selector);
+	                }else{
+	                    checkBox.setButtonDrawable(R.drawable.em_checkbox_bg_selector);
+	                }
 					// checkBox.setOnCheckedChangeListener(null);
 
 					checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {

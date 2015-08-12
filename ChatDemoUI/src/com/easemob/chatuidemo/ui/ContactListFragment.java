@@ -73,7 +73,6 @@ public class ContactListFragment extends Fragment {
 	private List<User> contactList;
 	private ListView listView;
 	private boolean hidden;
-	private EMSidebar sidebar;
 	private InputMethodManager inputMethodManager;
 	private List<String> blackList;
 	ImageButton clearSearch;
