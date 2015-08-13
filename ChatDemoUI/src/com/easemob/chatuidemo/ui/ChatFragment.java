@@ -732,18 +732,17 @@ public class ChatFragment extends Fragment implements EMEventListener {
      * @param selectedImage
      */
     protected void sendPicByUri(Uri selectedImage) {
-        // String[] filePathColumn = { MediaStore.Images.Media.DATA };
-        Cursor cursor = getActivity().getContentResolver().query(selectedImage, null, null, null, null);
-        String st8 = getResources().getString(R.string.cant_find_pictures);
+        String[] filePathColumn = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex("_data");
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
             cursor = null;
 
             if (picturePath == null || picturePath.equals("null")) {
-                Toast toast = Toast.makeText(getActivity(), st8, Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getActivity(), R.string.cant_find_pictures, Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
                 return;
@@ -752,7 +751,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
         } else {
             File file = new File(selectedImage.getPath());
             if (!file.exists()) {
-                Toast toast = Toast.makeText(getActivity(), st8, Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getActivity(), R.string.cant_find_pictures, Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
                 return;
