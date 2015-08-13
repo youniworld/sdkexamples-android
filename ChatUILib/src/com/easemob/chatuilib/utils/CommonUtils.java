@@ -87,7 +87,7 @@ public class CommonUtils {
             digest = getString(context, R.string.picture);
             break;
         case VOICE:// 语音消息
-            digest = getString(context, R.string.voice);
+            digest = getString(context, R.string.voice_prefix);
             break;
         case VIDEO: // 视频消息
             digest = getString(context, R.string.video);

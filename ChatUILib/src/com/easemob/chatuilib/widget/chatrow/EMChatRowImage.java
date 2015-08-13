@@ -50,7 +50,7 @@ public class EMChatRowImage extends EMChatRowFile{
         if (message.direct == EMMessage.Direct.RECEIVE) {
             if (message.status == EMMessage.Status.INPROGRESS) {
                 imageView.setImageResource(R.drawable.em_default_image);
-                showDownloadPregress((ImageMessageBody)message.getBody());
+                setMessageReceiveCallback();
             } else {
                 progressBar.setVisibility(View.GONE);
                 percentageView.setVisibility(View.GONE);
@@ -71,7 +71,7 @@ public class EMChatRowImage extends EMChatRowFile{
         if (filePath != null) {
             showImageView(ImageUtils.getThumbnailImagePath(filePath), imageView, filePath, message);
         } 
-        handleSendMessage((ImageMessageBody)message.getBody());
+        handleSendMessage();
     }
     
     @Override

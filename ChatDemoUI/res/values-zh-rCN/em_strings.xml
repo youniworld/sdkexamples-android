@@ -171,6 +171,7 @@
     <string name="is_quit_the_group_chat">正在退出群聊...</string>
     <string name="chatting_is_dissolution">正在解散群聊...</string>
     <string name="are_empty_group_of_news">正在清空群消息...</string>
+    <string name="messages_are_empty">聊天记录已被清空</string>
     <string name="is_modify_the_group_name">正在修改群名称...</string>
     <string name="Modify_the_group_name_successful">修改群名称成功</string>
     <string name="change_the_group_name_failed_please">改变群名称失败，请检查网络或稍后重试</string>

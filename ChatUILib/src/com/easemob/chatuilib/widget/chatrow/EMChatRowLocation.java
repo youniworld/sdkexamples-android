@@ -40,6 +40,7 @@ public class EMChatRowLocation extends EMChatRow{
 
 		// deal with send message
 		if (message.direct == EMMessage.Direct.SEND) {
+		    setMessageSendCallback();
             switch (message.status) {
             case CREATE: 
                 progressBar.setVisibility(View.VISIBLE);

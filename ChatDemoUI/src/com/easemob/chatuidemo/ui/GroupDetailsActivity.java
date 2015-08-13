@@ -44,6 +44,8 @@ import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuilib.utils.UserUtils;
+import com.easemob.chatuilib.widget.EMAlertDialog;
+import com.easemob.chatuilib.widget.EMAlertDialog.AlertDialogUser;
 import com.easemob.chatuilib.widget.ExpandGridView;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
@@ -54,11 +56,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	private static final int REQUEST_CODE_ADD_USER = 0;
 	private static final int REQUEST_CODE_EXIT = 1;
 	private static final int REQUEST_CODE_EXIT_DELETE = 2;
-	private static final int REQUEST_CODE_CLEAR_ALL_HISTORY = 3;
-	private static final int REQUEST_CODE_ADD_TO_BALCKLIST = 4;
 	private static final int REQUEST_CODE_EDIT_GROUPNAME = 5;
 
-	String longClickUsername = null;
 
 	private ExpandGridView userGridview;
 	private String groupId;
@@ -67,8 +66,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	private Button deleteBtn;
 	private EMGroup group;
 	private GridAdapter adapter;
-	private int referenceWidth;
-	private int referenceHeight;
 	private ProgressDialog progressDialog;
 
 	private RelativeLayout rl_switch_block_groupmsg;
@@ -125,10 +122,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		iv_switch_unblock_groupmsg = (ImageView) findViewById(R.id.iv_switch_unblock_groupmsg);
 
 		rl_switch_block_groupmsg.setOnClickListener(this);
-
-		Drawable referenceDrawable = getResources().getDrawable(R.drawable.em_smiley_add_btn);
-		referenceWidth = referenceDrawable.getIntrinsicWidth();
-		referenceHeight = referenceDrawable.getIntrinsicHeight();
 
 
 		idText.setText(groupId);
@@ -192,10 +185,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		String st5 = getResources().getString(R.string.is_modify_the_group_name);
 		final String st6 = getResources().getString(R.string.Modify_the_group_name_successful);
 		final String st7 = getResources().getString(R.string.change_the_group_name_failed_please);
-		String st8 = getResources().getString(R.string.Are_moving_to_blacklist);
-		final String st9 = getResources().getString(R.string.failed_to_move_into);
 		
-		final String stsuccess = getResources().getString(R.string.Move_into_blacklist_success);
 		if (resultCode == RESULT_OK) {
 			if (progressDialog == null) {
 				progressDialog = new ProgressDialog(GroupDetailsActivity.this);
@@ -218,12 +208,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				progressDialog.setMessage(st3);
 				progressDialog.show();
 				deleteGrop();
-				break;
-			case REQUEST_CODE_CLEAR_ALL_HISTORY:
-				// 清空此群聊的聊天记录
-				progressDialog.setMessage(st4);
-				progressDialog.show();
-				clearGroupHistory();
 				break;
 
 			case REQUEST_CODE_EDIT_GROUPNAME: //修改群名称
@@ -258,37 +242,39 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					}).start();
 				}
 				break;
-			case REQUEST_CODE_ADD_TO_BALCKLIST:
-				progressDialog.setMessage(st8);
-				progressDialog.show();
-				new Thread(new Runnable() {
-					public void run() {
-						try {
-						    EMGroupManager.getInstance().blockUser(groupId, longClickUsername);
-							runOnUiThread(new Runnable() {
-								public void run() {
-								    refreshMembers();
-									progressDialog.dismiss();
-									Toast.makeText(getApplicationContext(), stsuccess, 0).show();
-								}
-							});
-						} catch (EaseMobException e) {
-							runOnUiThread(new Runnable() {
-								public void run() {
-									progressDialog.dismiss();
-									Toast.makeText(getApplicationContext(), st9, 0).show();
-								}
-							});
-						}
-					}
-				}).start();
-
-				break;
 			default:
 				break;
 			}
 		}
 	}
+
+    protected void addUserToBlackList(final String username) {
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setCanceledOnTouchOutside(false);
+        pd.setMessage(getString(R.string.Are_moving_to_blacklist));
+        pd.show();
+        new Thread(new Runnable() {
+        	public void run() {
+        		try {
+        		    EMGroupManager.getInstance().blockUser(groupId, username);
+        			runOnUiThread(new Runnable() {
+        				public void run() {
+        				    refreshMembers();
+        				    pd.dismiss();
+        					Toast.makeText(getApplicationContext(), R.string.Move_into_blacklist_success, 0).show();
+        				}
+        			});
+        		} catch (EaseMobException e) {
+        			runOnUiThread(new Runnable() {
+        				public void run() {
+        				    pd.dismiss();
+        					Toast.makeText(getApplicationContext(), R.string.failed_to_move_into, 0).show();
+        				}
+        			});
+        		}
+        	}
+        }).start();
+    }
 
 	private void refreshMembers(){
 	    adapter.clear();
@@ -324,12 +310,10 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	/**
 	 * 清空群聊天记录
 	 */
-	public void clearGroupHistory() {
+	private void clearGroupHistory() {
 
 		EMChatManager.getInstance().clearConversation(group.getGroupId());
-		progressDialog.dismiss();
-		// adapter.refresh(EMChatManager.getInstance().getConversation(toChatUsername));
-
+		Toast.makeText(this, R.string.messages_are_empty, 0).show();
 	}
 
 	/**
@@ -510,11 +494,16 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 		case R.id.clear_all_history: // 清空聊天记录
 			String st9 = getResources().getString(R.string.sure_to_empty_this);
-			Intent intent = new Intent(GroupDetailsActivity.this, AlertDialog.class);
-			intent.putExtra("cancel", true);
-			intent.putExtra("titleIsCancel", true);
-			intent.putExtra("msg", st9);
-			startActivityForResult(intent, REQUEST_CODE_CLEAR_ALL_HISTORY);
+			new EMAlertDialog(GroupDetailsActivity.this, null, st9, null, new AlertDialogUser() {
+                
+                @Override
+                public void onResult(boolean confirmed, Bundle bundle) {
+                    if(confirmed){
+                        clearGroupHistory();
+                    }
+                }
+            }, true).show();
+			
 			break;
 
 		case R.id.rl_blacklist: // 黑名单列表
@@ -647,7 +636,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						if (isInDeleteMode) {
 							// 如果是删除自己，return
 							if (EMChatManager.getInstance().getCurrentUser().equals(username)) {
-								startActivity(new Intent(GroupDetailsActivity.this, AlertDialog.class).putExtra("msg", st12));
+							    new EMAlertDialog(GroupDetailsActivity.this, st12).show();
 								return;
 							}
 							if (!NetUtils.hasNetwork(getApplicationContext())) {
@@ -715,11 +704,16 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					    if(EMChatManager.getInstance().getCurrentUser().equals(username))
 					        return true;
 						if (group.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {
-							Intent intent = new Intent(GroupDetailsActivity.this, AlertDialog.class);
-							intent.putExtra("msg", st15);
-							intent.putExtra("cancel", true);
-							startActivityForResult(intent, REQUEST_CODE_ADD_TO_BALCKLIST);
-							longClickUsername = username;
+							new EMAlertDialog(GroupDetailsActivity.this, null, st15, null, new AlertDialogUser() {
+                                
+                                @Override
+                                public void onResult(boolean confirmed, Bundle bundle) {
+                                    if(confirmed){
+                                        addUserToBlackList(username);
+                                    }
+                                }
+                            }, true).show();
+							
 						}
 						return false;
 					}

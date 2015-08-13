@@ -3,6 +3,9 @@ package com.easemob.chatuilib.widget;
 import java.io.File;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.Cursor;
@@ -29,20 +32,22 @@ import com.easemob.chatuilib.EMConstant;
 import com.easemob.chatuilib.R;
 import com.easemob.chatuilib.widget.adapter.MessageAdapter;
 import com.easemob.chatuilib.widget.chatrow.EMChatRow;
+import com.easemob.util.EMLog;
 
 public class EMChatMessageList extends RelativeLayout{
     
+    protected static final String TAG = "EMChatMessageList";
     protected ListView messageListView;
     protected SwipeRefreshLayout swipeRefreshLayout;
-	private Context context;
-    private EMConversation conversation;
-    private int chatType;
-    private String toChatUsername;
-    private MessageAdapter messageAdapter;
-    private boolean showUserNick;
-    private boolean showAvatar;
-    private Drawable myBubbleBg;
-    private Drawable otherBuddleBg;
+    protected Context context;
+    protected EMConversation conversation;
+    protected int chatType;
+    protected String toChatUsername;
+    protected MessageAdapter messageAdapter;
+    protected boolean showUserNick;
+    protected boolean showAvatar;
+    protected Drawable myBubbleBg;
+    protected Drawable otherBuddleBg;
 
 	public EMChatMessageList(Context context, AttributeSet attrs, int defStyle) {
         this(context, attrs);
@@ -96,6 +101,8 @@ public class EMChatMessageList extends RelativeLayout{
         showUserNick = ta.getBoolean(R.styleable.EMChatMessageList_msgListShowUserNick, false);
         ta.recycle();
     }
+    
+    
     /**
      * 发送消息
      * @param message 要发送的消息.
@@ -345,8 +352,31 @@ public class EMChatMessageList extends RelativeLayout{
         if(attrs != null && attrs.size() != 0){
             String[] keys = attrs.keySet().toArray(new String[]{});
             for(int i = 0; i < attrs.size(); i++){
-                message.setObjectAttribute(keys[i], attrs.get(keys[i]));
+                setObjectAttribute(message, keys[i], attrs.get(keys[i]));
             }
+        }
+    }
+    
+    /**
+     * 设置扩展属性，value必须是integer、String、boolean、JSONObject、JSONArray类型中的一种
+     * @param message
+     * @param attribute
+     * @param value
+     */
+    public void setObjectAttribute(EMMessage message, String attribute, Object value) {
+        if(value != null){
+            if(value instanceof Boolean)
+                message.setAttribute(attribute, (Boolean)value);
+            else if(value instanceof String)
+                message.setAttribute(attribute, (String)value);
+            else if(value instanceof Integer)
+                message.setAttribute(attribute, (Integer)value);
+            else if(value instanceof JSONObject)
+                message.setAttribute(attribute, (JSONObject)value);
+            else if(value instanceof JSONArray)
+                message.setAttribute(attribute, (JSONArray)value);
+            else
+                EMLog.d(TAG, "unsupport value");
         }
     }
     

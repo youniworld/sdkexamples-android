@@ -171,6 +171,7 @@
     <string name="Modify_the_group_name_successful">Modify the group name successful</string>
     <string name="change_the_group_name_failed_please">Failed to change the group name, please check the network or try again later</string>
     <string name="Are_moving_to_blacklist">Moving to blacklist</string>
+    <string name="messages_are_empty">Messages has been cleared</string>
     <string name="failed_to_move_into">Failed to move to the blacklist, please check the network or try again later</string>
     <string name="Exit_the_group_chat_failure">Failed to exit the group:</string>
     <string name="Dissolve_group_chat_tofail">Failed to dismiss the group:</string>

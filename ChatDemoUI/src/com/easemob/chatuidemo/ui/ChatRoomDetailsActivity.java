@@ -40,7 +40,9 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatRoom;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuilib.utils.UserUtils;
+import com.easemob.chatuilib.widget.EMAlertDialog;
 import com.easemob.chatuilib.widget.ExpandGridView;
+import com.easemob.chatuilib.widget.EMAlertDialog.AlertDialogUser;
 import com.easemob.util.EMLog;
 import com.easemob.util.NetUtils;
 
@@ -48,7 +50,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	private static final String TAG = "ChatRoomDetailsActivity";
 	private static final int REQUEST_CODE_EXIT = 1;
 	private static final int REQUEST_CODE_EXIT_DELETE = 2;
-	private static final int REQUEST_CODE_CLEAR_ALL_HISTORY = 3;
 
 	String longClickUsername = null;
 
@@ -177,12 +178,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 				progressDialog.show();
 				exitGrop();
 				break;
-			case REQUEST_CODE_CLEAR_ALL_HISTORY:
-				// 清空此群聊的聊天记录
-				progressDialog.setMessage(st4);
-				progressDialog.show();
-				clearGroupHistory();
-				break;
 
 			default:
 				break;
@@ -216,7 +211,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	 */
 	public void clearGroupHistory() {
 		EMChatManager.getInstance().clearConversation(room.getId());
-		progressDialog.dismiss();
+		Toast.makeText(this, R.string.messages_are_empty, 0).show();
 	}
 
 	/**
@@ -292,11 +287,15 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		switch (v.getId()) {
 		case R.id.clear_all_history: // 清空聊天记录
 			String st9 = getResources().getString(R.string.sure_to_empty_this);
-			Intent intent = new Intent(ChatRoomDetailsActivity.this, AlertDialog.class);
-			intent.putExtra("cancel", true);
-			intent.putExtra("titleIsCancel", true);
-			intent.putExtra("msg", st9);
-			startActivityForResult(intent, REQUEST_CODE_CLEAR_ALL_HISTORY);
+			new EMAlertDialog(ChatRoomDetailsActivity.this, null, st9, null, new AlertDialogUser() {
+                
+                @Override
+                public void onResult(boolean confirmed, Bundle bundle) {
+                    if(confirmed){
+                        clearGroupHistory();
+                    }
+                }
+            }, true).show();
 			break;
 
 		default:
@@ -411,17 +410,13 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 				} else {
 					convertView.findViewById(R.id.badge_delete).setVisibility(View.INVISIBLE);
 				}
-				final String st12 = getResources().getString(R.string.not_delete_myself);
-				final String st13 = getResources().getString(R.string.Are_removed);
-				final String st14 = getResources().getString(R.string.Delete_failed);
-				final String st15 = getResources().getString(R.string.confirm_the_members);
 				button.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						if (isInDeleteMode) {
 							// 如果是删除自己，return
 							if (EMChatManager.getInstance().getCurrentUser().equals(username)) {
-								startActivity(new Intent(ChatRoomDetailsActivity.this, AlertDialog.class).putExtra("msg", st12));
+							    new EMAlertDialog(ChatRoomDetailsActivity.this, R.string.not_delete_myself).show();
 								return;
 							}
 							if (!NetUtils.hasNetwork(getApplicationContext())) {

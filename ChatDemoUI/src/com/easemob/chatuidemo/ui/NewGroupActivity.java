@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuilib.widget.EMAlertDialog;
 import com.easemob.exceptions.EaseMobException;
 
 public class NewGroupActivity extends BaseActivity {
@@ -65,12 +66,9 @@ public class NewGroupActivity extends BaseActivity {
 	 * @param v
 	 */
 	public void save(View v) {
-		String str6 = getResources().getString(R.string.Group_name_cannot_be_empty);
 		String name = groupNameEditText.getText().toString();
 		if (TextUtils.isEmpty(name)) {
-			Intent intent = new Intent(this, AlertDialog.class);
-			intent.putExtra("msg", str6);
-			startActivity(intent);
+		    new EMAlertDialog(this, R.string.Group_name_cannot_be_empty).show();
 		} else {
 			// 进通讯录选人
 			startActivityForResult(new Intent(this, GroupPickContactsActivity.class).putExtra("groupName", name), 0);

@@ -39,6 +39,7 @@ public class EMChatRowText extends EMChatRow{
         contentView.setText(span, BufferType.SPANNABLE);
 
         if (message.direct == EMMessage.Direct.SEND) {
+            setMessageSendCallback();
             switch (message.status) {
             case CREATE: 
                 progressBar.setVisibility(View.VISIBLE);

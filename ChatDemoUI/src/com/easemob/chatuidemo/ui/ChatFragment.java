@@ -163,6 +163,8 @@ public class ChatFragment extends Fragment implements EMEventListener {
 
         // 消息列表layout
         messageList = (EMChatMessageList) getView().findViewById(R.id.message_list);
+        if(chatType != Constant.CHATTYPE_SINGLE)
+            messageList.setShowUserNick(true);
         messageList.init(toChatUsername, chatType);
         listView = messageList.getListView();
 

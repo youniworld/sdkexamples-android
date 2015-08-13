@@ -136,6 +136,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 			}
 
 		} catch (Exception e) {
+		    System.out.println();
 		}
 	}
 

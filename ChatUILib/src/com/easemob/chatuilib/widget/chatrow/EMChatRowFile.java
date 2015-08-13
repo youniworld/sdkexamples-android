@@ -25,7 +25,6 @@ public class EMChatRowFile extends EMChatRow{
     protected TextView fileNameView;
 	protected TextView fileSizeView;
     protected TextView fileStateView;
-    protected TextView percentageView;
     
     protected EMCallBack sendfileCallBack;
     
@@ -68,14 +67,14 @@ public class EMChatRowFile extends EMChatRow{
         }
 
         // until here, deal with send voice msg
-        handleSendMessage(fileMessageBody);
+        handleSendMessage();
 	}
 
 	/**
 	 * 处理发送消息
-	 * @param fileMessageBody
 	 */
-    protected void handleSendMessage(final FileMessageBody fileMessageBody) {
+    protected void handleSendMessage() {
+        setMessageSendCallback();
         switch (message.status) {
         case SUCCESS:
             progressBar.setVisibility(View.INVISIBLE);
@@ -96,32 +95,6 @@ public class EMChatRowFile extends EMChatRow{
                 percentageView.setText(message.progress + "%");
             }
             statusView.setVisibility(View.INVISIBLE);
-            if(sendfileCallBack == null){
-                sendfileCallBack = new EMCallBack() {
-                    
-                    @Override
-                    public void onSuccess() {
-                        updateView();
-                    }
-                    
-                    @Override
-                    public void onProgress(final int progress, String status) {
-                        activity.runOnUiThread(new Runnable() {
-                            public void run() {
-                                if(percentageView != null){
-                                    percentageView.setText(progress + "%");
-                                }
-                            }
-                        });
-                    }
-                    
-                    @Override
-                    public void onError(int code, String message) {
-                        updateView();
-                    }
-                };
-                fileMessageBody.setSendCallBack(sendfileCallBack);
-            }
             break;
         default:
             progressBar.setVisibility(View.VISIBLE);
@@ -136,73 +109,6 @@ public class EMChatRowFile extends EMChatRow{
         }
     }
 	
-    /**
-     * 显示接收文件进度
-     * @param fileMessageBody
-     */
-    protected void showDownloadPregress(FileMessageBody fileMessageBody) {
-        final FileMessageBody msgbody = (FileMessageBody) message.getBody();
-        progressBar.setVisibility(View.VISIBLE);
-        if(percentageView !=null)
-            percentageView.setVisibility(View.VISIBLE);
-
-        msgbody.setDownloadCallback(new EMCallBack() {
-
-            @Override
-            public void onSuccess() {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateView();
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int code, String message) {
-                updateView();
-            }
-
-            @Override
-            public void onProgress(final int progress, String status) {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(percentageView != null)
-                            percentageView.setText(progress + "%");
-
-                    }
-                });
-
-            }
-
-        });
-    }
-    
-	
-	@Override
-	protected void sendMsgInBackground(final EMMessage message) {
-	    EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
-            
-            @Override
-            public void onSuccess() {
-                updateView();
-            }
-            
-            @Override
-            public void onProgress(int progress, String status) {
-                if(!isNotifyProcessed){
-                    isNotifyProcessed = true;
-                    updateView();
-                }
-            }
-            
-            @Override
-            public void onError(int code, String error) {
-                updateView();
-            }
-        });
-	}
 
 	@Override
     protected void onUpdateView() {

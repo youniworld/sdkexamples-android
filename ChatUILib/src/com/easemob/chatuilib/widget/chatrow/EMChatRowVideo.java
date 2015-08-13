@@ -82,7 +82,7 @@ public class EMChatRowVideo extends EMChatRowFile{
 
             if (message.status == EMMessage.Status.INPROGRESS) {
                 imageView.setImageResource(R.drawable.em_default_image);
-                showDownloadPregress(videoBody);
+                setMessageReceiveCallback();
 
             } else {
                 // System.err.println("!!!! not back receive, show image directly");
@@ -96,7 +96,7 @@ public class EMChatRowVideo extends EMChatRowFile{
             return;
         }
         //处理发送方消息
-        handleSendMessage(videoBody);
+        handleSendMessage();
 	}
 	
 	@Override

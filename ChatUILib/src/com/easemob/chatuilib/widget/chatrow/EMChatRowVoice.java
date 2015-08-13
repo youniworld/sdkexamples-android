@@ -74,7 +74,7 @@ public class EMChatRowVoice extends EMChatRowFile{
             EMLog.d(TAG, "it is receive msg");
             if (message.status == EMMessage.Status.INPROGRESS) {
                 progressBar.setVisibility(View.VISIBLE);
-                showDownloadPregress(voiceBody);
+                setMessageReceiveCallback();
             } else {
                 progressBar.setVisibility(View.INVISIBLE);
 
@@ -83,7 +83,7 @@ public class EMChatRowVoice extends EMChatRowFile{
         }
 
         // until here, deal with send voice msg
-        handleSendMessage(voiceBody);
+        handleSendMessage();
     }
 
     @Override
