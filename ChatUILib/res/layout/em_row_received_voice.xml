@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
             android:layout_toRightOf="@id/iv_userhead"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_below="@+id/tv_userid"
             android:background="@drawable/em_chatfrom_bg"
             >
@@ -54,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/bubble"
+            android:layout_alignTop="@id/bubble"
             android:gravity="center"
             android:text="3&apos;&apos;" />
 
@@ -62,6 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:layout_alignTop="@id/bubble"
             android:layout_toRightOf="@id/tv_length"
             android:src="@drawable/em_voice_unread" />
 
@@ -74,14 +76,15 @@
             android:layout_toRightOf="@id/iv_unread_voice"
             android:visibility="invisible" />
 
-        <TextView
+         <TextView
             android:id="@+id/tv_userid"
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_chat_activity"
-            android:visibility="gone"
-             />
+            android:layout_marginLeft="@dimen/chat_nick_margin_left"
+            android:textSize="@dimen/chat_nick_text_size"
+            android:layout_toRightOf="@id/iv_userhead"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

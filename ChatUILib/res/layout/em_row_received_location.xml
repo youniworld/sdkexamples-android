@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_toRightOf="@id/iv_userhead"
+            android:layout_below="@+id/tv_userid"
             android:background="@drawable/em_chatfrom_bg" >
 
             <TextView
@@ -45,14 +46,15 @@
                 android:textSize="13sp"
                 android:textColor="@android:color/white" />
         </LinearLayout>
-        <TextView
+         <TextView
             android:id="@+id/tv_userid"
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@id/bubble"
-            android:layout_below="@id/iv_userhead"/>
+            android:layout_marginLeft="@dimen/chat_nick_margin_left"
+            android:textSize="@dimen/chat_nick_text_size"
+            android:layout_toRightOf="@id/iv_userhead"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

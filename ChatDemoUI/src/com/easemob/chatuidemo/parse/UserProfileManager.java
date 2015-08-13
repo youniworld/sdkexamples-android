@@ -1,4 +1,4 @@
-package com.easemob.chatuidemo;
+package com.easemob.chatuidemo.parse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,6 @@ import android.content.Context;
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chatuidemo.parse.ParseManager;
 import com.easemob.chatuidemo.utils.PreferenceUtils;
 import com.easemob.chatuilib.controller.HXSDKHelper.HXSyncListener;
 import com.easemob.chatuilib.domain.User;
@@ -108,7 +107,7 @@ public class UserProfileManager {
 		return isSyncingContactInfosWithServer;
 	}
 
-	synchronized void reset() {
+	public synchronized void reset() {
 		isSyncingContactInfosWithServer = false;
 		currentUser = null;
 		PreferenceUtils.getInstance().removeCurrentUserInfo();

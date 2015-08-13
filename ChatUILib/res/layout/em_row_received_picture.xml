@@ -24,7 +24,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/margin_chat_activity"
-            android:background="@drawable/em_default_avatar"
+            android:src="@drawable/em_default_avatar"
             android:scaleType="fitXY" />
 
         <RelativeLayout
@@ -41,7 +41,7 @@
                 android:id="@+id/image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="fitXY" />
+                android:scaleType="fitCenter" />
 
             <LinearLayout
                 android:id="@+id/ll_loading"
@@ -67,14 +67,15 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <TextView
+         <TextView
             android:id="@+id/tv_userid"
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/chat_nick_margin_left"
-            android:visibility="gone"
-             />
+            android:textSize="@dimen/chat_nick_text_size"
+            android:layout_toRightOf="@id/iv_userhead"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

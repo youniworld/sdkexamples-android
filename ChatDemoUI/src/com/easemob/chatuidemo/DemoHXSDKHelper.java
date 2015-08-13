@@ -39,6 +39,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMMessage.Type;
 import com.easemob.chatuidemo.domain.RobotUser;
+import com.easemob.chatuidemo.parse.UserProfileManager;
 import com.easemob.chatuidemo.receiver.CallReceiver;
 import com.easemob.chatuidemo.ui.ChatActivity;
 import com.easemob.chatuidemo.ui.MainActivity;
