@@ -29,32 +29,32 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.DemoHXSDKHelper;
+import com.easemob.chatuidemo.DemoSDKHelper;
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuilib.controller.HXSDKHelper;
-import com.easemob.chatuilib.domain.User;
-import com.easemob.chatuilib.widget.EMSidebar;
-import com.easemob.chatuilib.widget.adapter.ContactAdapter;
+import com.easemob.easeui.adapter.EaseContactAdapter;
+import com.easemob.easeui.controller.EaseSDKHelper;
+import com.easemob.easeui.domain.EaseUser;
+import com.easemob.easeui.widget.EaseSidebar;
 
 public class PickContactNoCheckboxActivity extends BaseActivity {
 
 	private ListView listView;
-	private EMSidebar sidebar;
-	protected ContactAdapter contactAdapter;
-	private List<User> contactList;
+	private EaseSidebar sidebar;
+	protected EaseContactAdapter contactAdapter;
+	private List<EaseUser> contactList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.em_activity_pick_contact_no_checkbox);
 		listView = (ListView) findViewById(R.id.list);
-		sidebar = (EMSidebar) findViewById(R.id.sidebar);
+		sidebar = (EaseSidebar) findViewById(R.id.sidebar);
 		sidebar.setListView(listView);
-		contactList = new ArrayList<User>();
+		contactList = new ArrayList<EaseUser>();
 		// 获取设置contactlist
 		getContactList();
 		// 设置adapter
-		contactAdapter = new ContactAdapter(this, R.layout.em_row_contact, contactList);
+		contactAdapter = new EaseContactAdapter(this, R.layout.ease_row_contact, contactList);
 		listView.setAdapter(contactAdapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -80,18 +80,18 @@ public class PickContactNoCheckboxActivity extends BaseActivity {
 
 	private void getContactList() {
 		contactList.clear();
-		Map<String, User> users = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList();
-		Iterator<Entry<String, User>> iterator = users.entrySet().iterator();
+		Map<String, EaseUser> users = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList();
+		Iterator<Entry<String, EaseUser>> iterator = users.entrySet().iterator();
 		while (iterator.hasNext()) {
-			Entry<String, User> entry = iterator.next();
+			Entry<String, EaseUser> entry = iterator.next();
 			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME) && !entry.getKey().equals(Constant.CHAT_ROOM) && !entry.getKey().equals(Constant.CHAT_ROBOT))
 				contactList.add(entry.getValue());
 		}
 		// 排序
-		Collections.sort(contactList, new Comparator<User>() {
+		Collections.sort(contactList, new Comparator<EaseUser>() {
 
 			@Override
-			public int compare(User lhs, User rhs) {
+			public int compare(EaseUser lhs, EaseUser rhs) {
 				return lhs.getUsername().compareTo(rhs.getUsername());
 			}
 		});

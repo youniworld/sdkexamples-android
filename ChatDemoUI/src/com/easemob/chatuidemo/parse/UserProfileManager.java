@@ -9,8 +9,8 @@ import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.utils.PreferenceUtils;
-import com.easemob.chatuilib.controller.HXSDKHelper.HXSyncListener;
-import com.easemob.chatuilib.domain.User;
+import com.easemob.easeui.controller.EaseSDKHelper.HXSyncListener;
+import com.easemob.easeui.domain.EaseUser;
 
 public class UserProfileManager {
 
@@ -32,7 +32,7 @@ public class UserProfileManager {
 
 	private boolean isSyncingContactInfosWithServer = false;
 
-	private User currentUser;
+	private EaseUser currentUser;
 
 	public UserProfileManager() {
 	}
@@ -65,15 +65,15 @@ public class UserProfileManager {
 		}
 	}
 
-	public void asyncFetchContactInfosFromServer(List<String> usernames, final EMValueCallBack<List<User>> callback) {
+	public void asyncFetchContactInfosFromServer(List<String> usernames, final EMValueCallBack<List<EaseUser>> callback) {
 		if (isSyncingContactInfosWithServer) {
 			return;
 		}
 		isSyncingContactInfosWithServer = true;
-		ParseManager.getInstance().getContactInfos(usernames, new EMValueCallBack<List<User>>() {
+		ParseManager.getInstance().getContactInfos(usernames, new EMValueCallBack<List<EaseUser>>() {
 
 			@Override
-			public void onSuccess(List<User> value) {
+			public void onSuccess(List<EaseUser> value) {
 				isSyncingContactInfosWithServer = false;
 				// in case that logout already before server returns,we should
 				// return immediately
@@ -113,10 +113,10 @@ public class UserProfileManager {
 		PreferenceUtils.getInstance().removeCurrentUserInfo();
 	}
 
-	public synchronized User getCurrentUserInfo() {
+	public synchronized EaseUser getCurrentUserInfo() {
 		if (currentUser == null) {
 			String username = EMChatManager.getInstance().getCurrentUser();
-			currentUser = new User(username);
+			currentUser = new EaseUser(username);
 			String nick = getCurrentUserNick();
 			currentUser.setNick((nick != null) ? nick : username);
 			currentUser.setAvatar(getCurrentUserAvatar());
@@ -141,10 +141,10 @@ public class UserProfileManager {
 	}
 
 	public void asyncGetCurrentUserInfo() {
-		ParseManager.getInstance().asyncGetCurrentUserInfo(new EMValueCallBack<User>() {
+		ParseManager.getInstance().asyncGetCurrentUserInfo(new EMValueCallBack<EaseUser>() {
 
 			@Override
-			public void onSuccess(User value) {
+			public void onSuccess(EaseUser value) {
 			    if(value != null){
     				setCurrentUserNick(value.getNick());
     				setCurrentUserAvatar(value.getAvatar());
@@ -158,7 +158,7 @@ public class UserProfileManager {
 		});
 
 	}
-	public void asyncGetUserInfo(final String username,final EMValueCallBack<User> callback){
+	public void asyncGetUserInfo(final String username,final EMValueCallBack<EaseUser> callback){
 		ParseManager.getInstance().asyncGetUserInfo(username, callback);
 	}
 	private void setCurrentUserNick(String nickname) {

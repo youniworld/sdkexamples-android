@@ -53,7 +53,7 @@ import android.widget.VideoView;
 
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.video.util.Utils;
-import com.easemob.chatuilib.utils.CommonUtils;
+import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 
@@ -326,7 +326,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 
 	@SuppressLint("NewApi")
 	private boolean initRecorder(){
-	    if(!CommonUtils.isExitsSdcard()){
+	    if(!EaseCommonUtils.isExitsSdcard()){
 	        showNoSDCardDialog();
 	        return false;
 	    }

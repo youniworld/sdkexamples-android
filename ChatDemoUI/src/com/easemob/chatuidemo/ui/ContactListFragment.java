@@ -50,17 +50,16 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMContactManager;
 import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.DemoHXSDKHelper;
+import com.easemob.chatuidemo.DemoSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
-import com.easemob.chatuilib.controller.HXSDKHelper;
-import com.easemob.chatuilib.controller.HXSDKHelper.HXSyncListener;
-import com.easemob.chatuilib.domain.SystemUser;
-import com.easemob.chatuilib.domain.User;
-import com.easemob.chatuilib.widget.EMContactList;
-import com.easemob.chatuilib.widget.EMSidebar;
-import com.easemob.chatuilib.widget.EMTitleBar;
+import com.easemob.easeui.controller.EaseSDKHelper;
+import com.easemob.easeui.controller.EaseSDKHelper.HXSyncListener;
+import com.easemob.easeui.domain.EaseSystemUser;
+import com.easemob.easeui.domain.EaseUser;
+import com.easemob.easeui.widget.EaseContactList;
+import com.easemob.easeui.widget.EaseTitleBar;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 
@@ -70,7 +69,7 @@ import com.easemob.util.EMLog;
  */
 public class ContactListFragment extends Fragment {
 	public static final String TAG = "ContactlistFragment";
-	private List<User> contactList;
+	private List<EaseUser> contactList;
 	private ListView listView;
 	private boolean hidden;
 	private InputMethodManager inputMethodManager;
@@ -81,12 +80,12 @@ public class ContactListFragment extends Fragment {
 	HXBlackListSyncListener blackListSyncListener;
 	View progressBar;
 	Handler handler = new Handler();
-    private User toBeProcessUser;
+    private EaseUser toBeProcessUser;
     private String toBeProcessUsername;
-    private EMTitleBar titleBar;
-    private EMContactList contactListLayout;
+    private EaseTitleBar titleBar;
+    private EaseContactList contactListLayout;
 
-	class HXContactSyncListener implements HXSDKHelper.HXSyncListener {
+	class HXContactSyncListener implements EaseSDKHelper.HXSyncListener {
 		@Override
 		public void onSyncSucess(final boolean success) {
 			EMLog.d(TAG, "on contact list sync success:" + success);
@@ -142,12 +141,12 @@ public class ContactListFragment extends Fragment {
 		    return;
 		inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
-		titleBar = (EMTitleBar) getView().findViewById(R.id.title_bar);
-		contactListLayout = (EMContactList) getView().findViewById(R.id.contact_list);
+		titleBar = (EaseTitleBar) getView().findViewById(R.id.title_bar);
+		contactListLayout = (EaseContactList) getView().findViewById(R.id.contact_list);
 		
 		//黑名单列表
 		blackList = EMContactManager.getInstance().getBlackListUsernames();
-		contactList = new ArrayList<User>();
+		contactList = new ArrayList<EaseUser>();
 		// 获取设置contactlist
 		getContactList();
 		//设置数据
@@ -189,10 +188,10 @@ public class ContactListFragment extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				String username = ((User)listView.getItemAtPosition(position)).getUsername();
+				String username = ((EaseUser)listView.getItemAtPosition(position)).getUsername();
 				if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
 					// 进入申请与通知页面
-					SystemUser user = (SystemUser) ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().get(Constant.NEW_FRIENDS_USERNAME);
+				    EaseSystemUser user = (EaseSystemUser) ((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList().get(Constant.NEW_FRIENDS_USERNAME);
 					user.setUnreadMsgCount(0);
 					startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
 				} else if (Constant.GROUP_USERNAME.equals(username)) {
@@ -234,12 +233,12 @@ public class ContactListFragment extends Fragment {
 		progressBar = (View) getView().findViewById(R.id.progress_bar);
 
 		contactSyncListener = new HXContactSyncListener();
-		HXSDKHelper.getInstance().addSyncContactListener(contactSyncListener);
+		EaseSDKHelper.getInstance().addSyncContactListener(contactSyncListener);
 		
 		blackListSyncListener = new HXBlackListSyncListener();
-		HXSDKHelper.getInstance().addSyncBlackListListener(blackListSyncListener);
+		EaseSDKHelper.getInstance().addSyncBlackListListener(blackListSyncListener);
 		
-		if (!HXSDKHelper.getInstance().isContactsSyncedWithServer()) {
+		if (!EaseSDKHelper.getInstance().isContactsSyncedWithServer()) {
 			progressBar.setVisibility(View.VISIBLE);
 		} else {
 			progressBar.setVisibility(View.GONE);
@@ -250,7 +249,7 @@ public class ContactListFragment extends Fragment {
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		if (((AdapterContextMenuInfo) menuInfo).position > 3) {
-		    toBeProcessUser = (User) listView.getItemAtPosition(((AdapterContextMenuInfo) menuInfo).position);
+		    toBeProcessUser = (EaseUser) listView.getItemAtPosition(((AdapterContextMenuInfo) menuInfo).position);
 		    toBeProcessUsername = toBeProcessUser.getUsername();
 			getActivity().getMenuInflater().inflate(R.menu.em_context_contact_list, menu);
 		}
@@ -298,7 +297,7 @@ public class ContactListFragment extends Fragment {
 	 * 
 	 * @param toDeleteUser
 	 */
-	public void deleteContact(final User tobeDeleteUser) {
+	public void deleteContact(final EaseUser tobeDeleteUser) {
 		String st1 = getResources().getString(R.string.deleting);
 		final String st2 = getResources().getString(R.string.Delete_failed);
 		final ProgressDialog pd = new ProgressDialog(getActivity());
@@ -312,7 +311,7 @@ public class ContactListFragment extends Fragment {
 					// 删除db和内存中此用户的数据
 					UserDao dao = new UserDao(getActivity());
 					dao.deleteContact(tobeDeleteUser.getUsername());
-					((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().remove(tobeDeleteUser.getUsername());
+					((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList().remove(tobeDeleteUser.getUsername());
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
@@ -382,12 +381,12 @@ public class ContactListFragment extends Fragment {
 	@Override
 	public void onDestroy() {
 		if (contactSyncListener != null) {
-			HXSDKHelper.getInstance().removeSyncContactListener(contactSyncListener);
+			EaseSDKHelper.getInstance().removeSyncContactListener(contactSyncListener);
 			contactSyncListener = null;
 		}
 		
 		if(blackListSyncListener != null){
-		    HXSDKHelper.getInstance().removeSyncBlackListListener(blackListSyncListener);
+		    EaseSDKHelper.getInstance().removeSyncBlackListListener(blackListSyncListener);
 		}
 		
 		super.onDestroy();
@@ -409,10 +408,10 @@ public class ContactListFragment extends Fragment {
 	private void getContactList() {
 		contactList.clear();
 		//获取本地好友列表
-		Map<String, User> users = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList();
-		Iterator<Entry<String, User>> iterator = users.entrySet().iterator();
+		Map<String, EaseUser> users = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList();
+		Iterator<Entry<String, EaseUser>> iterator = users.entrySet().iterator();
 		while (iterator.hasNext()) {
-			Entry<String, User> entry = iterator.next();
+			Entry<String, EaseUser> entry = iterator.next();
 			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME)
 			        && !entry.getKey().equals(Constant.GROUP_USERNAME)
 			        && !entry.getKey().equals(Constant.CHAT_ROOM)
@@ -421,10 +420,10 @@ public class ContactListFragment extends Fragment {
 				contactList.add(entry.getValue());
 		}
 		// 排序
-		Collections.sort(contactList, new Comparator<User>() {
+		Collections.sort(contactList, new Comparator<EaseUser>() {
 
 			@Override
-			public int compare(User lhs, User rhs) {
+			public int compare(EaseUser lhs, EaseUser rhs) {
 				return lhs.getUsername().compareTo(rhs.getUsername());
 			}
 		});

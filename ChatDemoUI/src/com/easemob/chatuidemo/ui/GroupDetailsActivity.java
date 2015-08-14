@@ -16,11 +16,9 @@ package com.easemob.chatuidemo.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -43,10 +41,10 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuilib.utils.UserUtils;
-import com.easemob.chatuilib.widget.EMAlertDialog;
-import com.easemob.chatuilib.widget.EMAlertDialog.AlertDialogUser;
-import com.easemob.chatuilib.widget.ExpandGridView;
+import com.easemob.easeui.utils.EaseUserUtils;
+import com.easemob.easeui.widget.EaseAlertDialog;
+import com.easemob.easeui.widget.EaseAlertDialog.AlertDialogUser;
+import com.easemob.easeui.widget.EaseExpandGridView;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.easemob.util.NetUtils;
@@ -59,7 +57,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	private static final int REQUEST_CODE_EDIT_GROUPNAME = 5;
 
 
-	private ExpandGridView userGridview;
+	private EaseExpandGridView userGridview;
 	private String groupId;
 	private ProgressBar loadingPB;
 	private Button exitBtn;
@@ -72,11 +70,11 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	/**
 	 * 屏蔽群消息imageView
 	 */
-	private ImageView iv_switch_block_groupmsg;
+//	private ImageView iv_switch_block_groupmsg;
 	/**
 	 * 关闭屏蔽群消息imageview
 	 */
-	private ImageView iv_switch_unblock_groupmsg;
+//	private ImageView iv_switch_unblock_groupmsg;
 
 	public static GroupDetailsActivity instance;
 	
@@ -106,7 +104,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		instance = this;
 		st = getResources().getString(R.string.people);
 		clearAllHistory = (RelativeLayout) findViewById(R.id.clear_all_history);
-		userGridview = (ExpandGridView) findViewById(R.id.gridview);
+		userGridview = (EaseExpandGridView) findViewById(R.id.gridview);
 		loadingPB = (ProgressBar) findViewById(R.id.progressBar);
 		exitBtn = (Button) findViewById(R.id.btn_exit_grp);
 		deleteBtn = (Button) findViewById(R.id.btn_exitdel_grp);
@@ -118,8 +116,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		
 		rl_switch_block_groupmsg = (RelativeLayout) findViewById(R.id.rl_switch_block_groupmsg);
 
-		iv_switch_block_groupmsg = (ImageView) findViewById(R.id.iv_switch_block_groupmsg);
-		iv_switch_unblock_groupmsg = (ImageView) findViewById(R.id.iv_switch_unblock_groupmsg);
+//		iv_switch_block_groupmsg = (ImageView) findViewById(R.id.iv_switch_block_groupmsg);
+//		iv_switch_unblock_groupmsg = (ImageView) findViewById(R.id.iv_switch_unblock_groupmsg);
 
 		rl_switch_block_groupmsg.setOnClickListener(this);
 
@@ -424,77 +422,77 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		final String st7 = getResources().getString(R.string.remove_group_of);
 		switch (v.getId()) {
 		case R.id.rl_switch_block_groupmsg: // 屏蔽群组
-			if (iv_switch_block_groupmsg.getVisibility() == View.VISIBLE) {
-				EMLog.d(TAG, "change to unblock group msg");
-				if (progressDialog == null) {
-	                progressDialog = new ProgressDialog(GroupDetailsActivity.this);
-	                progressDialog.setCanceledOnTouchOutside(false);
-	            }
-				progressDialog.setMessage(st6);
-				progressDialog.show();
-				new Thread(new Runnable() {
-                    public void run() {
-                        try {
-                            EMGroupManager.getInstance().unblockGroupMessage(groupId);
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
-                                    iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
-                                    progressDialog.dismiss();
-                                }
-                            });
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(), st7, 1).show();
-                                }
-                            });
-                            
-                        }
-                    }
-                }).start();
-				
-			} else {
-				String st8 = getResources().getString(R.string.group_is_blocked);
-				final String st9 = getResources().getString(R.string.group_of_shielding);
-				EMLog.d(TAG, "change to block group msg");
-				if (progressDialog == null) {
-                    progressDialog = new ProgressDialog(GroupDetailsActivity.this);
-                    progressDialog.setCanceledOnTouchOutside(false);
-                }
-				progressDialog.setMessage(st8);
-				progressDialog.show();
-				new Thread(new Runnable() {
-                    public void run() {
-                        try {
-                            EMGroupManager.getInstance().blockGroupMessage(groupId);
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
-                                    iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
-                                    progressDialog.dismiss();
-                                }
-                            });
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(), st9, 1).show();
-                                }
-                            });
-                        }
-                        
-                    }
-                }).start();
-			}
+//			if (iv_switch_block_groupmsg.getVisibility() == View.VISIBLE) {
+//				EMLog.d(TAG, "change to unblock group msg");
+//				if (progressDialog == null) {
+//	                progressDialog = new ProgressDialog(GroupDetailsActivity.this);
+//	                progressDialog.setCanceledOnTouchOutside(false);
+//	            }
+//				progressDialog.setMessage(st6);
+//				progressDialog.show();
+//				new Thread(new Runnable() {
+//                    public void run() {
+//                        try {
+//                            EMGroupManager.getInstance().unblockGroupMessage(groupId);
+//                            runOnUiThread(new Runnable() {
+//                                public void run() {
+//                                    iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
+//                                    iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
+//                                    progressDialog.dismiss();
+//                                }
+//                            });
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                            runOnUiThread(new Runnable() {
+//                                public void run() {
+//                                    progressDialog.dismiss();
+//                                    Toast.makeText(getApplicationContext(), st7, 1).show();
+//                                }
+//                            });
+//                            
+//                        }
+//                    }
+//                }).start();
+//				
+//			} else {
+//				String st8 = getResources().getString(R.string.group_is_blocked);
+//				final String st9 = getResources().getString(R.string.group_of_shielding);
+//				EMLog.d(TAG, "change to block group msg");
+//				if (progressDialog == null) {
+//                    progressDialog = new ProgressDialog(GroupDetailsActivity.this);
+//                    progressDialog.setCanceledOnTouchOutside(false);
+//                }
+//				progressDialog.setMessage(st8);
+//				progressDialog.show();
+//				new Thread(new Runnable() {
+//                    public void run() {
+//                        try {
+//                            EMGroupManager.getInstance().blockGroupMessage(groupId);
+//                            runOnUiThread(new Runnable() {
+//                                public void run() {
+//                                    iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
+//                                    iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
+//                                    progressDialog.dismiss();
+//                                }
+//                            });
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                            runOnUiThread(new Runnable() {
+//                                public void run() {
+//                                    progressDialog.dismiss();
+//                                    Toast.makeText(getApplicationContext(), st9, 1).show();
+//                                }
+//                            });
+//                        }
+//                        
+//                    }
+//                }).start();
+//			}
 			break;
 
 		case R.id.clear_all_history: // 清空聊天记录
 			String st9 = getResources().getString(R.string.sure_to_empty_this);
-			new EMAlertDialog(GroupDetailsActivity.this, null, st9, null, new AlertDialogUser() {
+			new EaseAlertDialog(GroupDetailsActivity.this, null, st9, null, new AlertDialogUser() {
                 
                 @Override
                 public void onResult(boolean confirmed, Bundle bundle) {
@@ -617,8 +615,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 //				Drawable avatar = getResources().getDrawable(R.drawable.default_avatar);
 //				avatar.setBounds(0, 0, referenceWidth, referenceHeight);
 //				button.setCompoundDrawables(null, avatar, null, null);
-				UserUtils.setUserNick(username, holder.textView);
-				UserUtils.setUserAvatar(getContext(), username, holder.imageView);
+				EaseUserUtils.setUserNick(username, holder.textView);
+				EaseUserUtils.setUserAvatar(getContext(), username, holder.imageView);
 				if (isInDeleteMode) {
 					// 如果是删除模式下，显示减人图标
 					convertView.findViewById(R.id.badge_delete).setVisibility(View.VISIBLE);
@@ -635,7 +633,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						if (isInDeleteMode) {
 							// 如果是删除自己，return
 							if (EMChatManager.getInstance().getCurrentUser().equals(username)) {
-							    new EMAlertDialog(GroupDetailsActivity.this, st12).show();
+							    new EaseAlertDialog(GroupDetailsActivity.this, st12).show();
 								return;
 							}
 							if (!NetUtils.hasNetwork(getApplicationContext())) {
@@ -703,7 +701,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					    if(EMChatManager.getInstance().getCurrentUser().equals(username))
 					        return true;
 						if (group.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {
-							new EMAlertDialog(GroupDetailsActivity.this, null, st15, null, new AlertDialogUser() {
+							new EaseAlertDialog(GroupDetailsActivity.this, null, st15, null, new AlertDialogUser() {
                                 
                                 @Override
                                 public void onResult(boolean confirmed, Bundle bundle) {
@@ -753,13 +751,13 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 							// update block
 							EMLog.d(TAG, "group msg is blocked:" + group.getMsgBlocked());
-							if (group.isMsgBlocked()) {
-								iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
-								iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
-							} else {
-								iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
-								iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
-							}
+//							if (group.isMsgBlocked()) {
+//								iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
+//								iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
+//							} else {
+//								iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
+//								iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
+//							}
 						}
 					});
 

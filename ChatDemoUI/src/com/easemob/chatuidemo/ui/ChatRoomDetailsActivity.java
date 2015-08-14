@@ -15,7 +15,6 @@ package com.easemob.chatuidemo.ui;
 
 import java.util.List;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -39,10 +38,10 @@ import android.widget.Toast;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatRoom;
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuilib.utils.UserUtils;
-import com.easemob.chatuilib.widget.EMAlertDialog;
-import com.easemob.chatuilib.widget.ExpandGridView;
-import com.easemob.chatuilib.widget.EMAlertDialog.AlertDialogUser;
+import com.easemob.easeui.utils.EaseUserUtils;
+import com.easemob.easeui.widget.EaseAlertDialog;
+import com.easemob.easeui.widget.EaseAlertDialog.AlertDialogUser;
+import com.easemob.easeui.widget.EaseExpandGridView;
 import com.easemob.util.EMLog;
 import com.easemob.util.NetUtils;
 
@@ -53,7 +52,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 	String longClickUsername = null;
 
-	private ExpandGridView userGridview;
+	private EaseExpandGridView userGridview;
 	private String roomId;
 	private ProgressBar loadingPB;
 	private Button exitBtn;
@@ -83,7 +82,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		instance = this;
 		st = getResources().getString(R.string.people);
 		clearAllHistory = (RelativeLayout) findViewById(R.id.clear_all_history);
-		userGridview = (ExpandGridView) findViewById(R.id.gridview);
+		userGridview = (EaseExpandGridView) findViewById(R.id.gridview);
 		userGridview.setVisibility(View.GONE);
 		loadingPB = (ProgressBar) findViewById(R.id.progressBar);
 		exitBtn = (Button) findViewById(R.id.btn_exit_grp);
@@ -287,7 +286,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		switch (v.getId()) {
 		case R.id.clear_all_history: // 清空聊天记录
 			String st9 = getResources().getString(R.string.sure_to_empty_this);
-			new EMAlertDialog(ChatRoomDetailsActivity.this, null, st9, null, new AlertDialogUser() {
+			new EaseAlertDialog(ChatRoomDetailsActivity.this, null, st9, null, new AlertDialogUser() {
                 
                 @Override
                 public void onResult(boolean confirmed, Bundle bundle) {
@@ -402,7 +401,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 //				avatar.setBounds(0, 0, referenceWidth, referenceHeight);
 //				button.setCompoundDrawables(null, avatar, null, null);
 				holder.textView.setText(username);
-				UserUtils.setUserAvatar(getContext(), username, holder.imageView);
+				EaseUserUtils.setUserAvatar(getContext(), username, holder.imageView);
 				// demo群组成员的头像都用默认头像，需由开发者自己去设置头像
 				if (isInDeleteMode) {
 					// 如果是删除模式下，显示减人图标
@@ -416,7 +415,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 						if (isInDeleteMode) {
 							// 如果是删除自己，return
 							if (EMChatManager.getInstance().getCurrentUser().equals(username)) {
-							    new EMAlertDialog(ChatRoomDetailsActivity.this, R.string.not_delete_myself).show();
+							    new EaseAlertDialog(ChatRoomDetailsActivity.this, R.string.not_delete_myself).show();
 								return;
 							}
 							if (!NetUtils.hasNetwork(getApplicationContext())) {

@@ -13,7 +13,7 @@
         <LinearLayout
             android:layout_width="45dp"
             android:layout_height="match_parent"
-            android:background="@drawable/em_common_tab_bg"
+            android:background="@drawable/ease_common_tab_bg"
             android:onClick="back" >
 
             <ImageView
@@ -53,8 +53,7 @@
             android:background="@android:color/transparent"
             android:orientation="vertical" >
 
-
-            <com.easemob.chatuilib.widget.ExpandGridView
+            <com.easemob.easeui.widget.EaseExpandGridView
                 android:id="@+id/gridview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -75,7 +74,7 @@
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
                 android:background="#E6E6E6" />
-            
+
             <RelativeLayout
                 android:id="@+id/rl_group_id"
                 android:layout_width="match_parent"
@@ -85,7 +84,7 @@
                 android:visibility="gone" >
 
                 <TextView
-                	android:id="@+id/tv_group_id"
+                    android:id="@+id/tv_group_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -94,15 +93,14 @@
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:typeface="serif" />
-                
-                  <TextView 
+
+                <TextView
                     android:id="@+id/tv_group_id_value"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="20dp"
-                    /> 
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -211,23 +209,12 @@
                     android:textSize="18sp"
                     android:typeface="serif" />
 
-                <ImageView
-                    android:id="@+id/iv_switch_block_groupmsg"
+                <com.easemob.easeui.widget.EaseSwitchButton
+                    android:id="@+id/switch_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/em_open_icon"
-                    android:visibility="invisible" />
-
-                <ImageView
-                    android:id="@+id/iv_switch_unblock_groupmsg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/em_close_icon"
-                    android:visibility="visible" />
+                    android:layout_centerVertical="true" />
             </RelativeLayout>
 
             <TextView
@@ -265,7 +252,6 @@
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:visibility="gone" />
-
         </LinearLayout>
     </ScrollView>
 

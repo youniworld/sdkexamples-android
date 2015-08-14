@@ -36,13 +36,13 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoApplication;
-import com.easemob.chatuidemo.DemoHXSDKHelper;
+import com.easemob.chatuidemo.DemoSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.UserDao;
-import com.easemob.chatuilib.controller.HXSDKHelper;
-import com.easemob.chatuilib.domain.SystemUser;
-import com.easemob.chatuilib.domain.User;
-import com.easemob.chatuilib.utils.CommonUtils;
+import com.easemob.easeui.controller.EaseSDKHelper;
+import com.easemob.easeui.domain.EaseSystemUser;
+import com.easemob.easeui.domain.EaseUser;
+import com.easemob.easeui.utils.EaseCommonUtils;
 
 /**
  * 登陆页面
@@ -65,7 +65,7 @@ public class LoginActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 
 		// 如果用户名密码都有，直接进入主页面
-		if (DemoHXSDKHelper.getInstance().isLogined()) {
+		if (DemoSDKHelper.getInstance().isLogined()) {
 			autoLogin = true;
 			startActivity(new Intent(LoginActivity.this, MainActivity.class));
 
@@ -104,7 +104,7 @@ public class LoginActivity extends BaseActivity {
 	 * @param view
 	 */
 	public void login(View view) {
-		if (!CommonUtils.isNetWorkConnected(this)) {
+		if (!EaseCommonUtils.isNetWorkConnected(this)) {
 			Toast.makeText(this, R.string.network_isnot_available, Toast.LENGTH_SHORT).show();
 			return;
 		}
@@ -160,7 +160,7 @@ public class LoginActivity extends BaseActivity {
 					Log.e("LoginActivity", "update current user nick fail");
 				}
 				//异步获取当前用户的昵称和头像(从自己服务器获取，demo使用的一个第三方服务)
-		        ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().asyncGetCurrentUserInfo();
+		        ((DemoSDKHelper)EaseSDKHelper.getInstance()).getUserProfileManager().asyncGetCurrentUserInfo();
 				
 				if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
 					pd.dismiss();
@@ -194,9 +194,9 @@ public class LoginActivity extends BaseActivity {
 	}
 
 	private void initializeContacts() {
-		Map<String, User> userlist = new HashMap<String, User>();
+		Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
 		// 添加user"申请与通知"
-		User newFriends = new SystemUser(Constant.NEW_FRIENDS_USERNAME);
+		EaseUser newFriends = new EaseSystemUser(Constant.NEW_FRIENDS_USERNAME);
 		String strChat = getResources().getString(R.string.Application_and_notify);
 		newFriends.setInitialLetter("");
 		newFriends.setNick(strChat);
@@ -204,7 +204,7 @@ public class LoginActivity extends BaseActivity {
 		
 		userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
 		// 添加"群聊"
-		User groupUser = new SystemUser(Constant.GROUP_USERNAME);
+		EaseUser groupUser = new EaseSystemUser(Constant.GROUP_USERNAME);
 		String strGroup = getResources().getString(R.string.group_chat);
 		groupUser.setNick(strGroup);
 		groupUser.setInitialLetter("");
@@ -212,14 +212,14 @@ public class LoginActivity extends BaseActivity {
 		userlist.put(Constant.GROUP_USERNAME, groupUser);
 		
 		//聊天室
-		User chatRoomUser = new User(Constant.CHAT_ROOM);
+		EaseUser chatRoomUser = new EaseUser(Constant.CHAT_ROOM);
 		chatRoomUser.setNick(getResources().getString(R.string.chat_room));
 		chatRoomUser.setInitialLetter("");
 		chatRoomUser.setAvatar(R.drawable.em_groups_icon + "");
         userlist.put(Constant.CHAT_ROOM, chatRoomUser);
 		
 		// 添加"Robot"
-		User robotUser = new User(Constant.CHAT_ROBOT);
+        EaseUser robotUser = new EaseUser(Constant.CHAT_ROBOT);
 		String strRobot = getResources().getString(R.string.robot_chat);
 		robotUser.setNick(strRobot);
 		robotUser.setInitialLetter("");
@@ -227,10 +227,10 @@ public class LoginActivity extends BaseActivity {
 		userlist.put(Constant.CHAT_ROBOT, robotUser);
 		
 		// 存入内存
-		((DemoHXSDKHelper)HXSDKHelper.getInstance()).setContactList(userlist);
+		((DemoSDKHelper)EaseSDKHelper.getInstance()).setContactList(userlist);
 		// 存入db
 		UserDao dao = new UserDao(LoginActivity.this);
-		List<User> users = new ArrayList<User>(userlist.values());
+		List<EaseUser> users = new ArrayList<EaseUser>(userlist.values());
 		dao.saveContactList(users);
 	}
 	

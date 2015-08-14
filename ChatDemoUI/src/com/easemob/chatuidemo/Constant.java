@@ -13,7 +13,9 @@
  */
 package com.easemob.chatuidemo;
 
-public class Constant extends com.easemob.chatuilib.EMConstant{
+import com.easemob.easeui.EaseConstant;
+
+public class Constant extends EaseConstant{
 	public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
 	public static final String GROUP_USERNAME = "item_groups";
 	public static final String CHAT_ROOM = "item_chatroom";

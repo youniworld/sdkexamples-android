@@ -52,24 +52,24 @@ import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoApplication;
-import com.easemob.chatuidemo.DemoHXSDKHelper;
+import com.easemob.chatuidemo.DemoSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.domain.RobotUser;
-import com.easemob.chatuilib.controller.HXSDKHelper;
-import com.easemob.chatuilib.controller.HXSDKHelper.UserProvider;
-import com.easemob.chatuilib.model.GroupRemoveListener;
-import com.easemob.chatuilib.ui.BaiduMapActivity;
-import com.easemob.chatuilib.utils.CommonUtils;
-import com.easemob.chatuilib.utils.ImageUtils;
-import com.easemob.chatuilib.widget.EMAlertDialog;
-import com.easemob.chatuilib.widget.EMAlertDialog.AlertDialogUser;
-import com.easemob.chatuilib.widget.EMChatExtendMenu.ChatExtendMenuItemClickListener;
-import com.easemob.chatuilib.widget.EMChatInputMenu;
-import com.easemob.chatuilib.widget.EMChatInputMenu.ChatInputMenuListener;
-import com.easemob.chatuilib.widget.EMChatMessageList;
-import com.easemob.chatuilib.widget.EMChatMessageList.MessageListItemClickListener;
-import com.easemob.chatuilib.widget.EMTitleBar;
-import com.easemob.chatuilib.widget.EMVoiceRecorderView;
+import com.easemob.easeui.controller.EaseSDKHelper;
+import com.easemob.easeui.controller.EaseSDKHelper.UserProvider;
+import com.easemob.easeui.ui.EaseBaiduMapActivity;
+import com.easemob.easeui.ui.EaseGroupRemoveListener;
+import com.easemob.easeui.utils.EaseCommonUtils;
+import com.easemob.easeui.utils.EaseImageUtils;
+import com.easemob.easeui.widget.EaseAlertDialog;
+import com.easemob.easeui.widget.EaseAlertDialog.AlertDialogUser;
+import com.easemob.easeui.widget.EaseChatExtendMenu.ChatExtendMenuItemClickListener;
+import com.easemob.easeui.widget.EaseChatInputMenu;
+import com.easemob.easeui.widget.EaseChatInputMenu.ChatInputMenuListener;
+import com.easemob.easeui.widget.EaseChatMessageList;
+import com.easemob.easeui.widget.EaseChatMessageList.MessageListItemClickListener;
+import com.easemob.easeui.widget.EaseTitleBar;
+import com.easemob.easeui.widget.EaseVoiceRecorderView;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 
@@ -97,18 +97,18 @@ public class ChatFragment extends Fragment implements EMEventListener {
 
     protected int chatType;
     protected String toChatUsername;
-    protected EMChatMessageList messageList;
-    protected EMChatInputMenu inputMenu;
+    protected EaseChatMessageList messageList;
+    protected EaseChatInputMenu inputMenu;
 
     protected EMConversation conversation;
-    protected EMTitleBar titleBar;
+    protected EaseTitleBar titleBar;
     
     protected InputMethodManager inputManager;
     private ClipboardManager clipboard;
 
     protected Handler handler = new Handler();
     protected File cameraFile;
-    protected EMVoiceRecorderView voiceRecorder;
+    protected EaseVoiceRecorderView voiceRecorder;
     protected SwipeRefreshLayout swipeRefreshLayout;
     protected ListView listView;
 
@@ -156,19 +156,19 @@ public class ChatFragment extends Fragment implements EMEventListener {
 
     protected void initView() {
         // 标题栏
-        titleBar = (EMTitleBar) getView().findViewById(R.id.title_bar);
+        titleBar = (EaseTitleBar) getView().findViewById(R.id.title_bar);
 
         // 按住说话录音控件
-        voiceRecorder = (EMVoiceRecorderView) getView().findViewById(R.id.voice_recorder);
+        voiceRecorder = (EaseVoiceRecorderView) getView().findViewById(R.id.voice_recorder);
 
         // 消息列表layout
-        messageList = (EMChatMessageList) getView().findViewById(R.id.message_list);
+        messageList = (EaseChatMessageList) getView().findViewById(R.id.message_list);
         if(chatType != Constant.CHATTYPE_SINGLE)
             messageList.setShowUserNick(true);
         messageList.init(toChatUsername, chatType);
         listView = messageList.getListView();
 
-        inputMenu = (EMChatInputMenu) getView().findViewById(R.id.input_menu);
+        inputMenu = (EaseChatInputMenu) getView().findViewById(R.id.input_menu);
         if (chatType == Constant.CHATTYPE_SINGLE) {
             // 注册扩展菜单栏按钮
             for (int i = 0; i < itemStrings.length; i++) {
@@ -219,11 +219,11 @@ public class ChatFragment extends Fragment implements EMEventListener {
         // 把此会话的未读数置为0
         conversation.markAllMessagesAsRead();
         
-        UserProvider userProvider = HXSDKHelper.getInstance().getUserProvider();
+        UserProvider userProvider = EaseSDKHelper.getInstance().getUserProvider();
 
         titleBar.setTitle(toChatUsername);
         if (chatType == Constant.CHATTYPE_SINGLE) { // 单聊
-            Map<String,RobotUser> robotMap=((DemoHXSDKHelper)HXSDKHelper.getInstance()).getRobotList();
+            Map<String,RobotUser> robotMap=((DemoSDKHelper)EaseSDKHelper.getInstance()).getRobotList();
             if(robotMap!=null&&robotMap.containsKey(toChatUsername)){
                 isRobot = true;
             }
@@ -319,7 +319,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
             
             @Override
             public void onResendClick(final EMMessage message) {
-                new EMAlertDialog(getActivity(), R.string.resend, R.string.confirm_resend, null, new AlertDialogUser() {
+                new EaseAlertDialog(getActivity(), R.string.resend, R.string.confirm_resend, null, new AlertDialogUser() {
                     @Override
                     public void onResult(boolean confirmed, Bundle bundle) {
                         if (!confirmed) {
@@ -467,7 +467,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
     public void onResume() {
         super.onResume();
         messageList.refresh();
-        DemoHXSDKHelper sdkHelper = (DemoHXSDKHelper) DemoHXSDKHelper.getInstance();
+        DemoSDKHelper sdkHelper = (DemoSDKHelper) DemoSDKHelper.getInstance();
         sdkHelper.pushActivity(getActivity());
         // register the event listener when enter the foreground
         EMChatManager.getInstance().registerEventListener(
@@ -484,7 +484,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
         // background
         EMChatManager.getInstance().unregisterEventListener(this);
 
-        DemoHXSDKHelper sdkHelper = (DemoHXSDKHelper) DemoHXSDKHelper.getInstance();
+        DemoSDKHelper sdkHelper = (DemoSDKHelper) DemoSDKHelper.getInstance();
 
         // 把此activity 从foreground activity 列表里移除
         sdkHelper.popActivity(getActivity());
@@ -523,10 +523,10 @@ public class ChatFragment extends Fragment implements EMEventListener {
             if (username.equals(toChatUsername)) {
                 messageList.refreshSelectLast();
                 // 声音和震动提示有新消息
-                HXSDKHelper.getInstance().getNotifier().viberateAndPlayTone(message);
+                EaseSDKHelper.getInstance().getNotifier().viberateAndPlayTone(message);
             } else {
                 // 如果消息不是和当前聊天ID的消息
-                HXSDKHelper.getInstance().getNotifier().onNewMsg(message);
+                EaseSDKHelper.getInstance().getNotifier().onNewMsg(message);
             }
 
             break;
@@ -646,7 +646,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
                 selectPicFromLocal(); // 图库选择图片
                 break;
             case ITEM_LOCATION: // 位置
-                startActivityForResult(new Intent(getActivity(), BaiduMapActivity.class), REQUEST_CODE_MAP);
+                startActivityForResult(new Intent(getActivity(), EaseBaiduMapActivity.class), REQUEST_CODE_MAP);
                 break;
             case ITEM_VIDEO: // 视频
                 Intent intent = new Intent(getActivity(), ImageGridActivity.class);
@@ -766,7 +766,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
      * 照相获取图片
      */
     protected void selectPicFromCamera() {
-        if (!CommonUtils.isExitsSdcard()) {
+        if (!EaseCommonUtils.isExitsSdcard()) {
             Toast.makeText(getActivity(), R.string.sd_card_does_not_exist, 0).show();
             return;
         }
@@ -853,7 +853,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
      */
     public void emptyHistory() {
         String msg = getResources().getString(R.string.Whether_to_empty_all_chats);
-        new EMAlertDialog(getActivity(),null, msg, null,new AlertDialogUser() {
+        new EaseAlertDialog(getActivity(),null, msg, null,new AlertDialogUser() {
             
             @Override
             public void onResult(boolean confirmed, Bundle bundle) {
@@ -915,7 +915,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
                 File file = new File(filePath);
                 if (!file.exists()) {
                     // 不存在大图发送缩略图
-                    filePath = ImageUtils.getThumbnailImagePath(filePath);
+                    filePath = EaseImageUtils.getThumbnailImagePath(filePath);
                 }
                 sendImageMessage(filePath);
             }
@@ -933,7 +933,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
      * 监测群组解散或者被T事件
      * 
      */
-    class GroupListener extends GroupRemoveListener {
+    class GroupListener extends EaseGroupRemoveListener {
 
         @Override
         public void onUserRemoved(final String groupId, String groupName) {

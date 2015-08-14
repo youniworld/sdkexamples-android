@@ -17,7 +17,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.easemob.EMCallBack;
-import com.easemob.chat.EMChatManager;
+import com.easemob.easeui.controller.EaseSDKHelper;
 
 public class DemoApplication extends Application {
 
@@ -30,7 +30,7 @@ public class DemoApplication extends Application {
 	 * 当前用户nickname,为了苹果推送不是userid而是昵称
 	 */
 	public static String currentUserNick = "";
-	public static DemoHXSDKHelper hxSDKHelper = new DemoHXSDKHelper();
+	public static DemoSDKHelper hxSDKHelper = new DemoSDKHelper();
 
 	@Override
 	public void onCreate() {

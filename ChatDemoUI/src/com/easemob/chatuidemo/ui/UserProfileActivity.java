@@ -24,11 +24,11 @@ import android.widget.Toast;
 
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chatuidemo.DemoHXSDKHelper;
+import com.easemob.chatuidemo.DemoSDKHelper;
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuilib.controller.HXSDKHelper;
-import com.easemob.chatuilib.domain.User;
-import com.easemob.chatuilib.utils.UserUtils;
+import com.easemob.easeui.controller.EaseSDKHelper;
+import com.easemob.easeui.domain.EaseUser;
+import com.easemob.easeui.utils.EaseUserUtils;
 import com.squareup.picasso.Picasso;
 
 public class UserProfileActivity extends BaseActivity implements OnClickListener{
@@ -78,12 +78,12 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 		if(username != null){
     		if (username.equals(EMChatManager.getInstance().getCurrentUser())) {
     			tvUsername.setText(EMChatManager.getInstance().getCurrentUser());
-    			UserUtils.setUserNick(username, tvNickName);
-                UserUtils.setUserAvatar(this, username, headAvatar);
+    			EaseUserUtils.setUserNick(username, tvNickName);
+                EaseUserUtils.setUserAvatar(this, username, headAvatar);
     		} else {
     			tvUsername.setText(username);
-    			UserUtils.setUserNick(username, tvNickName);
-    			UserUtils.setUserAvatar(this, username, headAvatar);
+    			EaseUserUtils.setUserNick(username, tvNickName);
+    			EaseUserUtils.setUserAvatar(this, username, headAvatar);
     			asyncFetchUserInfo(username);
     		}
 		}
@@ -118,10 +118,10 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 	}
 	
 	public void asyncFetchUserInfo(String username){
-		((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().asyncGetUserInfo(username, new EMValueCallBack<User>() {
+		((DemoSDKHelper)EaseSDKHelper.getInstance()).getUserProfileManager().asyncGetUserInfo(username, new EMValueCallBack<EaseUser>() {
 			
 			@Override
-			public void onSuccess(User user) {
+			public void onSuccess(EaseUser user) {
 				if (user != null) {
 					tvNickName.setText(user.getNick());
 					if(!TextUtils.isEmpty(user.getAvatar())){
@@ -129,7 +129,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 					}else{
 						Picasso.with(UserProfileActivity.this).load(R.drawable.em_default_avatar).into(headAvatar);
 					}
-					((DemoHXSDKHelper) HXSDKHelper.getInstance()).saveContact(user);
+					((DemoSDKHelper) EaseSDKHelper.getInstance()).saveContact(user);
 				}
 			}
 			
@@ -175,7 +175,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 
 			@Override
 			public void run() {
-				boolean updatenick = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().updateCurrentUserNickName(nickName);
+				boolean updatenick = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getUserProfileManager().updateCurrentUserNickName(nickName);
 				if (UserProfileActivity.this.isFinishing()) {
 					return;
 				}
@@ -257,7 +257,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 
 			@Override
 			public void run() {
-				final String avatarUrl = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().uploadUserAvatar(data);
+				final String avatarUrl = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getUserProfileManager().uploadUserAvatar(data);
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {

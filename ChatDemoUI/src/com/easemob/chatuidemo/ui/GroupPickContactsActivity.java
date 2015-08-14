@@ -27,21 +27,20 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.DemoHXSDKHelper;
+import com.easemob.chatuidemo.DemoSDKHelper;
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuilib.controller.HXSDKHelper;
-import com.easemob.chatuilib.domain.User;
-import com.easemob.chatuilib.utils.UserUtils;
-import com.easemob.chatuilib.widget.EMSidebar;
-import com.easemob.chatuilib.widget.adapter.ContactAdapter;
+import com.easemob.easeui.adapter.EaseContactAdapter;
+import com.easemob.easeui.controller.EaseSDKHelper;
+import com.easemob.easeui.domain.EaseUser;
+import com.easemob.easeui.widget.EaseSidebar;
 
 public class GroupPickContactsActivity extends BaseActivity {
 	private ListView listView;
@@ -70,15 +69,15 @@ public class GroupPickContactsActivity extends BaseActivity {
 		if(exitingMembers == null)
 			exitingMembers = new ArrayList<String>();
 		// 获取好友列表
-		final List<User> alluserList = new ArrayList<User>();
-		for (User user : ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().values()) {
+		final List<EaseUser> alluserList = new ArrayList<EaseUser>();
+		for (EaseUser user : ((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList().values()) {
 			if (!user.getUsername().equals(Constant.NEW_FRIENDS_USERNAME) & !user.getUsername().equals(Constant.GROUP_USERNAME) & !user.getUsername().equals(Constant.CHAT_ROOM) & !user.getUsername().equals(Constant.CHAT_ROBOT))
 				alluserList.add(user);
 		}
 		// 对list进行排序
-		Collections.sort(alluserList, new Comparator<User>() {
+		Collections.sort(alluserList, new Comparator<EaseUser>() {
 			@Override
-			public int compare(User lhs, User rhs) {
+			public int compare(EaseUser lhs, EaseUser rhs) {
 				return (lhs.getUsername().compareTo(rhs.getUsername()));
 
 			}
@@ -87,7 +86,7 @@ public class GroupPickContactsActivity extends BaseActivity {
 		listView = (ListView) findViewById(R.id.list);
 		contactAdapter = new PickContactAdapter(this, R.layout.em_row_contact_with_checkbox, alluserList);
 		listView.setAdapter(contactAdapter);
-		((EMSidebar) findViewById(R.id.sidebar)).setListView(listView);
+		((EaseSidebar) findViewById(R.id.sidebar)).setListView(listView);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -130,11 +129,11 @@ public class GroupPickContactsActivity extends BaseActivity {
 	/**
 	 * adapter
 	 */
-	private class PickContactAdapter extends ContactAdapter {
+	private class PickContactAdapter extends EaseContactAdapter {
 
 		private boolean[] isCheckedArray;
 
-		public PickContactAdapter(Context context, int resource, List<User> users) {
+		public PickContactAdapter(Context context, int resource, List<EaseUser> users) {
 			super(context, resource, users);
 			isCheckedArray = new boolean[users.size()];
 		}

@@ -33,7 +33,7 @@ import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
-import com.easemob.chatuilib.widget.EMConversationList;
+import com.easemob.easeui.widget.EaseConversationList;
 
 public class ConversationListFragment extends Fragment{
     private InputMethodManager inputMethodManager;
@@ -43,7 +43,7 @@ public class ConversationListFragment extends Fragment{
     public TextView errorText;
     private boolean hidden;
     private List<EMConversation> conversationList = new ArrayList<EMConversation>();
-    private EMConversationList conversationListView;
+    private EaseConversationList conversationListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class ConversationListFragment extends Fragment{
         errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
         
         //会话列表控件
-        conversationListView = (EMConversationList) getView().findViewById(R.id.list);
+        conversationListView = (EaseConversationList) getView().findViewById(R.id.list);
         conversationListView.init();
         
         // 注册上下文菜单

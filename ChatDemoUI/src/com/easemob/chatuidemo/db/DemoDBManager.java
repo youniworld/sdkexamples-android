@@ -15,8 +15,8 @@ import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.domain.InviteMessage;
 import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
 import com.easemob.chatuidemo.domain.RobotUser;
-import com.easemob.chatuilib.domain.SystemUser;
-import com.easemob.chatuilib.domain.User;
+import com.easemob.easeui.domain.EaseSystemUser;
+import com.easemob.easeui.domain.EaseUser;
 import com.easemob.util.HanziToPinyin;
 
 public class DemoDBManager {
@@ -36,11 +36,11 @@ public class DemoDBManager {
      * 
      * @param contactList
      */
-    synchronized public void saveContactList(List<User> contactList) {
+    synchronized public void saveContactList(List<EaseUser> contactList) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if (db.isOpen()) {
             db.delete(UserDao.TABLE_NAME, null, null);
-            for (User user : contactList) {
+            for (EaseUser user : contactList) {
                 ContentValues values = new ContentValues();
                 values.put(UserDao.COLUMN_NAME_ID, user.getUsername());
                 if(user.getNick() != null)
@@ -57,21 +57,21 @@ public class DemoDBManager {
      * 
      * @return
      */
-    synchronized public Map<String, User> getContactList() {
+    synchronized public Map<String, EaseUser> getContactList() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Map<String, User> users = new HashMap<String, User>();
+        Map<String, EaseUser> users = new HashMap<String, EaseUser>();
         if (db.isOpen()) {
             Cursor cursor = db.rawQuery("select * from " + UserDao.TABLE_NAME /* + " desc" */, null);
             while (cursor.moveToNext()) {
                 String username = cursor.getString(cursor.getColumnIndex(UserDao.COLUMN_NAME_ID));
                 String nick = cursor.getString(cursor.getColumnIndex(UserDao.COLUMN_NAME_NICK));
                 String avatar = cursor.getString(cursor.getColumnIndex(UserDao.COLUMN_NAME_AVATAR));
-                User user = null;
+                EaseUser user = null;
                 if (username.equals(Constant.NEW_FRIENDS_USERNAME) || username.equals(Constant.GROUP_USERNAME)
                         || username.equals(Constant.CHAT_ROOM)|| username.equals(Constant.CHAT_ROBOT)){
-                    user = new SystemUser(username);
+                    user = new EaseSystemUser(username);
                 }else{
-                    user = new User(username);
+                    user = new EaseUser(username);
                 }
                 user.setNick(nick);
                 user.setAvatar(avatar);
@@ -117,7 +117,7 @@ public class DemoDBManager {
      * 保存一个联系人
      * @param user
      */
-    synchronized public void saveContact(User user){
+    synchronized public void saveContact(EaseUser user){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(UserDao.COLUMN_NAME_ID, user.getUsername());

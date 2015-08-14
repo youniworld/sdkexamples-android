@@ -20,13 +20,13 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.DemoHXSDKHelper;
+import com.easemob.chatuidemo.DemoSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.adapter.NewFriendsMsgAdapter;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
-import com.easemob.chatuilib.controller.HXSDKHelper;
-import com.easemob.chatuilib.domain.SystemUser;
+import com.easemob.easeui.controller.EaseSDKHelper;
+import com.easemob.easeui.domain.EaseSystemUser;
 
 /**
  * 申请与通知
@@ -46,7 +46,7 @@ public class NewFriendsMsgActivity extends BaseActivity {
 		//设置adapter
 		NewFriendsMsgAdapter adapter = new NewFriendsMsgAdapter(this, 1, msgs); 
 		listView.setAdapter(adapter);
-		((SystemUser)((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().
+		((EaseSystemUser)((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList().
 		        get(Constant.NEW_FRIENDS_USERNAME)).setUnreadMsgCount(0);
 		
 	}

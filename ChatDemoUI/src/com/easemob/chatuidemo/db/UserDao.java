@@ -19,7 +19,7 @@ import java.util.Map;
 import android.content.Context;
 
 import com.easemob.chatuidemo.domain.RobotUser;
-import com.easemob.chatuilib.domain.User;
+import com.easemob.easeui.domain.EaseUser;
 
 public class UserDao {
 	public static final String TABLE_NAME = "uers";
@@ -46,7 +46,7 @@ public class UserDao {
 	 * 
 	 * @param contactList
 	 */
-	public void saveContactList(List<User> contactList) {
+	public void saveContactList(List<EaseUser> contactList) {
 	    DemoDBManager.getInstance().saveContactList(contactList);
 	}
 
@@ -55,7 +55,7 @@ public class UserDao {
 	 * 
 	 * @return
 	 */
-	public Map<String, User> getContactList() {
+	public Map<String, EaseUser> getContactList() {
 		
 	    return DemoDBManager.getInstance().getContactList();
 	}
@@ -72,7 +72,7 @@ public class UserDao {
 	 * 保存一个联系人
 	 * @param user
 	 */
-	public void saveContact(User user){
+	public void saveContact(EaseUser user){
 	    DemoDBManager.getInstance().saveContact(user);
 	}
 	

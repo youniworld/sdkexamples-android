@@ -13,9 +13,9 @@
  */
 package com.easemob.chatuidemo.domain;
 
-import com.easemob.chatuilib.domain.User;
+import com.easemob.easeui.domain.EaseUser;
 
-public class RobotUser extends User{
+public class RobotUser extends EaseUser{
 	public RobotUser(String username) {
         super(username);
     }

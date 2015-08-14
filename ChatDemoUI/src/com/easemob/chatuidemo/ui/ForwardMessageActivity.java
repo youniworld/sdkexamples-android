@@ -17,12 +17,12 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuilib.domain.User;
-import com.easemob.chatuilib.widget.EMAlertDialog;
-import com.easemob.chatuilib.widget.EMAlertDialog.AlertDialogUser;
+import com.easemob.easeui.domain.EaseUser;
+import com.easemob.easeui.widget.EaseAlertDialog;
+import com.easemob.easeui.widget.EaseAlertDialog.AlertDialogUser;
 
 public class ForwardMessageActivity extends PickContactNoCheckboxActivity {
-	private User selectUser;
+	private EaseUser selectUser;
 	private String forward_msg_id;
 
 	 
@@ -36,7 +36,7 @@ public class ForwardMessageActivity extends PickContactNoCheckboxActivity {
 	protected void onListItemClick(int position) {
 //		if (position != 0) {
 			selectUser = contactAdapter.getItem(position);
-			new EMAlertDialog(this, null, getString(R.string.confirm_forward_to, selectUser.getNick()), null, new AlertDialogUser() {
+			new EaseAlertDialog(this, null, getString(R.string.confirm_forward_to, selectUser.getNick()), null, new AlertDialogUser() {
                 @Override
                 public void onResult(boolean confirmed, Bundle bundle) {
                     if (!confirmed) {

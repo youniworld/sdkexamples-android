@@ -81,7 +81,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/em_open_icon"
+                        android:background="@drawable/ease_open_icon"
                         android:visibility="visible" />
 
                     <ImageView
@@ -90,7 +90,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/em_close_icon"
+                        android:background="@drawable/ease_close_icon"
                         android:visibility="invisible" />
                 </RelativeLayout>
 
@@ -125,7 +125,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/em_open_icon"
+                        android:background="@drawable/ease_open_icon"
                         android:visibility="visible" />
 
                     <ImageView
@@ -134,7 +134,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/em_close_icon"
+                        android:background="@drawable/ease_close_icon"
                         android:visibility="invisible" />
                 </RelativeLayout>
 
@@ -169,7 +169,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/em_open_icon"
+                        android:background="@drawable/ease_open_icon"
                         android:visibility="visible" />
 
                     <ImageView
@@ -178,7 +178,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/em_close_icon"
+                        android:background="@drawable/ease_close_icon"
                         android:visibility="invisible" />
                 </RelativeLayout>
 
@@ -227,7 +227,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/em_open_icon"
+                        android:background="@drawable/ease_open_icon"
                         android:visibility="visible" />
 
                     <ImageView
@@ -236,7 +236,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/em_close_icon"
+                        android:background="@drawable/ease_close_icon"
                         android:visibility="invisible" />
                 </RelativeLayout>
 
@@ -368,7 +368,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/em_open_icon"
+                    android:background="@drawable/ease_open_icon"
                     android:visibility="visible" />
 
                 <ImageView
@@ -377,7 +377,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/em_close_icon"
+                    android:background="@drawable/ease_close_icon"
                     android:visibility="invisible" />
             </RelativeLayout>
 

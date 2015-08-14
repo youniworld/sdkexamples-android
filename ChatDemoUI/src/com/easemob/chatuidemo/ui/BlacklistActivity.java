@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMContactManager;
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuilib.utils.UserUtils;
+import com.easemob.easeui.utils.EaseUserUtils;
 import com.easemob.exceptions.EaseMobException;
 
 /**
@@ -118,14 +118,14 @@ public class BlacklistActivity extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				convertView = View.inflate(getContext(), R.layout.em_row_contact, null);
+				convertView = View.inflate(getContext(), R.layout.ease_row_contact, null);
 			}
 			String username = getItem(position);
 			TextView name = (TextView) convertView.findViewById(R.id.name);
 			ImageView avatar = (ImageView) convertView.findViewById(R.id.avatar);
 			
-			UserUtils.setUserAvatar(getContext(), username, avatar);
-			UserUtils.setUserNick(username, name);
+			EaseUserUtils.setUserAvatar(getContext(), username, avatar);
+			EaseUserUtils.setUserNick(username, name);
 			
 			return convertView;
 		}

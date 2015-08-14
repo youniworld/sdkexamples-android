@@ -33,10 +33,10 @@ import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
 import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.DemoHXSDKHelper;
-import com.easemob.chatuidemo.DemoHXSDKModel;
+import com.easemob.chatuidemo.DemoSDKHelper;
+import com.easemob.chatuidemo.DemoSDKModel;
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuilib.controller.HXSDKHelper;
+import com.easemob.easeui.controller.EaseSDKHelper;
 
 /**
  * 设置界面
@@ -125,7 +125,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	 */
 	private LinearLayout pushNick;
 	
-	DemoHXSDKModel model;
+	DemoSDKModel model;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -182,7 +182,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		
 		chatOptions = EMChatManager.getInstance().getChatOptions();
 		
-		model = (DemoHXSDKModel) HXSDKHelper.getInstance().getModel();
+		model = (DemoSDKModel) EaseSDKHelper.getInstance().getModel();
 		
 		// 震动和声音总开关，来消息时，是否允许此开关打开
 		// the vibrate and sound notification are allowed or not?
@@ -249,7 +249,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				chatOptions.setNotificationEnable(false);
 				EMChatManager.getInstance().setChatOptions(chatOptions);
 
-				HXSDKHelper.getInstance().getModel().setSettingMsgNotification(false);
+				EaseSDKHelper.getInstance().getModel().setSettingMsgNotification(false);
 			} else {
 				iv_switch_open_notification.setVisibility(View.VISIBLE);
 				iv_switch_close_notification.setVisibility(View.INVISIBLE);
@@ -259,7 +259,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				textview2.setVisibility(View.VISIBLE);
 				chatOptions.setNotificationEnable(true);
 				EMChatManager.getInstance().setChatOptions(chatOptions);
-				HXSDKHelper.getInstance().getModel().setSettingMsgNotification(true);
+				EaseSDKHelper.getInstance().getModel().setSettingMsgNotification(true);
 			}
 			break;
 		case R.id.rl_switch_sound:
@@ -268,13 +268,13 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				iv_switch_close_sound.setVisibility(View.VISIBLE);
 				chatOptions.setNoticeBySound(false);
 				EMChatManager.getInstance().setChatOptions(chatOptions);
-				HXSDKHelper.getInstance().getModel().setSettingMsgSound(false);
+				EaseSDKHelper.getInstance().getModel().setSettingMsgSound(false);
 			} else {
 				iv_switch_open_sound.setVisibility(View.VISIBLE);
 				iv_switch_close_sound.setVisibility(View.INVISIBLE);
 				chatOptions.setNoticeBySound(true);
 				EMChatManager.getInstance().setChatOptions(chatOptions);
-				HXSDKHelper.getInstance().getModel().setSettingMsgSound(true);
+				EaseSDKHelper.getInstance().getModel().setSettingMsgSound(true);
 			}
 			break;
 		case R.id.rl_switch_vibrate:
@@ -283,13 +283,13 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				iv_switch_close_vibrate.setVisibility(View.VISIBLE);
 				chatOptions.setNoticedByVibrate(false);
 				EMChatManager.getInstance().setChatOptions(chatOptions);
-				HXSDKHelper.getInstance().getModel().setSettingMsgVibrate(false);
+				EaseSDKHelper.getInstance().getModel().setSettingMsgVibrate(false);
 			} else {
 				iv_switch_open_vibrate.setVisibility(View.VISIBLE);
 				iv_switch_close_vibrate.setVisibility(View.INVISIBLE);
 				chatOptions.setNoticedByVibrate(true);
 				EMChatManager.getInstance().setChatOptions(chatOptions);
-				HXSDKHelper.getInstance().getModel().setSettingMsgVibrate(true);
+				EaseSDKHelper.getInstance().getModel().setSettingMsgVibrate(true);
 			}
 			break;
 		case R.id.rl_switch_speaker:
@@ -298,13 +298,13 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				iv_switch_close_speaker.setVisibility(View.VISIBLE);
 				chatOptions.setUseSpeaker(false);
 				EMChatManager.getInstance().setChatOptions(chatOptions);
-				HXSDKHelper.getInstance().getModel().setSettingMsgSpeaker(false);
+				EaseSDKHelper.getInstance().getModel().setSettingMsgSpeaker(false);
 			} else {
 				iv_switch_open_speaker.setVisibility(View.VISIBLE);
 				iv_switch_close_speaker.setVisibility(View.INVISIBLE);
 				chatOptions.setUseSpeaker(true);
 				EMChatManager.getInstance().setChatOptions(chatOptions);
-				HXSDKHelper.getInstance().getModel().setSettingMsgVibrate(true);
+				EaseSDKHelper.getInstance().getModel().setSettingMsgVibrate(true);
 			}
 			break;
 		case R.id.rl_switch_chatroom_owner_leave:
@@ -351,7 +351,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		pd.setMessage(st);
 		pd.setCanceledOnTouchOutside(false);
 		pd.show();
-		DemoHXSDKHelper.getInstance().logout(true,new EMCallBack() {
+		DemoSDKHelper.getInstance().logout(true,new EMCallBack() {
 			
 			@Override
 			public void onSuccess() {

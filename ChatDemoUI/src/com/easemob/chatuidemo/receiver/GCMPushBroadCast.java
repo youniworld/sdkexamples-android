@@ -12,7 +12,7 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.easemob.chatuilib.controller.HXSDKHelper;
+import com.easemob.easeui.controller.EaseSDKHelper;
 
 public class GCMPushBroadCast extends BroadcastReceiver {
 
@@ -30,7 +30,7 @@ public class GCMPushBroadCast extends BroadcastReceiver {
 
 	public void sendNotification(String message, boolean isForeground) {
 
-		Context appContext = HXSDKHelper.getInstance().getAppContext();
+		Context appContext = EaseSDKHelper.getInstance().getAppContext();
 
 		if (notificationManager == null) {
 			notificationManager = (NotificationManager) appContext

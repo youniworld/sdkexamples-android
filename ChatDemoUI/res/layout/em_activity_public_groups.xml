@@ -11,7 +11,7 @@
         android:background="@color/top_bar_normal_bg"
         android:gravity="center_vertical" >
 
-        <include layout="@layout/em_commom_back_btn" />
+        <include layout="@layout/ease_commom_back_btn" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -34,7 +34,7 @@
             android:id="@+id/btn_search"
             android:layout_width="55dp"
             android:layout_height="match_parent"
-            android:background="@drawable/em_common_tab_bg"
+            android:background="@drawable/ease_common_tab_bg"
             android:textColor="#fff"
             android:text="@string/search"
             android:onClick="search"

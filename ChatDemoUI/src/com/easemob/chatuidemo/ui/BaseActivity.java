@@ -15,13 +15,11 @@
 package com.easemob.chatuidemo.ui;
 
 import android.os.Bundle;
-import android.view.View;
 
-import com.easemob.chatuilib.controller.HXSDKHelper;
-import com.easemob.chatuilib.ui.EMBaseActivity;
+import com.easemob.easeui.ui.EaseBaseActivity;
 import com.umeng.analytics.MobclickAgent;
 
-public class BaseActivity extends EMBaseActivity {
+public class BaseActivity extends EaseBaseActivity {
 
     @Override
     protected void onCreate(Bundle arg0) {
@@ -43,12 +41,4 @@ public class BaseActivity extends EMBaseActivity {
     }
 
 
-    /**
-     * 返回
-     * 
-     * @param view
-     */
-    public void back(View view) {
-        finish();
-    }
 }

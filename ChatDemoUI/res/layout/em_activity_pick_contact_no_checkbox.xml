@@ -12,7 +12,7 @@
         android:background="@color/top_bar_normal_bg"
         android:gravity="center_vertical" >
 
-        <include layout="@layout/em_commom_back_btn" />
+        <include layout="@layout/ease_commom_back_btn" />
 
         <TextView
             android:id="@+id/tv_contact_details"
@@ -39,7 +39,7 @@
             android:divider="#E2E2E2"
             android:dividerHeight="1dp" />
 
-        <com.easemob.chatuilib.widget.EMSidebar
+        <com.easemob.easeui.widget.EaseSidebar
             android:id="@+id/sidebar"
             android:layout_width="25dp"
             android:layout_height="match_parent"

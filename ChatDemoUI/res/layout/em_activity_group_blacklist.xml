@@ -14,7 +14,7 @@
         <LinearLayout
             android:layout_width="45dp"
             android:layout_height="match_parent"
-            android:background="@drawable/em_common_tab_bg"
+            android:background="@drawable/ease_common_tab_bg"
             android:onClick="back" >
 
             <ImageView

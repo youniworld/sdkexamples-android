@@ -8,9 +8,9 @@ import android.text.TextUtils;
 
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chatuidemo.DemoHXSDKHelper;
-import com.easemob.chatuilib.controller.HXSDKHelper;
-import com.easemob.chatuilib.domain.User;
+import com.easemob.chatuidemo.DemoSDKHelper;
+import com.easemob.easeui.controller.EaseSDKHelper;
+import com.easemob.easeui.domain.EaseUser;
 import com.easemob.util.EMLog;
 import com.easemob.util.HanziToPinyin;
 import com.parse.FindCallback;
@@ -83,7 +83,7 @@ public class ParseManager {
 		return false;
 	}
 
-	public void getContactInfos(List<String> usernames, final EMValueCallBack<List<User>> callback) {
+	public void getContactInfos(List<String> usernames, final EMValueCallBack<List<EaseUser>> callback) {
 		ParseQuery<ParseObject> pQuery = ParseQuery.getQuery(CONFIG_TABLE_NAME);
 		pQuery.whereContainedIn(CONFIG_USERNAME, usernames);
 		pQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -91,9 +91,9 @@ public class ParseManager {
 			@Override
 			public void done(List<ParseObject> arg0, ParseException arg1) {
 				if (arg0 != null) {
-					List<User> mList = new ArrayList<User>();
+					List<EaseUser> mList = new ArrayList<EaseUser>();
 					for (ParseObject pObject : arg0) {
-						User user = new User(pObject.getString(CONFIG_USERNAME));
+					    EaseUser user = new EaseUser(pObject.getString(CONFIG_USERNAME));
 						ParseFile parseFile = pObject.getParseFile(CONFIG_AVATAR);
 						if (parseFile != null) {
 							user.setAvatar(parseFile.getUrl());
@@ -116,7 +116,7 @@ public class ParseManager {
      * @param username
      * @param user
      */
-    private static void setUserHearder(User user) {
+    private static void setUserHearder(EaseUser user) {
         String headerName = null;
         if (!TextUtils.isEmpty(user.getNick())) {
             headerName = user.getNick();
@@ -135,12 +135,12 @@ public class ParseManager {
         }
     }
 	
-	public void asyncGetCurrentUserInfo(final EMValueCallBack<User> callback){
+	public void asyncGetCurrentUserInfo(final EMValueCallBack<EaseUser> callback){
 		final String username = EMChatManager.getInstance().getCurrentUser();
-		asyncGetUserInfo(username, new EMValueCallBack<User>() {
+		asyncGetUserInfo(username, new EMValueCallBack<EaseUser>() {
 
 			@Override
-			public void onSuccess(User value) {
+			public void onSuccess(EaseUser value) {
 				callback.onSuccess(value);
 			}
 
@@ -154,7 +154,7 @@ public class ParseManager {
 						@Override
 						public void done(ParseException arg0) {
 							if(arg0==null){
-								callback.onSuccess(new User(username));
+								callback.onSuccess(new EaseUser(username));
 							}
 						}
 					});
@@ -165,7 +165,7 @@ public class ParseManager {
 		});
 	}
 	
-	public void asyncGetUserInfo(final String username,final EMValueCallBack<User> callback){
+	public void asyncGetUserInfo(final String username,final EMValueCallBack<EaseUser> callback){
 		ParseQuery<ParseObject> pQuery = ParseQuery.getQuery(CONFIG_TABLE_NAME);
 		pQuery.whereEqualTo(CONFIG_USERNAME, username);
 		pQuery.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -176,14 +176,14 @@ public class ParseManager {
 					String nick = pUser.getString(CONFIG_NICK);
 					ParseFile pFile = pUser.getParseFile(CONFIG_AVATAR);
 					if(callback!=null){
-						User user = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().get(username);
+					    EaseUser user = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList().get(username);
 						if(user!=null){
 							user.setNick(nick);
 							if (pFile != null && pFile.getUrl() != null) {
 								user.setAvatar(pFile.getUrl());
 							}
 						}else{
-						    user = new User(username);
+						    user = new EaseUser(username);
 						    user.setNick(nick);
 						    if (pFile != null && pFile.getUrl() != null) {
                                 user.setAvatar(pFile.getUrl());

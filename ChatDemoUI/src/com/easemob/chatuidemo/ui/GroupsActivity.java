@@ -36,7 +36,7 @@ import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.adapter.GroupAdapter;
-import com.easemob.chatuilib.controller.HXSDKHelper;
+import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.util.EMLog;
 
 public class GroupsActivity extends BaseActivity {
@@ -51,7 +51,7 @@ public class GroupsActivity extends BaseActivity {
 	private SwipeRefreshLayout swipeRefreshLayout;
 	Handler handler = new Handler();
 
-	class SyncListener implements HXSDKHelper.HXSyncListener {
+	class SyncListener implements EaseSDKHelper.HXSyncListener {
 		@Override
 		public void onSyncSucess(final boolean success) {
 			EMLog.d(TAG, "onSyncGroupsFinish success:" + success);
@@ -140,9 +140,9 @@ public class GroupsActivity extends BaseActivity {
 		progressBar = (View)findViewById(R.id.progress_bar);
 		
 		syncListener = new SyncListener();
-		HXSDKHelper.getInstance().addSyncGroupListener(syncListener);
+		EaseSDKHelper.getInstance().addSyncGroupListener(syncListener);
 
-		if (!HXSDKHelper.getInstance().isGroupsSyncedWithServer()) {
+		if (!EaseSDKHelper.getInstance().isGroupsSyncedWithServer()) {
 			progressBar.setVisibility(View.VISIBLE);
 		} else {
 			progressBar.setVisibility(View.GONE);
@@ -175,7 +175,7 @@ public class GroupsActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		if (syncListener != null) {
-			HXSDKHelper.getInstance().removeSyncGroupListener(syncListener);
+			EaseSDKHelper.getInstance().removeSyncGroupListener(syncListener);
 			syncListener = null;
 		}
 		super.onDestroy();

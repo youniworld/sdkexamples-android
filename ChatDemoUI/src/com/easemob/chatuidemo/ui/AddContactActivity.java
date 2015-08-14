@@ -13,10 +13,8 @@
  */
 package com.easemob.chatuidemo.ui;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -30,10 +28,10 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMContactManager;
 import com.easemob.chatuidemo.DemoApplication;
-import com.easemob.chatuidemo.DemoHXSDKHelper;
+import com.easemob.chatuidemo.DemoSDKHelper;
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuilib.controller.HXSDKHelper;
-import com.easemob.chatuilib.widget.EMAlertDialog;
+import com.easemob.easeui.controller.EaseSDKHelper;
+import com.easemob.easeui.widget.EaseAlertDialog;
 
 public class AddContactActivity extends BaseActivity{
 	private EditText editText;
@@ -75,7 +73,7 @@ public class AddContactActivity extends BaseActivity{
 		if (getString(R.string.button_search).equals(saveText)) {
 			toAddUsername = name;
 			if(TextUtils.isEmpty(name)) {
-				new EMAlertDialog(this, R.string.Please_enter_a_username).show();
+				new EaseAlertDialog(this, R.string.Please_enter_a_username).show();
 				return;
 			}
 			
@@ -94,17 +92,17 @@ public class AddContactActivity extends BaseActivity{
 	 */
 	public void addContact(View view){
 		if(DemoApplication.getInstance().getUserName().equals(nameText.getText().toString())){
-			new EMAlertDialog(this, R.string.not_add_myself).show();
+			new EaseAlertDialog(this, R.string.not_add_myself).show();
 			return;
 		}
 		
-		if(((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().containsKey(nameText.getText().toString())){
+		if(((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList().containsKey(nameText.getText().toString())){
 		    //提示已在好友列表中(在黑名单列表里)，无需添加
 		    if(EMContactManager.getInstance().getBlackListUsernames().contains(nameText.getText().toString())){
-		        new EMAlertDialog(this, R.string.user_already_in_contactlist).show();
+		        new EaseAlertDialog(this, R.string.user_already_in_contactlist).show();
 		        return;
 		    }
-			new EMAlertDialog(this, R.string.This_user_is_already_your_friend).show();
+			new EaseAlertDialog(this, R.string.This_user_is_already_your_friend).show();
 			return;
 		}
 		
