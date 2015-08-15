@@ -45,6 +45,7 @@ import com.easemob.easeui.utils.EaseUserUtils;
 import com.easemob.easeui.widget.EaseAlertDialog;
 import com.easemob.easeui.widget.EaseAlertDialog.AlertDialogUser;
 import com.easemob.easeui.widget.EaseExpandGridView;
+import com.easemob.easeui.widget.EaseSwitchButton;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.easemob.util.NetUtils;
@@ -67,14 +68,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	private ProgressDialog progressDialog;
 
 	private RelativeLayout rl_switch_block_groupmsg;
-	/**
-	 * 屏蔽群消息imageView
-	 */
-//	private ImageView iv_switch_block_groupmsg;
-	/**
-	 * 关闭屏蔽群消息imageview
-	 */
-//	private ImageView iv_switch_unblock_groupmsg;
 
 	public static GroupDetailsActivity instance;
 	
@@ -85,6 +78,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	private RelativeLayout changeGroupNameLayout;
     private RelativeLayout idLayout;
     private TextView idText;
+	private EaseSwitchButton switchButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -115,9 +109,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		idText = (TextView) findViewById(R.id.tv_group_id_value);
 		
 		rl_switch_block_groupmsg = (RelativeLayout) findViewById(R.id.rl_switch_block_groupmsg);
+		switchButton = (EaseSwitchButton) findViewById(R.id.switch_btn);
 
-//		iv_switch_block_groupmsg = (ImageView) findViewById(R.id.iv_switch_block_groupmsg);
-//		iv_switch_unblock_groupmsg = (ImageView) findViewById(R.id.iv_switch_unblock_groupmsg);
 
 		rl_switch_block_groupmsg.setOnClickListener(this);
 
@@ -418,76 +411,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 	@Override
 	public void onClick(View v) {
-		String st6 = getResources().getString(R.string.Is_unblock);
-		final String st7 = getResources().getString(R.string.remove_group_of);
 		switch (v.getId()) {
-		case R.id.rl_switch_block_groupmsg: // 屏蔽群组
-//			if (iv_switch_block_groupmsg.getVisibility() == View.VISIBLE) {
-//				EMLog.d(TAG, "change to unblock group msg");
-//				if (progressDialog == null) {
-//	                progressDialog = new ProgressDialog(GroupDetailsActivity.this);
-//	                progressDialog.setCanceledOnTouchOutside(false);
-//	            }
-//				progressDialog.setMessage(st6);
-//				progressDialog.show();
-//				new Thread(new Runnable() {
-//                    public void run() {
-//                        try {
-//                            EMGroupManager.getInstance().unblockGroupMessage(groupId);
-//                            runOnUiThread(new Runnable() {
-//                                public void run() {
-//                                    iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
-//                                    iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
-//                                    progressDialog.dismiss();
-//                                }
-//                            });
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                            runOnUiThread(new Runnable() {
-//                                public void run() {
-//                                    progressDialog.dismiss();
-//                                    Toast.makeText(getApplicationContext(), st7, 1).show();
-//                                }
-//                            });
-//                            
-//                        }
-//                    }
-//                }).start();
-//				
-//			} else {
-//				String st8 = getResources().getString(R.string.group_is_blocked);
-//				final String st9 = getResources().getString(R.string.group_of_shielding);
-//				EMLog.d(TAG, "change to block group msg");
-//				if (progressDialog == null) {
-//                    progressDialog = new ProgressDialog(GroupDetailsActivity.this);
-//                    progressDialog.setCanceledOnTouchOutside(false);
-//                }
-//				progressDialog.setMessage(st8);
-//				progressDialog.show();
-//				new Thread(new Runnable() {
-//                    public void run() {
-//                        try {
-//                            EMGroupManager.getInstance().blockGroupMessage(groupId);
-//                            runOnUiThread(new Runnable() {
-//                                public void run() {
-//                                    iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
-//                                    iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
-//                                    progressDialog.dismiss();
-//                                }
-//                            });
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                            runOnUiThread(new Runnable() {
-//                                public void run() {
-//                                    progressDialog.dismiss();
-//                                    Toast.makeText(getApplicationContext(), st9, 1).show();
-//                                }
-//                            });
-//                        }
-//                        
-//                    }
-//                }).start();
-//			}
+		case R.id.rl_switch_block_groupmsg: // 屏蔽或取消屏蔽群组
+			toggleBlockGroup();
 			break;
 
 		case R.id.clear_all_history: // 清空聊天记录
@@ -516,6 +442,73 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			break;
 		}
 
+	}
+
+	private void toggleBlockGroup() {
+		if(switchButton.isSwitchOpen()){
+			EMLog.d(TAG, "change to unblock group msg");
+			if (progressDialog == null) {
+		        progressDialog = new ProgressDialog(GroupDetailsActivity.this);
+		        progressDialog.setCanceledOnTouchOutside(false);
+		    }
+			progressDialog.setMessage(getString(R.string.Is_unblock));
+			progressDialog.show();
+			new Thread(new Runnable() {
+		        public void run() {
+		            try {
+		                EMGroupManager.getInstance().unblockGroupMessage(groupId);
+		                runOnUiThread(new Runnable() {
+		                    public void run() {
+		                    	switchButton.closeSwitch();
+		                        progressDialog.dismiss();
+		                    }
+		                });
+		            } catch (Exception e) {
+		                e.printStackTrace();
+		                runOnUiThread(new Runnable() {
+		                    public void run() {
+		                        progressDialog.dismiss();
+		                        Toast.makeText(getApplicationContext(), R.string.remove_group_of, 1).show();
+		                    }
+		                });
+		                
+		            }
+		        }
+		    }).start();
+			
+		} else {
+			String st8 = getResources().getString(R.string.group_is_blocked);
+			final String st9 = getResources().getString(R.string.group_of_shielding);
+			EMLog.d(TAG, "change to block group msg");
+			if (progressDialog == null) {
+		        progressDialog = new ProgressDialog(GroupDetailsActivity.this);
+		        progressDialog.setCanceledOnTouchOutside(false);
+		    }
+			progressDialog.setMessage(st8);
+			progressDialog.show();
+			new Thread(new Runnable() {
+		        public void run() {
+		            try {
+		                EMGroupManager.getInstance().blockGroupMessage(groupId);
+		                runOnUiThread(new Runnable() {
+		                    public void run() {
+		                    	switchButton.openSwitch();
+		                        progressDialog.dismiss();
+		                    }
+		                });
+		            } catch (Exception e) {
+		                e.printStackTrace();
+		                runOnUiThread(new Runnable() {
+		                    public void run() {
+		                        progressDialog.dismiss();
+		                        Toast.makeText(getApplicationContext(), st9, 1).show();
+		                    }
+		                });
+		            }
+		            
+		        }
+		    }).start();
+		}
 	}
 
 	/**

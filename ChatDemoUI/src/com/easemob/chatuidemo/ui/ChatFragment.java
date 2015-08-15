@@ -63,11 +63,10 @@ import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.easeui.utils.EaseImageUtils;
 import com.easemob.easeui.widget.EaseAlertDialog;
 import com.easemob.easeui.widget.EaseAlertDialog.AlertDialogUser;
-import com.easemob.easeui.widget.EaseChatExtendMenu.ChatExtendMenuItemClickListener;
+import com.easemob.easeui.widget.EaseChatExtendMenu;
 import com.easemob.easeui.widget.EaseChatInputMenu;
 import com.easemob.easeui.widget.EaseChatInputMenu.ChatInputMenuListener;
 import com.easemob.easeui.widget.EaseChatMessageList;
-import com.easemob.easeui.widget.EaseChatMessageList.MessageListItemClickListener;
 import com.easemob.easeui.widget.EaseTitleBar;
 import com.easemob.easeui.widget.EaseVoiceRecorderView;
 import com.easemob.util.EMLog;
@@ -308,7 +307,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
     }
 
     protected void setListItemClickListener() {
-        messageList.setItemClickListener(new MessageListItemClickListener() {
+        messageList.setItemClickListener(new EaseChatMessageList.MessageListItemClickListener() {
             
             @Override
             public void onUserAvatarClick(String username) {
@@ -634,7 +633,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
      * 扩展菜单栏item点击事件
      *
      */
-    class MyItemClickListener implements ChatExtendMenuItemClickListener {
+    class MyItemClickListener implements EaseChatExtendMenu.ChatExtendMenuItemClickListener {
 
         @Override
         public void onClick(int itemId, View view) {
