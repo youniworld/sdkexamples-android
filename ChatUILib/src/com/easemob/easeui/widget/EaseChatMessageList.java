@@ -90,7 +90,6 @@ public class EaseChatMessageList extends RelativeLayout{
         messageListView.setAdapter(messageAdapter);
         
         messageAdapter.refreshSelectLast();
-        
     }
     
     protected void parseStyle(Context context, AttributeSet attrs) {

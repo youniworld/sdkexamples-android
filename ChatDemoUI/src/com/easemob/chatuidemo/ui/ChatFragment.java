@@ -61,6 +61,7 @@ import com.easemob.easeui.ui.EaseBaiduMapActivity;
 import com.easemob.easeui.ui.EaseGroupRemoveListener;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.easeui.utils.EaseImageUtils;
+import com.easemob.easeui.utils.EaseUserUtils;
 import com.easemob.easeui.widget.EaseAlertDialog;
 import com.easemob.easeui.widget.EaseAlertDialog.AlertDialogUser;
 import com.easemob.easeui.widget.EaseChatExtendMenu;
@@ -73,9 +74,9 @@ import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 
 public class ChatFragment extends Fragment implements EMEventListener {
-    private static final String TAG = "ChatActivity";
+    protected static final String TAG = "ChatActivity";
     public static final int REQUEST_CODE_CONTEXT_MENU = 1;
-    private static final int REQUEST_CODE_MAP = 2;
+    protected static final int REQUEST_CODE_MAP = 2;
     public static final int REQUEST_CODE_COPY_AND_PASTE = 3;
     public static final int REQUEST_CODE_DOWNLOAD_VOICE = 4;
     public static final int REQUEST_CODE_CAMERA = 5;
@@ -103,7 +104,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
     protected EaseTitleBar titleBar;
     
     protected InputMethodManager inputManager;
-    private ClipboardManager clipboard;
+    protected ClipboardManager clipboard;
 
     protected Handler handler = new Handler();
     protected File cameraFile;
@@ -114,8 +115,8 @@ public class ChatFragment extends Fragment implements EMEventListener {
     protected boolean isloading;
     protected boolean haveMoreData = true;
     protected final int pagesize = 20;
-    private GroupListener groupListener;
-    private EMMessage contextMenuMessage;
+    protected GroupListener groupListener;
+    protected EMMessage contextMenuMessage;
     
     static final int ITEM_TAKE_PICTURE = 1;
     static final int ITEM_PICTURE = 2;
@@ -132,7 +133,9 @@ public class ChatFragment extends Fragment implements EMEventListener {
             R.drawable.em_chat_voice_call_selector, R.drawable.em_chat_video_call_selector };
     protected int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION, ITEM_VIDEO, ITEM_FILE, ITEM_VOICE_CALL,
             ITEM_VIDEO_CALL };
-    private boolean isRobot;
+    protected boolean isRobot;
+    private EMChatRoomChangeListener chatRoomChangeListener;
+    private boolean isMessageListInited;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -164,7 +167,6 @@ public class ChatFragment extends Fragment implements EMEventListener {
         messageList = (EaseChatMessageList) getView().findViewById(R.id.message_list);
         if(chatType != Constant.CHATTYPE_SINGLE)
             messageList.setShowUserNick(true);
-        messageList.init(toChatUsername, chatType);
         listView = messageList.getListView();
 
         inputMenu = (EaseChatInputMenu) getView().findViewById(R.id.input_menu);
@@ -212,14 +214,6 @@ public class ChatFragment extends Fragment implements EMEventListener {
     }
 
     protected void setUpView() {
-
-        // 获取当前conversation对象
-        conversation = EMChatManager.getInstance().getConversation(toChatUsername);
-        // 把此会话的未读数置为0
-        conversation.markAllMessagesAsRead();
-        
-        UserProvider userProvider = EaseSDKHelper.getInstance().getUserProvider();
-
         titleBar.setTitle(toChatUsername);
         if (chatType == Constant.CHATTYPE_SINGLE) { // 单聊
             Map<String,RobotUser> robotMap=((DemoSDKHelper)EaseSDKHelper.getInstance()).getRobotList();
@@ -227,8 +221,8 @@ public class ChatFragment extends Fragment implements EMEventListener {
                 isRobot = true;
             }
             // 设置标题
-            if(userProvider != null && userProvider.getUser(toChatUsername) != null){
-                titleBar.setTitle(userProvider.getUser(toChatUsername).getNick());
+            if(EaseUserUtils.getUserInfo(toChatUsername) != null){
+                titleBar.setTitle(EaseUserUtils.getUserInfo(toChatUsername).getNick());
             }
             titleBar.setRightImageResource(R.drawable.em_mm_title_remove);
         } else {
@@ -247,34 +241,9 @@ public class ChatFragment extends Fragment implements EMEventListener {
 
         }
         if (chatType != Constant.CHATTYPE_CHATROOM) {
-            // 初始化db时，每个conversation加载数目是getChatOptions().getNumberOfMessagesLoaded
-            // 这个数目如果比用户期望进入会话界面时显示的个数不一样，就多加载一些
-            final List<EMMessage> msgs = conversation.getAllMessages();
-            int msgCount = msgs != null ? msgs.size() : 0;
-            if (msgCount < conversation.getAllMsgCount() && msgCount < pagesize) {
-                String msgId = null;
-                if (msgs != null && msgs.size() > 0) {
-                    msgId = msgs.get(0).getMsgId();
-                }
-                if (chatType == Constant.CHATTYPE_SINGLE) {
-                    conversation.loadMoreMsgFromDB(msgId, pagesize);
-                } else {
-                    conversation.loadMoreGroupMsgFromDB(msgId, pagesize);
-                }
-            }
+            onConversationInit();
+            onMessageListInit();
         }
-
-        setListItemClickListener();
-        
-        messageList.getListView().setOnTouchListener(new OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                hideKeyboard();
-                inputMenu.hideExtendMenuContainer();
-                return false;
-            }
-        });
 
         // 设置标题栏点击事件
         titleBar.setLeftLayoutClickListener(new OnClickListener() {
@@ -305,7 +274,48 @@ public class ChatFragment extends Fragment implements EMEventListener {
             forwardMessage(forward_msg_id);
         }
     }
+    
+    protected void onConversationInit(){
+        // 获取当前conversation对象
+        conversation = EMChatManager.getInstance().getConversation(toChatUsername);
+        // 把此会话的未读数置为0
+        conversation.markAllMessagesAsRead();
+        // 初始化db时，每个conversation加载数目是getChatOptions().getNumberOfMessagesLoaded
+        // 这个数目如果比用户期望进入会话界面时显示的个数不一样，就多加载一些
+        final List<EMMessage> msgs = conversation.getAllMessages();
+        int msgCount = msgs != null ? msgs.size() : 0;
+        if (msgCount < conversation.getAllMsgCount() && msgCount < pagesize) {
+            String msgId = null;
+            if (msgs != null && msgs.size() > 0) {
+                msgId = msgs.get(0).getMsgId();
+            }
+            if (chatType == Constant.CHATTYPE_SINGLE) {
+                conversation.loadMoreMsgFromDB(msgId, pagesize);
+            } else {
+                conversation.loadMoreGroupMsgFromDB(msgId, pagesize);
+            }
+        }
+        
+    }
+    
+    protected void onMessageListInit(){
+        messageList.init(toChatUsername, chatType);
+        //设置list item里的控件的点击事件
+        setListItemClickListener();
+        
+        messageList.getListView().setOnTouchListener(new OnTouchListener() {
 
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                hideKeyboard();
+                inputMenu.hideExtendMenuContainer();
+                return false;
+            }
+        });
+        
+        isMessageListInited = true;
+    }
+    
     protected void setListItemClickListener() {
         messageList.setItemClickListener(new EaseChatMessageList.MessageListItemClickListener() {
             
@@ -418,7 +428,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
             }
         }
         
-        if (resultCode == Activity.RESULT_OK) { // 清空消息
+        if (resultCode == Activity.RESULT_OK) { 
             if (requestCode == REQUEST_CODE_CAMERA) { // 发送照片
                 if (cameraFile != null && cameraFile.exists())
                     sendImageMessage(cameraFile.getAbsolutePath());
@@ -453,11 +463,6 @@ public class ChatFragment extends Fragment implements EMEventListener {
                     Toast.makeText(getActivity(), R.string.unable_to_get_loaction, 0).show();
                 }
                 
-            } else if (requestCode == REQUEST_CODE_COPY_AND_PASTE) {
-                
-            } else if (requestCode == REQUEST_CODE_ADD_TO_BLACKLIST) { // 移入黑名单
-                EMMessage deleteMsg = (EMMessage) messageList.getItem(data.getIntExtra("position", -1));
-//                addUserToBlacklist(deleteMsg.getFrom());
             }
         }
     }
@@ -465,7 +470,8 @@ public class ChatFragment extends Fragment implements EMEventListener {
     @Override
     public void onResume() {
         super.onResume();
-        messageList.refresh();
+        if(isMessageListInited)
+            messageList.refresh();
         DemoSDKHelper sdkHelper = (DemoSDKHelper) DemoSDKHelper.getInstance();
         sdkHelper.pushActivity(getActivity());
         // register the event listener when enter the foreground
@@ -482,6 +488,8 @@ public class ChatFragment extends Fragment implements EMEventListener {
         // unregister this event listener when this activity enters the
         // background
         EMChatManager.getInstance().unregisterEventListener(this);
+        if(chatRoomChangeListener != null)
+            EMChatManager.getInstance().removeChatRoomChangeListener(chatRoomChangeListener);
 
         DemoSDKHelper sdkHelper = (DemoSDKHelper) DemoSDKHelper.getInstance();
 
@@ -560,10 +568,12 @@ public class ChatFragment extends Fragment implements EMEventListener {
         EMChatManager.getInstance().joinChatRoom(toChatUsername, new EMValueCallBack<EMChatRoom>() {
 
             @Override
-            public void onSuccess(EMChatRoom value) {
+            public void onSuccess(final EMChatRoom value) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if(getActivity().isFinishing() || !toChatUsername.equals(value.getUsername()))
+                            return;
                         pd.dismiss();
                         EMChatRoom room = EMChatManager.getInstance().getChatRoom(toChatUsername);
                         if (room != null) {
@@ -572,11 +582,9 @@ public class ChatFragment extends Fragment implements EMEventListener {
                             titleBar.setTitle(toChatUsername);
                         }
                         EMLog.d(TAG, "join room success : " + room.getName());
-
                         addChatRoomChangeListenr();
-                        // onConversationInit();
-                        //
-                        // onListViewCreation();
+                        onConversationInit();
+                        onMessageListInit();
                     }
                 });
             }
@@ -595,9 +603,10 @@ public class ChatFragment extends Fragment implements EMEventListener {
             }
         });
     }
+    
 
     protected void addChatRoomChangeListenr() {
-        EMChatManager.getInstance().addChatRoomChangeListener(new EMChatRoomChangeListener() {
+        chatRoomChangeListener = new EMChatRoomChangeListener() {
 
             @Override
             public void onChatRoomDestroyed(String roomId, String roomName) {
@@ -626,7 +635,9 @@ public class ChatFragment extends Fragment implements EMEventListener {
                 }
             }
 
-        });
+        };
+        
+        EMChatManager.getInstance().addChatRoomChangeListener(chatRoomChangeListener);
     }
 
     /**
@@ -850,7 +861,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
      * 点击清空聊天记录
      * 
      */
-    public void emptyHistory() {
+    protected void emptyHistory() {
         String msg = getResources().getString(R.string.Whether_to_empty_all_chats);
         new EaseAlertDialog(getActivity(),null, msg, null,new AlertDialogUser() {
             
@@ -869,7 +880,7 @@ public class ChatFragment extends Fragment implements EMEventListener {
      * 点击进入群组详情
      * 
      */
-    public void toGroupDetails() {
+    protected void toGroupDetails() {
         if (chatType == Constant.CHATTYPE_GROUP) {
             EMGroup group = EMGroupManager.getInstance().getGroup(toChatUsername);
             if (group == null) {

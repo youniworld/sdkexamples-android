@@ -148,7 +148,7 @@ public class DemoSDKHelper extends EaseSDKHelper{
                     return getUserProfileManager().getCurrentUserInfo();
                 user = getContactList().get(username);
                 //TODO 获取不在好友列表里的群成员用户信息，demo未实现
-                if(user == null){
+                if(user == null && getRobotList() != null){
                     user = getRobotList().get(username);
                 }
                 return user;
