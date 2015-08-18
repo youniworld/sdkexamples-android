@@ -75,23 +75,12 @@
                         android:textSize="14sp"
                         android:typeface="serif" />
 
-                    <ImageView
-                        android:id="@+id/iv_switch_open_notification"
+                    <com.easemob.easeui.widget.EaseSwitchButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/switch_notification"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ease_open_icon"
-                        android:visibility="visible" />
-
-                    <ImageView
-                        android:id="@+id/iv_switch_close_notification"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ease_close_icon"
-                        android:visibility="invisible" />
+                        android:layout_centerVertical="true" />
                 </RelativeLayout>
 
                 <TextView
@@ -119,23 +108,12 @@
                         android:textSize="14sp"
                         android:typeface="serif" />
 
-                    <ImageView
-                        android:id="@+id/iv_switch_open_sound"
+                    <com.easemob.easeui.widget.EaseSwitchButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/switch_sound"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ease_open_icon"
-                        android:visibility="visible" />
-
-                    <ImageView
-                        android:id="@+id/iv_switch_close_sound"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ease_close_icon"
-                        android:visibility="invisible" />
+                        android:layout_centerVertical="true" />
                 </RelativeLayout>
 
                 <TextView
@@ -163,23 +141,12 @@
                         android:textSize="14sp"
                         android:typeface="serif" />
 
-                    <ImageView
-                        android:id="@+id/iv_switch_open_vibrate"
+                    <com.easemob.easeui.widget.EaseSwitchButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/switch_vibrate"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ease_open_icon"
-                        android:visibility="visible" />
-
-                    <ImageView
-                        android:id="@+id/iv_switch_close_vibrate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ease_close_icon"
-                        android:visibility="invisible" />
+                        android:layout_centerVertical="true" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -221,23 +188,12 @@
                         android:textSize="14sp"
                         android:typeface="serif" />
 
-                    <ImageView
-                        android:id="@+id/iv_switch_open_speaker"
+                    <com.easemob.easeui.widget.EaseSwitchButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/switch_speaker"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ease_open_icon"
-                        android:visibility="visible" />
-
-                    <ImageView
-                        android:id="@+id/iv_switch_close_speaker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ease_close_icon"
-                        android:visibility="invisible" />
+                        android:layout_centerVertical="true" />
                 </RelativeLayout>
 
                 <View
@@ -362,23 +318,12 @@
                     android:textSize="14sp"
                     android:typeface="serif" />
 
-                <ImageView
-                    android:id="@+id/iv_switch_chatroom_owner_leave_allow"
+                <com.easemob.easeui.widget.EaseSwitchButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/switch_owner_leave"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/ease_open_icon"
-                    android:visibility="visible" />
-
-                <ImageView
-                    android:id="@+id/iv_switch_chatroom_owner_leave_not_allow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/ease_close_icon"
-                    android:visibility="invisible" />
+                    android:layout_centerVertical="true" />
             </RelativeLayout>
 
             <LinearLayout
