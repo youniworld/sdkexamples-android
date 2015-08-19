@@ -39,6 +39,8 @@ import com.easemob.easeui.model.EaseNotifier.HXNotificationInfoProvider;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 
+// youni: supposed to refactor this class to make it more easily to be used
+
 /**
  * The developer can derive from this class to talk with HuanXin SDK
  * All the Huan Xin related initialization and global listener are implemented in this class which will 

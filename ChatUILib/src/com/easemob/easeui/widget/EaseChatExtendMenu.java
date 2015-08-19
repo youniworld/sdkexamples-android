@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.easemob.easeui.R;
 import com.easemob.util.DensityUtil;
 
+//youni: add prefix 'ease' for ease class
 /**
  * 按+按钮出来的扩展按钮
  *

@@ -36,10 +36,12 @@ import com.easemob.easeui.widget.chatrow.EaseChatRowText;
 import com.easemob.easeui.widget.chatrow.EaseChatRowVideo;
 import com.easemob.easeui.widget.chatrow.EaseChatRowVoice;
 
+//youni : please use brackets in if-else even through that's only containing one line of code, that's a good habbit
 public class EaseMessageAdapter extends BaseAdapter{
 
 	private final static String TAG = "msg";
 
+    // youni: where are those static variable used?
 	public static final String IMAGE_DIR = "chat/image/";
 	public static final String VOICE_DIR = "chat/audio/";
 	public static final String VIDEO_DIR = "chat/video";
@@ -67,16 +69,21 @@ public class EaseMessageAdapter extends BaseAdapter{
 	private static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 14;
 	private static final int MESSAGE_TYPE_RECV_VIDEO_CALL = 15;
 	
+	// youni: make this private
 	public int itemTypeCount; 
 	
 	// reference to conversation object in chatsdk
 	private EMConversation conversation;
+	
+	// youni: make this private
 	EMMessage[] messages = null;
 	
+	// youni: make this private
 	ListView listView;
 
     private String toChatUsername;
 
+    //youni: please don't use public accessor to memeber data if that's not necessary
     public MessageListItemClickListener itemClickListener;
     
     public boolean showUserNick;
@@ -188,6 +195,7 @@ public class EaseMessageAdapter extends BaseAdapter{
 		if (message == null) {
 			return -1;
 		}
+		// youni use if-else for following codes
 		if (message.getType() == EMMessage.Type.TXT) {
 			if (message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_VOICE_CALL, false))
 			    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VOICE_CALL : MESSAGE_TYPE_SENT_VOICE_CALL;

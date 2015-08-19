@@ -34,6 +34,8 @@ import com.easemob.easeui.adapter.EaseMessageAdapter;
 import com.easemob.easeui.widget.chatrow.EaseChatRow;
 import com.easemob.util.EMLog;
 
+// youni: only keep sendMessage(EMMessage msg) is enough, the message should be created outside the EaseChatMessageList
+//        but we'd better to add new api to easily create the messages in SDK
 public class EaseChatMessageList extends RelativeLayout{
     
     protected static final String TAG = "EMChatMessageList";
@@ -93,6 +95,7 @@ public class EaseChatMessageList extends RelativeLayout{
         
     }
     
+    // youni: looks like we are not able to provide rich style attributes
     protected void parseStyle(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EMChatMessageList);
         showAvatar = ta.getBoolean(R.styleable.EMChatMessageList_msgListShowUserAvatar, true);
@@ -380,7 +383,7 @@ public class EaseChatMessageList extends RelativeLayout{
         }
     }
     
-
+    // youni: don't export internal member data
     /**
      * 获取listview
      * @return
@@ -413,6 +416,7 @@ public class EaseChatMessageList extends RelativeLayout{
 	    return showUserNick;
 	}
 	
+    // youni: define it to be the static
 	public interface MessageListItemClickListener{
 	    void onResendClick(EMMessage message);
 	    /**

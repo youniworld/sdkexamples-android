@@ -52,6 +52,7 @@ public abstract class EaseChatRow extends LinearLayout {
 
     protected MessageListItemClickListener itemClickListener;
 
+    // youni:is that possible to replace adapter with more meaningful class like EaseMessageRowInfoProvider
     public EaseChatRow(Context context, EMMessage message, int position, BaseAdapter adapter) {
         super(context);
         this.context = context;
@@ -61,8 +62,10 @@ public abstract class EaseChatRow extends LinearLayout {
         this.adapter = adapter;
         inflater = LayoutInflater.from(context);
 
+        //youni: move this initView out constructor?
         initView();
     }
+
 
     private void initView() {
         onInflatView();
@@ -309,6 +312,7 @@ public abstract class EaseChatRow extends LinearLayout {
      */
     protected abstract void onInflatView();
 
+    //youni: change onFindViewById to onViewCreated
     /**
      * 查找chatrow里的控件
      */

@@ -15,8 +15,12 @@ package com.easemob.easeui.domain;
 
 import com.easemob.chat.EMContact;
 
+// youni: put this class to model
 public class EaseUser extends EMContact {
     
+	// youni: remove this initialLetter member since that app only supply necessary info
+	// youni: solution is easeui should maintain its user model which should wrap around the easeuser for display purpose 
+	
     /**
      * 昵称首字母
      */
