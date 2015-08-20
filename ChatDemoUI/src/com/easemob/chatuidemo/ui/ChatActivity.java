@@ -4,14 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.easemob.chatuidemo.R;
+import com.easemob.easeui.ui.EaseChatFragment;
 
 /**
- * 聊天页面，需要fragment的使用{@link #EMChatFragment}
+ * 聊天页面，需要fragment的使用{@link #ChatFragment}
  *
  */
 public class ChatActivity extends BaseActivity{
     public static ChatActivity activityInstance;
-    private ChatFragment chatFragment;
+    private EaseChatFragment chatFragment;
     String toChatUsername;
 
     @Override
@@ -21,7 +22,9 @@ public class ChatActivity extends BaseActivity{
         activityInstance = this;
         
         toChatUsername = getIntent().getExtras().getString("userId");
+        //可以直接new EaseChatFratFragment使用
         chatFragment = new ChatFragment();
+        //传入参数
         chatFragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager().beginTransaction().add(R.id.container, chatFragment).commit();
         

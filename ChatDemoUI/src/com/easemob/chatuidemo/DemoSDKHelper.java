@@ -81,21 +81,7 @@ public class DemoSDKHelper extends EaseSDKHelper{
     
     private UserProfileManager  userProManager;
     
-    /**
-     * 用来记录foreground Activity
-     */
-    private List<Activity> activityList = new ArrayList<Activity>();
-    
-    public void pushActivity(Activity activity){
-        if(!activityList.contains(activity)){
-            activityList.add(0,activity); 
-        }
-    }
-    
-    public void popActivity(Activity activity){
-        activityList.remove(activity);
-    }
-    
+   
     @Override
     public synchronized boolean onInit(Context context){
         if(super.onInit(context)){

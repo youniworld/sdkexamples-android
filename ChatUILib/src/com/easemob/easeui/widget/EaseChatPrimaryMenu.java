@@ -249,6 +249,10 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements OnClickListen
             if(listener != null)
                 listener.onToggleVoiceBtnClicked();
         } else if (id == R.id.btn_more) {
+            buttonSetModeVoice.setVisibility(View.VISIBLE);
+            buttonSetModeKeyboard.setVisibility(View.GONE);
+            edittext_layout.setVisibility(View.VISIBLE);
+            buttonPressToSpeak.setVisibility(View.GONE);
             showNormalFaceImage();
             if(listener != null)
                 listener.onToggleExtendClicked();
