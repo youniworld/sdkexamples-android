@@ -41,6 +41,7 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.R;
+import com.easemob.easeui.ui.EaseGroupRemoveListener;
 import com.easemob.easeui.utils.EaseUserUtils;
 import com.easemob.easeui.widget.EaseAlertDialog;
 import com.easemob.easeui.widget.EaseAlertDialog.AlertDialogUser;
@@ -79,6 +80,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
     private RelativeLayout idLayout;
     private TextView idText;
 	private EaseSwitchButton switchButton;
+    private GroupRemoveListener groupRemoveListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +130,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			exitBtn.setVisibility(View.GONE);
 			deleteBtn.setVisibility(View.VISIBLE);
 		}
+		
+		groupRemoveListener = new GroupRemoveListener();
+        EMGroupManager.getInstance().addGroupChangeListener(groupRemoveListener);
 		
 		((TextView) findViewById(R.id.group_name)).setText(group.getGroupName() + "(" + group.getAffiliationsCount() + st);
 		
@@ -787,5 +792,23 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	    TextView textView;
 	    ImageView badgeDeleteView;
 	}
+	
+	/**
+     * 监测群组解散或者被T事件
+     * 
+     */
+    private class GroupRemoveListener extends EaseGroupRemoveListener {
+
+        @Override
+        public void onUserRemoved(final String groupId, String groupName) {
+            finish();
+        }
+
+        @Override
+        public void onGroupDestroy(final String groupId, String groupName) {
+            finish();
+        }
+
+    }
 
 }

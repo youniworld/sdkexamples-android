@@ -1,6 +1,8 @@
-package com.easemob.easeui.ui;
+package com.easemob.chatuidemo.ui;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,12 +48,17 @@ import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
-import com.easemob.chat.EMMessage.Type;
 import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
-import com.easemob.easeui.EaseConstant;
-import com.easemob.easeui.R;
+import com.easemob.chatuidemo.Constant;
+import com.easemob.chatuidemo.DemoApplication;
+import com.easemob.chatuidemo.DemoSDKHelper;
+import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.easeui.controller.EaseSDKHelper;
+import com.easemob.easeui.controller.EaseSDKHelper.UserProvider;
+import com.easemob.easeui.ui.EaseBaiduMapActivity;
+import com.easemob.easeui.ui.EaseGroupRemoveListener;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.easeui.utils.EaseImageUtils;
 import com.easemob.easeui.utils.EaseUserUtils;
@@ -62,25 +73,28 @@ import com.easemob.easeui.widget.EaseVoiceRecorderView;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 
-/**
- * 可以直接new出来使用的聊天对话页面fragment，
- * 使用时需传入chatType(会话类型)和userId(用户或群id)，
- * app也可继承此fragment续写
- * <br/>
- * <br/>
- * 参数传入示例可查看demo里的ChatActivity
- *
- */
-public class EaseChatFragment extends Fragment implements EMEventListener {
-    protected static final String TAG = "EaseChatFragment";
-    protected static final int REQUEST_CODE_MAP = 1;
-    protected static final int REQUEST_CODE_CAMERA = 2;
-    protected static final int REQUEST_CODE_LOCAL = 3;
+public class ChatFragmentss extends Fragment implements EMEventListener {
+    protected static final String TAG = "ChatActivity";
+    public static final int REQUEST_CODE_CONTEXT_MENU = 1;
+    protected static final int REQUEST_CODE_MAP = 2;
+    public static final int REQUEST_CODE_COPY_AND_PASTE = 3;
+    public static final int REQUEST_CODE_DOWNLOAD_VOICE = 4;
+    public static final int REQUEST_CODE_CAMERA = 5;
+    public static final int REQUEST_CODE_LOCAL = 6;
+    public static final int REQUEST_CODE_GROUP_DETAIL = 7;
+    public static final int REQUEST_CODE_SELECT_VIDEO = 8;
+    public static final int REQUEST_CODE_SELECT_FILE = 9;
+    public static final int REQUEST_CODE_ADD_TO_BLACKLIST = 10;
 
-    /**
-     * 传入fragment的参数
-     */
-    protected Bundle fragmentArgs;
+    public static final int RESULT_CODE_COPY = 1;
+    public static final int RESULT_CODE_DELETE = 2;
+    public static final int RESULT_CODE_FORWARD = 3;
+    public static final int RESULT_CODE_OPEN = 4;
+    public static final int RESULT_CODE_DWONLOAD = 5;
+    public static final int RESULT_CODE_TO_CLOUD = 6;
+    public static final int RESULT_CODE_EXIT_GROUP = 7;
+
+
     protected int chatType;
     protected String toChatUsername;
     protected EaseChatMessageList messageList;
@@ -107,29 +121,36 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
     static final int ITEM_TAKE_PICTURE = 1;
     static final int ITEM_PICTURE = 2;
     static final int ITEM_LOCATION = 3;
+    static final int ITEM_VIDEO = 4;
+    static final int ITEM_FILE = 5;
+    static final int ITEM_VOICE_CALL = 6;
+    static final int ITEM_VIDEO_CALL = 7;
     
-    protected int[] itemStrings = { R.string.attach_take_pic, R.string.attach_picture, R.string.attach_location };
+    protected int[] itemStrings = { R.string.attach_take_pic, R.string.attach_picture, R.string.attach_location,
+            R.string.attach_video, R.string.attach_file, R.string.attach_voice_call, R.string.attach_video_call };
     protected int[] itemdrawables = { R.drawable.ease_chat_takepic_selector, R.drawable.ease_chat_image_selector,
-            R.drawable.ease_chat_location_selector };
-    protected int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION };
+            R.drawable.ease_chat_location_selector, R.drawable.em_chat_video_selector, R.drawable.em_chat_file_selector,
+            R.drawable.em_chat_voice_call_selector, R.drawable.em_chat_video_call_selector };
+    protected int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION, ITEM_VIDEO, ITEM_FILE, ITEM_VOICE_CALL,
+            ITEM_VIDEO_CALL };
+    protected boolean isRobot;
     private EMChatRoomChangeListener chatRoomChangeListener;
     private boolean isMessageListInited;
-    protected MyItemClickListener extendMenuItemClickListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.ease_fragment_chat, container, false);
+        return inflater.inflate(R.layout.em_fragment_chat, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        fragmentArgs = getArguments();
+        Bundle args = getArguments();
         // 判断单聊还是群聊
-        chatType = fragmentArgs.getInt("chatType", EaseConstant.CHATTYPE_SINGLE);
+        chatType = args.getInt("chatType", Constant.CHATTYPE_SINGLE);
         // 会话人或群组id
-        toChatUsername = fragmentArgs.getString("userId");
+        toChatUsername = args.getString("userId");
 
         initView();
         setUpView();
@@ -144,13 +165,27 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
 
         // 消息列表layout
         messageList = (EaseChatMessageList) getView().findViewById(R.id.message_list);
-        if(chatType != EaseConstant.CHATTYPE_SINGLE)
+        if(chatType != Constant.CHATTYPE_SINGLE)
             messageList.setShowUserNick(true);
         listView = messageList.getListView();
 
-        extendMenuItemClickListener = new MyItemClickListener();
         inputMenu = (EaseChatInputMenu) getView().findViewById(R.id.input_menu);
-        registerExtendMenuItem();
+        if (chatType == Constant.CHATTYPE_SINGLE) {
+            // 注册扩展菜单栏按钮
+            for (int i = 0; i < itemStrings.length; i++) {
+                // init()需在这个方法后面调用
+                inputMenu.registerExtendMenuItem(itemStrings[i], itemdrawables[i], itemIds[i],
+                        new MyItemClickListener());
+            }
+        } else {
+            int len = itemStrings.length - 2;
+            // 群聊不显示通话按钮
+            for (int i = 0; i < len; i++) {
+                // init()需在这个方法后面调用
+                inputMenu.registerExtendMenuItem(itemStrings[i], itemdrawables[i], itemIds[i],
+                        new MyItemClickListener());
+            }
+        }
         // 设置按住说话控件
         inputMenu.setPressToSpeakRecorderView(voiceRecorder);
         inputMenu.init();
@@ -180,19 +215,23 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
 
     protected void setUpView() {
         titleBar.setTitle(toChatUsername);
-        if (chatType == EaseConstant.CHATTYPE_SINGLE) { // 单聊
+        if (chatType == Constant.CHATTYPE_SINGLE) { // 单聊
+            Map<String,RobotUser> robotMap=((DemoSDKHelper)EaseSDKHelper.getInstance()).getRobotList();
+            if(robotMap!=null&&robotMap.containsKey(toChatUsername)){
+                isRobot = true;
+            }
             // 设置标题
             if(EaseUserUtils.getUserInfo(toChatUsername) != null){
                 titleBar.setTitle(EaseUserUtils.getUserInfo(toChatUsername).getNick());
             }
-            titleBar.setRightImageResource(R.drawable.ease_mm_title_remove);
+            titleBar.setRightImageResource(R.drawable.em_mm_title_remove);
         } else {
-            if (chatType == EaseConstant.CHATTYPE_GROUP) {
+            if (chatType == Constant.CHATTYPE_GROUP) {
                 // 群聊
                 EMGroup group = EMGroupManager.getInstance().getGroup(toChatUsername);
                 if (group != null)
                     titleBar.setTitle(group.getGroupName());
-                titleBar.setRightImageResource(R.drawable.ease_to_group_details_normal);
+                titleBar.setRightImageResource(R.drawable.em_to_group_details_normal);
                 // 监听当前会话的群聊解散被T事件
                 groupListener = new GroupListener();
                 EMGroupManager.getInstance().addGroupChangeListener(groupListener);
@@ -201,7 +240,7 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
             }
 
         }
-        if (chatType != EaseConstant.CHATTYPE_CHATROOM) {
+        if (chatType != Constant.CHATTYPE_CHATROOM) {
             onConversationInit();
             onMessageListInit();
         }
@@ -218,7 +257,7 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
 
             @Override
             public void onClick(View v) {
-                if (chatType == EaseConstant.CHATTYPE_SINGLE) {
+                if (chatType == Constant.CHATTYPE_SINGLE) {
                     emptyHistory();
                 } else {
                     toGroupDetails();
@@ -236,16 +275,6 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
         }
     }
     
-    /**
-     * 注册底部菜单扩展栏item,覆盖此方法时如果不覆盖已有item，item的id需大于3
-     */
-    protected void registerExtendMenuItem(){
-        for(int i = 0; i < itemStrings.length; i++){
-            inputMenu.registerExtendMenuItem(itemStrings[i], itemdrawables[i], itemIds[i], extendMenuItemClickListener);
-        }
-    }
-    
-    
     protected void onConversationInit(){
         // 获取当前conversation对象
         conversation = EMChatManager.getInstance().getConversation(toChatUsername);
@@ -260,10 +289,10 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
             if (msgs != null && msgs.size() > 0) {
                 msgId = msgs.get(0).getMsgId();
             }
-            if (chatType == EaseConstant.CHATTYPE_SINGLE) {
-                conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
+            if (chatType == Constant.CHATTYPE_SINGLE) {
+                conversation.loadMoreMsgFromDB(msgId, pagesize);
             } else {
-                conversation.loadMoreGroupMsgFromDB(msgId, pagesize - msgCount);
+                conversation.loadMoreGroupMsgFromDB(msgId, pagesize);
             }
         }
         
@@ -292,7 +321,9 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
             
             @Override
             public void onUserAvatarClick(String username) {
-                onAvatarClick(username);
+                Intent intent = new Intent(getActivity(), UserProfileActivity.class);
+                intent.putExtra("username", username);
+                startActivity(intent);
             }
             
             @Override
@@ -311,12 +342,13 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
             @Override
             public void onBubbleLongClick(EMMessage message) {
                 contextMenuMessage = message;
-                onMessageBubbleLongClick(message);
+                startActivityForResult((new Intent(getActivity(), ContextMenuActivity.class)).putExtra("message",message),
+                        REQUEST_CODE_CONTEXT_MENU);
             }
             
             @Override
             public boolean onBubbleClick(EMMessage message) {
-                return onMessageBubbleClick(message);
+                return false;
             }
         });
     }
@@ -333,7 +365,7 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
                         if (listView.getFirstVisiblePosition() == 0 && !isloading && haveMoreData) {
                             List<EMMessage> messages;
                             try {
-                                if (chatType == EaseConstant.CHATTYPE_SINGLE) {
+                                if (chatType == Constant.CHATTYPE_SINGLE) {
                                     messages = conversation.loadMoreMsgFromDB(messageList.getItem(0).getMsgId(),
                                             pagesize);
                                 } else {
@@ -369,10 +401,43 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_CODE_EXIT_GROUP) {
+            getActivity().setResult(Activity.RESULT_OK);
+            getActivity().finish();
+            return;
+        }
+        if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
+            switch (resultCode) {
+            case RESULT_CODE_COPY: // 复制消息
+                clipboard.setText(((TextMessageBody) contextMenuMessage.getBody()).getMessage());
+                break;
+            case RESULT_CODE_DELETE: // 删除消息|
+                conversation.removeMessage(contextMenuMessage.getMsgId());
+                messageList.refresh();
+                break;
+
+            case RESULT_CODE_FORWARD: // 转发消息
+                Intent intent = new Intent(getActivity(), ForwardMessageActivity.class);
+                intent.putExtra("forward_msg_id", contextMenuMessage.getMsgId());
+                startActivity(intent);
+                
+                break;
+
+            default:
+                break;
+            }
+        }
+        
         if (resultCode == Activity.RESULT_OK) { 
             if (requestCode == REQUEST_CODE_CAMERA) { // 发送照片
                 if (cameraFile != null && cameraFile.exists())
                     sendImageMessage(cameraFile.getAbsolutePath());
+            } else if (requestCode == REQUEST_CODE_SELECT_VIDEO) { // 发送本地选择的视频
+
+                int duration = data.getIntExtra("dur", 0);
+                String videoPath = data.getStringExtra("path");
+                sendVideoMessageByResult(duration, videoPath);
+
             } else if (requestCode == REQUEST_CODE_LOCAL) { // 发送本地图片
                 if (data != null) {
                     Uri selectedImage = data.getData();
@@ -380,6 +445,14 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
                         sendPicByUri(selectedImage);
                     }
                 }
+            } else if (requestCode == REQUEST_CODE_SELECT_FILE) { // 发送选择的文件
+                if (data != null) {
+                    Uri uri = data.getData();
+                    if (uri != null) {
+                        sendFileMessage(uri);
+                    }
+                }
+
             } else if (requestCode == REQUEST_CODE_MAP) { // 地图
                 double latitude = data.getDoubleExtra("latitude", 0);
                 double longitude = data.getDoubleExtra("longitude", 0);
@@ -399,7 +472,7 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
         super.onResume();
         if(isMessageListInited)
             messageList.refresh();
-        EaseSDKHelper sdkHelper = EaseSDKHelper.getInstance();
+        DemoSDKHelper sdkHelper = (DemoSDKHelper) DemoSDKHelper.getInstance();
         sdkHelper.pushActivity(getActivity());
         // register the event listener when enter the foreground
         EMChatManager.getInstance().registerEventListener(
@@ -418,7 +491,7 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
         if(chatRoomChangeListener != null)
             EMChatManager.getInstance().removeChatRoomChangeListener(chatRoomChangeListener);
 
-        EaseSDKHelper sdkHelper = EaseSDKHelper.getInstance();
+        DemoSDKHelper sdkHelper = (DemoSDKHelper) DemoSDKHelper.getInstance();
 
         // 把此activity 从foreground activity 列表里移除
         sdkHelper.popActivity(getActivity());
@@ -484,7 +557,7 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
     public void onBackPressed() {
         if (inputMenu.onBackPressed()) {
             getActivity().finish();
-            if (chatType == EaseConstant.CHATTYPE_CHATROOM) {
+            if (chatType == Constant.CHATTYPE_CHATROOM) {
                 EMChatManager.getInstance().leaveChatRoom(toChatUsername);
             }
         }
@@ -575,7 +648,33 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
 
         @Override
         public void onClick(int itemId, View view) {
-            onExtendMenuItemClick(itemId, view);
+            switch (itemId) {
+            case ITEM_TAKE_PICTURE: // 拍照
+                selectPicFromCamera();
+                break;
+            case ITEM_PICTURE:
+                selectPicFromLocal(); // 图库选择图片
+                break;
+            case ITEM_LOCATION: // 位置
+                startActivityForResult(new Intent(getActivity(), EaseBaiduMapActivity.class), REQUEST_CODE_MAP);
+                break;
+            case ITEM_VIDEO: // 视频
+                Intent intent = new Intent(getActivity(), ImageGridActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_SELECT_VIDEO);
+                break;
+            case ITEM_FILE:
+                selectFileFromLocal();
+                break;
+            case ITEM_VOICE_CALL: // 语音通话
+                startVoiceCall();
+                break;
+            case ITEM_VIDEO_CALL: // 视频通话
+                startVideoCall();
+                break;
+
+            default:
+                break;
+            }
         }
 
     }
@@ -583,37 +682,59 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
     //发送消息方法
     //==========================================================================
     protected void sendTextMessage(String content) {
-        messageList.sendTextMessage(content, getMessageAttributesMap(EMMessage.Type.TXT));
+        messageList.sendTextMessage(content, getAttributesMap());
     }
 
     protected void sendVoiceMessage(String filePath, String fileName, int length) {
-        messageList.sendVoiceMessage(filePath, fileName, length, getMessageAttributesMap(EMMessage.Type.VOICE));
+        messageList.sendVoiceMessage(filePath, fileName, length, getAttributesMap());
     }
 
     protected void sendImageMessage(String imagePath) {
-        messageList.sendImageMessage(imagePath, false, getMessageAttributesMap(EMMessage.Type.IMAGE));
+        messageList.sendImageMessage(imagePath, false, getAttributesMap());
     }
 
     protected void sendLocationMessage(double latitude, double longitude, String locationAddress) {
-        messageList.sendLocationMessage(latitude, longitude, locationAddress, getMessageAttributesMap(EMMessage.Type.LOCATION));
+        messageList.sendLocationMessage(latitude, longitude, locationAddress, getAttributesMap());
     }
 
     protected void sendVideoMessage(String filePath, String thumbPath, int length) {
-        messageList.sendVideoMessage(filePath, thumbPath, length, getMessageAttributesMap(EMMessage.Type.VIDEO));
+        messageList.sendVideoMessage(filePath, thumbPath, length, getAttributesMap());
     }
 
     protected void sendFileMessage(Uri uri) {
-        messageList.sendFileMessage(uri, getMessageAttributesMap(EMMessage.Type.FILE));
+        messageList.sendFileMessage(uri, getAttributesMap());
     }
     
     //===================================================================================
     
-    private Map<String, Object> getMessageAttributesMap(Type txt){
+    private Map<String, Object> getAttributesMap(){
         Map<String, Object> map = new HashMap<String, Object>();
-        onSetMessageAttributes(map, txt);
+        if(isRobot)
+            map.put("em_robot_message", true);
         return map;
     }
-    
+
+    protected void startVoiceCall() {
+        if (!EMChatManager.getInstance().isConnected()) {
+            Toast.makeText(getActivity(), R.string.not_connect_to_server, 0).show();
+        } else {
+            startActivity(new Intent(getActivity(), VoiceCallActivity.class).putExtra("username", toChatUsername)
+                    .putExtra("isComingCall", false));
+            // voiceCallBtn.setEnabled(false);
+            inputMenu.hideExtendMenuContainer();
+        }
+    }
+
+    protected void startVideoCall() {
+        if (!EMChatManager.getInstance().isConnected())
+            Toast.makeText(getActivity(), R.string.not_connect_to_server, 0).show();
+        else {
+            startActivity(new Intent(getActivity(), VideoCallActivity.class).putExtra("username", toChatUsername)
+                    .putExtra("isComingCall", false));
+            // videoCallBtn.setEnabled(false);
+            inputMenu.hideExtendMenuContainer();
+        }
+    }
 
     /**
      * 根据图库图片uri发送图片
@@ -660,7 +781,7 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
             return;
         }
 
-        cameraFile = new File(PathUtil.getInstance().getImagePath(), EMChatManager.getInstance().getCurrentUser()
+        cameraFile = new File(PathUtil.getInstance().getImagePath(), DemoApplication.getInstance().getUserName()
                 + System.currentTimeMillis() + ".jpg");
         cameraFile.getParentFile().mkdirs();
         startActivityForResult(
@@ -683,7 +804,58 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
         startActivityForResult(intent, REQUEST_CODE_LOCAL);
     }
 
+    /**
+     * 选择文件
+     */
+    protected void selectFileFromLocal() {
+        Intent intent = null;
+        if (Build.VERSION.SDK_INT < 19) {
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("*/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
 
+        } else {
+            intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        }
+        startActivityForResult(intent, REQUEST_CODE_SELECT_FILE);
+    }
+
+    private void sendVideoMessageByResult(int duration, String videoPath) {
+        File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
+        Bitmap bitmap = null;
+        FileOutputStream fos = null;
+        try {
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
+            if (bitmap == null) {
+                EMLog.d("chatactivity", "problem load video thumbnail bitmap,use default icon");
+                bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.em_app_panel_video_icon);
+            }
+            fos = new FileOutputStream(file);
+
+            bitmap.compress(CompressFormat.JPEG, 100, fos);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                fos = null;
+            }
+            if (bitmap != null) {
+                bitmap.recycle();
+                bitmap = null;
+            }
+
+        }
+        sendVideoMessage(videoPath, file.getAbsolutePath(), duration / 1000);
+    }
 
     /**
      * 点击清空聊天记录
@@ -709,13 +881,15 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
      * 
      */
     protected void toGroupDetails() {
-        if (chatType == EaseConstant.CHATTYPE_GROUP) {
+        if (chatType == Constant.CHATTYPE_GROUP) {
             EMGroup group = EMGroupManager.getInstance().getGroup(toChatUsername);
             if (group == null) {
                 Toast.makeText(getActivity(), R.string.gorup_not_found, 0).show();
                 return;
             }
-            onEnterToChatDetails();
+            startActivityForResult(
+                    (new Intent(getActivity(), GroupDetailsActivity.class).putExtra("groupId", toChatUsername)),
+                    REQUEST_CODE_GROUP_DETAIL);
         }
     }
 
@@ -778,6 +952,8 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
                 public void run() {
                     if (toChatUsername.equals(groupId)) {
                         Toast.makeText(getActivity(), R.string.you_are_group, 1).show();
+                        if (GroupDetailsActivity.instance != null)
+                            GroupDetailsActivity.instance.finish();
                         getActivity().finish();
                     }
                 }
@@ -791,6 +967,8 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
                 public void run() {
                     if (toChatUsername.equals(groupId)) {
                         Toast.makeText(getActivity(), R.string.the_current_group, 1).show();
+                        if (GroupDetailsActivity.instance != null)
+                            GroupDetailsActivity.instance.finish();
                         getActivity().finish();
                     }
                 }
@@ -799,59 +977,4 @@ public class EaseChatFragment extends Fragment implements EMEventListener {
 
     }
     
-    /**
-     * 设置消息扩展属性
-     * @param attrsMap 把扩展属性存入此map
-     * @param type 消息类型
-     */
-    protected void onSetMessageAttributes(Map<String, Object> attrsMap, EMMessage.Type type){
-    }
-    
-    /**
-     * 进入会话详情
-     */
-    protected void onEnterToChatDetails(){
-    }
-    
-    /**
-     * 用户头像点击事件
-     * @param username
-     */
-    protected void onAvatarClick(String username){
-    }
-    
-    /**
-     * 消息气泡框点击事件
-     */
-    protected boolean onMessageBubbleClick(EMMessage message){
-        return false;
-    }
-    
-    /**
-     * 消息气泡框长按事件
-     */
-    protected void onMessageBubbleLongClick(EMMessage message) {
-    }
-    
-    /**
-     * 扩展输入栏item点击事件
-     * @param view 
-     * @param itemId 
-     */
-    protected void onExtendMenuItemClick(int itemId, View view) {
-        switch (itemId) {
-        case ITEM_TAKE_PICTURE: // 拍照
-            selectPicFromCamera();
-            break;
-        case ITEM_PICTURE:
-            selectPicFromLocal(); // 图库选择图片
-            break;
-        case ITEM_LOCATION: // 位置
-            startActivityForResult(new Intent(getActivity(), EaseBaiduMapActivity.class), REQUEST_CODE_MAP);
-            break;
-
-        default:
-            break;
-        }
-    }
 }
