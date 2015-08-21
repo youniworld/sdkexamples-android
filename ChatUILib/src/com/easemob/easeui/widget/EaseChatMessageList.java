@@ -99,7 +99,6 @@ public class EaseChatMessageList extends RelativeLayout{
         messageListView.setAdapter(messageAdapter);
         
         messageAdapter.refreshSelectLast();
-        
     }
     
     // youni: dummy, this could be override by 3rd app

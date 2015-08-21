@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -140,6 +141,22 @@ public abstract class EaseSDKHelper {
 	
 	public boolean isVoiceCalling;
     public boolean isVideoCalling;
+    
+    
+    /**
+     * 用来记录foreground Activity
+     */
+    protected List<Activity> activityList = new ArrayList<Activity>();
+    
+    public void pushActivity(Activity activity){
+        if(!activityList.contains(activity)){
+            activityList.add(0,activity); 
+        }
+    }
+    
+    public void popActivity(Activity activity){
+        activityList.remove(activity);
+    }
 
     protected UserProvider userProvider;
 

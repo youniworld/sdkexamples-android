@@ -50,6 +50,21 @@ public class EaseSwitchButton extends FrameLayout{
         return openImage.getVisibility() == View.VISIBLE;
     }
     
+    /**
+     * 打开开关
+     */
+    public void openSwitch(){
+    	openImage.setVisibility(View.VISIBLE);
+    	closeImage.setVisibility(View.INVISIBLE);
+    }
     
+    /**
+     * 关闭开关
+     */
+    public void closeSwitch(){
+    	openImage.setVisibility(View.INVISIBLE);
+    	closeImage.setVisibility(View.VISIBLE);
+    }
+
     
 }

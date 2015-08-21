@@ -81,21 +81,7 @@ public class DemoSDKHelper extends EaseSDKHelper{
     
     private UserProfileManager  userProManager;
     
-    /**
-     * 用来记录foreground Activity
-     */
-    private List<Activity> activityList = new ArrayList<Activity>();
-    
-    public void pushActivity(Activity activity){
-        if(!activityList.contains(activity)){
-            activityList.add(0,activity); 
-        }
-    }
-    
-    public void popActivity(Activity activity){
-        activityList.remove(activity);
-    }
-    
+   
     @Override
     public synchronized boolean onInit(Context context){
         if(super.onInit(context)){
@@ -148,7 +134,7 @@ public class DemoSDKHelper extends EaseSDKHelper{
                     return getUserProfileManager().getCurrentUserInfo();
                 user = getContactList().get(username);
                 //TODO 获取不在好友列表里的群成员用户信息，demo未实现
-                if(user == null){
+                if(user == null && getRobotList() != null){
                     user = getRobotList().get(username);
                 }
                 return user;

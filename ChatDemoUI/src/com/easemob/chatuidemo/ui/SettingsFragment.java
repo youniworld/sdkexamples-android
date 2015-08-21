@@ -37,6 +37,7 @@ import com.easemob.chatuidemo.DemoSDKHelper;
 import com.easemob.chatuidemo.DemoSDKModel;
 import com.easemob.chatuidemo.R;
 import com.easemob.easeui.controller.EaseSDKHelper;
+import com.easemob.easeui.widget.EaseSwitchButton;
 
 /**
  * 设置界面
@@ -63,38 +64,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	 */
 	private RelativeLayout rl_switch_speaker;
 
-	/**
-	 * 打开新消息通知imageView
-	 */
-	private ImageView iv_switch_open_notification;
-	/**
-	 * 关闭新消息通知imageview
-	 */
-	private ImageView iv_switch_close_notification;
-	/**
-	 * 打开声音提示imageview
-	 */
-	private ImageView iv_switch_open_sound;
-	/**
-	 * 关闭声音提示imageview
-	 */
-	private ImageView iv_switch_close_sound;
-	/**
-	 * 打开消息震动提示
-	 */
-	private ImageView iv_switch_open_vibrate;
-	/**
-	 * 关闭消息震动提示
-	 */
-	private ImageView iv_switch_close_vibrate;
-	/**
-	 * 打开扬声器播放语音
-	 */
-	private ImageView iv_switch_open_speaker;
-	/**
-	 * 关闭扬声器播放语音
-	 */
-	private ImageView iv_switch_close_speaker;
 
 	/**
 	 * 声音和震动中间的那条线
@@ -111,10 +80,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	private Button logoutBtn;
 
 	private RelativeLayout rl_switch_chatroom_leave;
-	private ImageView iv_switch_room_owner_leave_allow;
-	private ImageView iv_switch_room_owner_leave_disallow;
 	
-	private EMChatOptions chatOptions;
  
 	/**
 	 * 诊断
@@ -126,6 +92,11 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	private LinearLayout pushNick;
 	
 	DemoSDKModel model;
+    private EaseSwitchButton notifiSwitch;
+    private EaseSwitchButton soundSwitch;
+    private EaseSwitchButton vibrateSwitch;
+    private EaseSwitchButton speakerSwitch;
+    private EaseSwitchButton ownerLeaveSwitch;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -143,17 +114,13 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_speaker = (RelativeLayout) getView().findViewById(R.id.rl_switch_speaker);
 		rl_switch_chatroom_leave = (RelativeLayout) getView().findViewById(R.id.rl_switch_chatroom_owner_leave);
 
-		iv_switch_open_notification = (ImageView) getView().findViewById(R.id.iv_switch_open_notification);
-		iv_switch_close_notification = (ImageView) getView().findViewById(R.id.iv_switch_close_notification);
-		iv_switch_open_sound = (ImageView) getView().findViewById(R.id.iv_switch_open_sound);
-		iv_switch_close_sound = (ImageView) getView().findViewById(R.id.iv_switch_close_sound);
-		iv_switch_open_vibrate = (ImageView) getView().findViewById(R.id.iv_switch_open_vibrate);
-		iv_switch_close_vibrate = (ImageView) getView().findViewById(R.id.iv_switch_close_vibrate);
-		iv_switch_open_speaker = (ImageView) getView().findViewById(R.id.iv_switch_open_speaker);
-		iv_switch_close_speaker = (ImageView) getView().findViewById(R.id.iv_switch_close_speaker);
 		
-		iv_switch_room_owner_leave_allow = (ImageView) getView().findViewById(R.id.iv_switch_chatroom_owner_leave_allow);
-		iv_switch_room_owner_leave_disallow = (ImageView) getView().findViewById(R.id.iv_switch_chatroom_owner_leave_not_allow);
+		notifiSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_notification);
+		soundSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_sound);
+		vibrateSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_vibrate);
+		speakerSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_speaker);
+		ownerLeaveSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_owner_leave);
+		
 		
 		
 		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
@@ -180,57 +147,46 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		pushNick.setOnClickListener(this);
 		rl_switch_chatroom_leave.setOnClickListener(this);
 		
-		chatOptions = EMChatManager.getInstance().getChatOptions();
 		
 		model = (DemoSDKModel) EaseSDKHelper.getInstance().getModel();
 		
 		// 震动和声音总开关，来消息时，是否允许此开关打开
 		// the vibrate and sound notification are allowed or not?
 		if (model.getSettingMsgNotification()) {
-			iv_switch_open_notification.setVisibility(View.VISIBLE);
-			iv_switch_close_notification.setVisibility(View.INVISIBLE);
+			notifiSwitch.openSwitch();
 		} else {
-			iv_switch_open_notification.setVisibility(View.INVISIBLE);
-			iv_switch_close_notification.setVisibility(View.VISIBLE);
+		    notifiSwitch.closeSwitch();
 		}
 		
 		// 是否打开声音
 		// sound notification is switched on or not?
 		if (model.getSettingMsgSound()) {
-			iv_switch_open_sound.setVisibility(View.VISIBLE);
-			iv_switch_close_sound.setVisibility(View.INVISIBLE);
+		    soundSwitch.openSwitch();
 		} else {
-			iv_switch_open_sound.setVisibility(View.INVISIBLE);
-			iv_switch_close_sound.setVisibility(View.VISIBLE);
+		    soundSwitch.closeSwitch();
 		}
 		
 		// 是否打开震动
 		// vibrate notification is switched on or not?
 		if (model.getSettingMsgVibrate()) {
-			iv_switch_open_vibrate.setVisibility(View.VISIBLE);
-			iv_switch_close_vibrate.setVisibility(View.INVISIBLE);
+		    vibrateSwitch.openSwitch();
 		} else {
-			iv_switch_open_vibrate.setVisibility(View.INVISIBLE);
-			iv_switch_close_vibrate.setVisibility(View.VISIBLE);
+		    vibrateSwitch.closeSwitch();
 		}
 
 		// 是否打开扬声器
 		// the speaker is switched on or not?
 		if (model.getSettingMsgSpeaker()) {
-			iv_switch_open_speaker.setVisibility(View.VISIBLE);
-			iv_switch_close_speaker.setVisibility(View.INVISIBLE);
+		    speakerSwitch.openSwitch();
 		} else {
-			iv_switch_open_speaker.setVisibility(View.INVISIBLE);
-			iv_switch_close_speaker.setVisibility(View.VISIBLE);
+		    speakerSwitch.closeSwitch();
 		}
 
 		// 是否允许聊天室owner leave
 		if(model.isChatroomOwnerLeaveAllowed()){
-		    iv_switch_room_owner_leave_allow.setVisibility(View.VISIBLE);
-		    iv_switch_room_owner_leave_disallow.setVisibility(View.INVISIBLE);
+		    ownerLeaveSwitch.openSwitch();
 		}else{
-		    iv_switch_room_owner_leave_allow.setVisibility(View.INVISIBLE);
-            iv_switch_room_owner_leave_disallow.setVisibility(View.VISIBLE);
+		    ownerLeaveSwitch.closeSwitch();
 		}
 	}
 
@@ -239,87 +195,57 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.rl_switch_notification:
-			if (iv_switch_open_notification.getVisibility() == View.VISIBLE) {
-				iv_switch_open_notification.setVisibility(View.INVISIBLE);
-				iv_switch_close_notification.setVisibility(View.VISIBLE);
+			if (notifiSwitch.isSwitchOpen()) {
+			    notifiSwitch.closeSwitch();
 				rl_switch_sound.setVisibility(View.GONE);
 				rl_switch_vibrate.setVisibility(View.GONE);
 				textview1.setVisibility(View.GONE);
 				textview2.setVisibility(View.GONE);
-				chatOptions.setNotificationEnable(false);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
 
 				EaseSDKHelper.getInstance().getModel().setSettingMsgNotification(false);
 			} else {
-				iv_switch_open_notification.setVisibility(View.VISIBLE);
-				iv_switch_close_notification.setVisibility(View.INVISIBLE);
+			    notifiSwitch.openSwitch();
 				rl_switch_sound.setVisibility(View.VISIBLE);
 				rl_switch_vibrate.setVisibility(View.VISIBLE);
 				textview1.setVisibility(View.VISIBLE);
 				textview2.setVisibility(View.VISIBLE);
-				chatOptions.setNotificationEnable(true);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
 				EaseSDKHelper.getInstance().getModel().setSettingMsgNotification(true);
 			}
 			break;
 		case R.id.rl_switch_sound:
-			if (iv_switch_open_sound.getVisibility() == View.VISIBLE) {
-				iv_switch_open_sound.setVisibility(View.INVISIBLE);
-				iv_switch_close_sound.setVisibility(View.VISIBLE);
-				chatOptions.setNoticeBySound(false);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
+			if (soundSwitch.isSwitchOpen()) {
+			    soundSwitch.closeSwitch();
 				EaseSDKHelper.getInstance().getModel().setSettingMsgSound(false);
 			} else {
-				iv_switch_open_sound.setVisibility(View.VISIBLE);
-				iv_switch_close_sound.setVisibility(View.INVISIBLE);
-				chatOptions.setNoticeBySound(true);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
+			    soundSwitch.openSwitch();
 				EaseSDKHelper.getInstance().getModel().setSettingMsgSound(true);
 			}
 			break;
 		case R.id.rl_switch_vibrate:
-			if (iv_switch_open_vibrate.getVisibility() == View.VISIBLE) {
-				iv_switch_open_vibrate.setVisibility(View.INVISIBLE);
-				iv_switch_close_vibrate.setVisibility(View.VISIBLE);
-				chatOptions.setNoticedByVibrate(false);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
+			if (vibrateSwitch.isSwitchOpen()) {
+			    vibrateSwitch.closeSwitch();
 				EaseSDKHelper.getInstance().getModel().setSettingMsgVibrate(false);
 			} else {
-				iv_switch_open_vibrate.setVisibility(View.VISIBLE);
-				iv_switch_close_vibrate.setVisibility(View.INVISIBLE);
-				chatOptions.setNoticedByVibrate(true);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
+			    vibrateSwitch.openSwitch();
 				EaseSDKHelper.getInstance().getModel().setSettingMsgVibrate(true);
 			}
 			break;
 		case R.id.rl_switch_speaker:
-			if (iv_switch_open_speaker.getVisibility() == View.VISIBLE) {
-				iv_switch_open_speaker.setVisibility(View.INVISIBLE);
-				iv_switch_close_speaker.setVisibility(View.VISIBLE);
-				chatOptions.setUseSpeaker(false);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
+			if (speakerSwitch.isSwitchOpen()) {
+			    speakerSwitch.closeSwitch();
 				EaseSDKHelper.getInstance().getModel().setSettingMsgSpeaker(false);
 			} else {
-				iv_switch_open_speaker.setVisibility(View.VISIBLE);
-				iv_switch_close_speaker.setVisibility(View.INVISIBLE);
-				chatOptions.setUseSpeaker(true);
-				EMChatManager.getInstance().setChatOptions(chatOptions);
+			    speakerSwitch.openSwitch();
 				EaseSDKHelper.getInstance().getModel().setSettingMsgVibrate(true);
 			}
 			break;
 		case R.id.rl_switch_chatroom_owner_leave:
-		    if(this.iv_switch_room_owner_leave_allow.getVisibility() == View.VISIBLE){
-		        iv_switch_room_owner_leave_allow.setVisibility(View.INVISIBLE);
-                iv_switch_room_owner_leave_disallow.setVisibility(View.VISIBLE);
-                chatOptions.allowChatroomOwnerLeave(false);
-                EMChatManager.getInstance().setChatOptions(chatOptions);
+		    if(ownerLeaveSwitch.isSwitchOpen()){
+		        ownerLeaveSwitch.closeSwitch();
                 model.allowChatroomOwnerLeave(false);
 
 		    }else{
-		        iv_switch_room_owner_leave_allow.setVisibility(View.VISIBLE);
-                iv_switch_room_owner_leave_disallow.setVisibility(View.INVISIBLE);
-                chatOptions.allowChatroomOwnerLeave(true);
-                EMChatManager.getInstance().setChatOptions(chatOptions);
+		        ownerLeaveSwitch.openSwitch();
                 model.allowChatroomOwnerLeave(true);
 		    }
 		    break;

@@ -21,8 +21,11 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
 
-public class ContextMenu extends BaseActivity {
-
+public class ContextMenuActivity extends BaseActivity {
+    public static final int RESULT_CODE_COPY = 1;
+    public static final int RESULT_CODE_DELETE = 2;
+    public static final int RESULT_CODE_FORWARD = 3;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,15 +60,15 @@ public class ContextMenu extends BaseActivity {
 	}
 
 	public void copy(View view){
-		setResult(ChatFragment.RESULT_CODE_COPY);
+		setResult(RESULT_CODE_COPY);
 		finish();
 	}
 	public void delete(View view){
-		setResult(ChatFragment.RESULT_CODE_DELETE);
+		setResult(RESULT_CODE_DELETE);
 		finish();
 	}
 	public void forward(View view){
-		setResult(ChatFragment.RESULT_CODE_FORWARD);
+		setResult(RESULT_CODE_FORWARD);
 		finish();
 	}
 	

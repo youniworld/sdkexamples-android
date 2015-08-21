@@ -54,7 +54,6 @@ public class EaseChatExtendMenu extends GridView{
         setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
         setGravity(Gravity.CENTER_VERTICAL);
         setVerticalSpacing(DensityUtil.dip2px(context, 8));
-//        setBackgroundColor(getResources().getColor(android.R.color.white));
     }
     
     /**

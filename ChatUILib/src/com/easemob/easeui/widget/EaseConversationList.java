@@ -35,7 +35,6 @@ import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.easeui.R;
-import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.easeui.utils.EaseSmileUtils;
@@ -55,7 +54,7 @@ public class EaseConversationList extends ListView {
     protected final int MSG_REFRESH_ADAPTER_DATA = 0;
     
     protected Context context;
-    protected ConverastionAdapater adapter;
+    protected EaseConverastionAdapater adapter;
     protected List<EMConversation> allConversations = new ArrayList<EMConversation>();
     
     
@@ -85,7 +84,7 @@ public class EaseConversationList extends ListView {
     }
     
     public void init(){
-        adapter = new ConverastionAdapater(context, 0, allConversations);
+        adapter = new EaseConverastionAdapater(context, 0, allConversations);
         setAdapter(adapter);
 
         refresh();
@@ -187,11 +186,11 @@ public class EaseConversationList extends ListView {
      * adapter
      *
      */
-    class ConverastionAdapater extends ArrayAdapter<EMConversation> {
+    class EaseConverastionAdapater extends ArrayAdapter<EMConversation> {
         List<EMConversation> conversationList;
         private ConversationFilter conversationFilter;
 
-        public ConverastionAdapater(Context context, int resource,
+        public EaseConverastionAdapater(Context context, int resource,
                 List<EMConversation> objects) {
             super(context, resource, objects);
             conversationList = objects;
