@@ -31,7 +31,6 @@ import android.os.Vibrator;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.NotificationCompat;
-import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.util.EMLog;
 import com.easemob.util.EasyUtils;
 
@@ -291,8 +290,12 @@ public class EaseNotifier {
             } 
         }
         
-        EaseSDKModel model = EaseSDKHelper.getInstance().getModel();
-        if(!model.getSettingMsgNotification()){
+        // youni : change to get notifier from easeui kit
+        EaseUI.EaseSettingsProvider provider = EaseUI.getInstance().setSettingsProvider();
+        
+        boolean notifAllowed = provider != null? provier.isMsgNotificationAllowed():true;
+        
+        if(!notifAllowed){
             return;
         }
         

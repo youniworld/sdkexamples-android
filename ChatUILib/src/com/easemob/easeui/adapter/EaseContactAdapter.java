@@ -51,6 +51,7 @@ public class EaseContactAdapter extends ArrayAdapter<EaseUser>  implements Secti
         TextView nameView;
         TextView headerView;
     }
+    
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -73,6 +74,7 @@ public class EaseContactAdapter extends ArrayAdapter<EaseUser>  implements Secti
         if(user == null)
             Log.d("ContactAdapter", position + "");
         String username = user.getUsername();
+        
         String header = user.getInitialLetter();
         
         if (position == 0 || header != null && !header.equals(getItem(position - 1).getInitialLetter())) {

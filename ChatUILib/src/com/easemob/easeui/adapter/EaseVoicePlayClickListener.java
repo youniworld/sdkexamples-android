@@ -34,6 +34,15 @@ import com.easemob.easeui.R;
 import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.util.EMLog;
 
+// youni: put all view related to EaseChatRowVoice
+// we need to abstract one chat row click handler class
+// like 
+//
+
+// youni : dummy implementation
+// chatrow should be able to provide api to regiser the row click handler
+// EaseChatRow::regiserDefaultClickHandler(EaseChatRowClickHandler)
+
 public class EaseVoicePlayClickListener implements View.OnClickListener {
 	private static final String TAG = "VoicePlayClickListener";
 	EMMessage message;

@@ -13,6 +13,7 @@
  */
 package com.easemob.easeui;
 
+//youni: put this to unils?
 public class EaseConstant {
 	public static final String MESSAGE_ATTR_IS_VOICE_CALL = "is_voice_call";
 	public static final String MESSAGE_ATTR_IS_VIDEO_CALL = "is_video_call";

@@ -90,6 +90,9 @@ public class EaseMessageAdapter extends BaseAdapter{
     public boolean showAvatar;
     public Drawable myBubbleBg;
     public Drawable otherBuddleBg;
+	
+	// youni: dummy
+    protected EaseMessageCustomRowProvider rowProvider = null;
 
 	public EaseMessageAdapter(Context context, String username, int chatType, ListView listView) {
 		this.context = context;
@@ -183,6 +186,19 @@ public class EaseMessageAdapter extends BaseAdapter{
 	 * 获取item类型数
 	 */
 	public int getViewTypeCount() {
+		// youni : dummy
+		int count = -1;
+		
+		if(rowProvider != null){
+			count = rowProvider.getRowTypeCount();
+		}
+		
+		if(count > 0){
+			return count;
+		}
+		
+		// youni: end
+		
         return 16;
     }
 	
@@ -195,7 +211,19 @@ public class EaseMessageAdapter extends BaseAdapter{
 		if (message == null) {
 			return -1;
 		}
-		// youni use if-else for following codes
+		
+		// youni: dummy 
+		if(rowProvider != null){
+			int type = rowProvider.getRowType(message)；
+			
+			if(type > 0){
+				return type;
+			}
+		}
+
+        // youni: end
+
+		// youni: use if-else for following codes
 		if (message.getType() == EMMessage.Type.TXT) {
 			if (message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_VOICE_CALL, false))
 			    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VOICE_CALL : MESSAGE_TYPE_SENT_VOICE_CALL;
@@ -225,6 +253,17 @@ public class EaseMessageAdapter extends BaseAdapter{
 	
 	protected EaseChatRow createChatRow(Context context, EMMessage message, int position) {
         EaseChatRow chatRow = null;
+		
+		// youni: dummy
+		if(rowProvider != null){
+			chatRow = rowProvider.getChatRow(message);
+			
+			if(chatRow != null){
+				return chatRow;
+			}
+		}
+		
+		// youni: dummy end
         switch (message.getType()) {
         case TXT:
             // 语音通话,  视频通话

@@ -182,6 +182,7 @@ public class EaseConversationList extends ListView {
         adapter.getFilter().filter(str);
     }
     
+    // youni: put this adapter to adapter folder
     /**
      * adapter
      *

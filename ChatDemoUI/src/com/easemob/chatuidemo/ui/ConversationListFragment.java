@@ -35,6 +35,7 @@ import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.easeui.widget.EaseConversationList;
 
+// youni: also take this also as the reusable component
 public class ConversationListFragment extends Fragment{
     private InputMethodManager inputMethodManager;
     private EditText query;

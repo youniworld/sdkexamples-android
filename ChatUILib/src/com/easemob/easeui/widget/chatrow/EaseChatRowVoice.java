@@ -93,6 +93,8 @@ public class EaseChatRowVoice extends EaseChatRowFile{
 
     @Override
     protected void onBuubleClick() {
+        // youni: should call defult handler
+        // defaultClickHandler.onChatRowClicked(this);
         new EaseVoicePlayClickListener(message, voiceImageView, readStutausView, adapter, activity).onClick(bubbleLayout);
     }
     

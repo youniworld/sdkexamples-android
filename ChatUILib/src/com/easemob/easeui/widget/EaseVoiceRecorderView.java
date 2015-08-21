@@ -161,6 +161,7 @@ public class EaseVoiceRecorderView extends RelativeLayout  {
         return voiceRecorder.isRecording();
     }
     
+    // move this class to model folder
     public class VoiceRecorder {
 
         MediaRecorder recorder;

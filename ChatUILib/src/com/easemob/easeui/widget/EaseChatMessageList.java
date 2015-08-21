@@ -51,6 +51,13 @@ public class EaseChatMessageList extends RelativeLayout{
     protected Drawable myBubbleBg;
     protected Drawable otherBuddleBg;
 
+    // youni: dummy 
+    public static interface EaseMessageCustomRowProvider{
+        public int getRowTypeCount();
+        public int getRowType(EMMessage msg);
+        public EaseChatRow getChatRow(EMMessage msg);
+    }
+    
 	public EaseChatMessageList(Context context, AttributeSet attrs, int defStyle) {
         this(context, attrs);
     }
@@ -93,6 +100,11 @@ public class EaseChatMessageList extends RelativeLayout{
         
         messageAdapter.refreshSelectLast();
         
+    }
+    
+    // youni: dummy, this could be override by 3rd app
+    protected EaseMessageAdapter createMessageAdapter(Context context, String username, int chatType, ListView listView){
+        return new EaseMessageAdapter(context, toChatUsername, chatType, messageListView);
     }
     
     // youni: looks like we are not able to provide rich style attributes
@@ -418,6 +430,7 @@ public class EaseChatMessageList extends RelativeLayout{
 	
     // youni: define it to be the static
 	public interface MessageListItemClickListener{
+        //youni: return also boolean
 	    void onResendClick(EMMessage message);
 	    /**
 	     * 控件有对气泡做点击事件默认实现，如果需要自己实现，return true。
@@ -426,7 +439,11 @@ public class EaseChatMessageList extends RelativeLayout{
 	     * @return
 	     */
 	    boolean onBubbleClick(EMMessage message);
+        
+        // youni: return also boolean
 	    void onBubbleLongClick(EMMessage message);
+        
+        // youni: return also boolean
 	    void onUserAvatarClick(String username);
 	}
 	

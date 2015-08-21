@@ -51,7 +51,20 @@ public abstract class EaseChatRow extends LinearLayout {
     protected EMCallBack messageReceiveCallback;
 
     protected MessageListItemClickListener itemClickListener;
+    
+    // youni: dummy
+    protected EaseChatRowClickHandler defaultClickHandler = null;
 
+    // youni: add by youni for dummy implementation
+    public interface EaseChatRowClickListener{
+        void onChatRowClicked(EaseChatRow chatRow);
+    }
+    
+    // youni: dummy
+    public EMessage getMessage(){
+        return message;
+    }
+    
     // youni:is that possible to replace adapter with more meaningful class like EaseMessageRowInfoProvider
     public EaseChatRow(Context context, EMMessage message, int position, BaseAdapter adapter) {
         super(context);

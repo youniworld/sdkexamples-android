@@ -18,6 +18,7 @@ import com.easemob.easeui.adapter.EaseContactAdapter;
 import com.easemob.easeui.domain.EaseUser;
 import com.easemob.util.EMLog;
 
+// youni: support custom row view for example group,friends,etc.
 public class EaseContactList extends RelativeLayout {
     protected static final String TAG = EaseContactList.class.getSimpleName();
     
@@ -103,6 +104,11 @@ public class EaseContactList extends RelativeLayout {
             sidebar.setListView(listView);
         }
     }
+    
+    //youni: move contactList to init as argu
+    // and contactlist should be copied instead of just using reference
+    // so when you get contactlist passed from client, just caculate the initial letter for displayer purpose
+    // you can have a map <username,>
     
     /**
      * 设置联系人列表,init方法需在此方法后面调用

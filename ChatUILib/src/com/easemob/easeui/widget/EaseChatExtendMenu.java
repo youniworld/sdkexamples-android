@@ -43,6 +43,7 @@ public class EaseChatExtendMenu extends GridView{
         init(context, null);
     }
     
+    //youni: do you need to check if attrs is null?
     private void init(Context context, AttributeSet attrs){
         this.context = context;
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EMChatExtendMenu);

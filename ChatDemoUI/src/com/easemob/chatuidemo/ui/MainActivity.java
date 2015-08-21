@@ -259,6 +259,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	    });
 	}
 	
+	//youni : move this initialleter to contact list view?
 	/**
      * 设置hearder属性，方便通讯中对联系人按header分类显示，以及通过右侧ABCD...字母栏快速定位联系人
      * 

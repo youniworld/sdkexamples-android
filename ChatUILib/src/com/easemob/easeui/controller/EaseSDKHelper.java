@@ -40,6 +40,7 @@ import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 
 // youni: supposed to refactor this class to make it more easily to be used
+// youni: move the defalut model to EaseUI library
 
 /**
  * The developer can derive from this class to talk with HuanXin SDK
@@ -54,6 +55,9 @@ import com.easemob.util.EMLog;
  * @author easemob
  *
  */
+ 
+ // youni: remove this abstract
+ // we should create default model if we did not get custom model
 public abstract class EaseSDKHelper {
 
 	/**

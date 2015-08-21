@@ -63,6 +63,7 @@ import com.easemob.easeui.widget.EaseTitleBar;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 
+//youni : should use user profile provider in this class?
 /**
  * 联系人列表页
  * 
@@ -297,6 +298,7 @@ public class ContactListFragment extends Fragment {
 	 * 
 	 * @param toDeleteUser
 	 */
+	//youni: tobeDeleteUser.getUsername() should be nick name?
 	public void deleteContact(final EaseUser tobeDeleteUser) {
 		String st1 = getResources().getString(R.string.deleting);
 		final String st2 = getResources().getString(R.string.Delete_failed);
@@ -407,6 +409,7 @@ public class ContactListFragment extends Fragment {
 	 */
 	private void getContactList() {
 		contactList.clear();
+		// youni : actually we should
 		//获取本地好友列表
 		Map<String, EaseUser> users = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList();
 		Iterator<Entry<String, EaseUser>> iterator = users.entrySet().iterator();

@@ -29,6 +29,7 @@ import com.easemob.easeui.utils.EaseSmileUtils;
 public class EaseChatPrimaryMenu extends RelativeLayout implements OnClickListener {
     private EditText editText;
     private View buttonSetModeKeyboard;
+    //youni : no underline for member data
     private RelativeLayout edittext_layout;
     private View buttonSetModeVoice;
     private View buttonSend;
@@ -119,7 +120,8 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements OnClickListen
             }
         });
         
-        
+        //youni: all related to recording functions should use interface instead of just directly using EaseVoiceRecorderView
+        //
         buttonPressToSpeak.setOnTouchListener(new OnTouchListener() {
             
             @Override
@@ -192,6 +194,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements OnClickListen
     public void onEmojiconInputEvent(String name){
         try {
             // 这里用的反射，所以混淆的时候不要混淆SmileUtils这个类
+            // youni: com.easemob.easeui.utils.SmileUtils???
             Class clz = Class.forName("com.easemob.easeui.utils.SmileUtils");
             Field field = clz.getField(name);
             editText.append(EaseSmileUtils.getSmiledText(context,(String) field.get(null)));
@@ -345,6 +348,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements OnClickListen
     }
     
     public interface ChatPrimaryMenuListener{
+        //youni: use button instead of btn
         /**
          * 发送按钮点击事件
          * @param content 发送内容

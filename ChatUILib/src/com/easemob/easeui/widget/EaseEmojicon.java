@@ -20,6 +20,8 @@ import com.easemob.easeui.adapter.EaseExpressionAdapter;
 import com.easemob.easeui.adapter.EaseExpressionPagerAdapter;
 import com.easemob.easeui.utils.EaseSmileUtils;
 
+// youni: should redesign this class since this class is not be able to be easily expended
+// youni: we should design to allow 3rd party to provide the emoj plugin
 /**
  * 表情图片控件
  */
